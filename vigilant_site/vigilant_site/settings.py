@@ -1,4 +1,4 @@
-# Django settings for vigilant project.
+# Django settings for vigilant_site project.
 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
@@ -83,7 +83,7 @@ STATICFILES_FINDERS = (
 )
 
 # Make this unique, and don't share it with anybody.
-SECRET_KEY = '-k3p&186$4-428cbf&the^+o$%hnmigz5ps*krl5r4@)o6=q+-'
+SECRET_KEY = '&)5i(#ouz&1z^e72to_so=7i&7212hwb8rw2i8ke(gk00rsbxx'
 
 # List of callables that know how to import templates from various sources.
 TEMPLATE_LOADERS = (
@@ -102,10 +102,10 @@ MIDDLEWARE_CLASSES = (
     # 'django.middleware.clickjacking.XFrameOptionsMiddleware',
 )
 
-ROOT_URLCONF = 'vigilant.urls'
+ROOT_URLCONF = 'vigilant_site.urls'
 
 # Python dotted path to the WSGI application used by Django's runserver.
-WSGI_APPLICATION = 'vigilant.wsgi.application'
+WSGI_APPLICATION = 'vigilant_site.wsgi.application'
 
 TEMPLATE_DIRS = (
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
