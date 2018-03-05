@@ -1,19 +1,35 @@
-This git repository includes the virtual environment for the VIGILANT project, and the VIGILANT project itself.
+# VIGILANT
 
-in order to run the virtual environment, run 'source bin/active'
-- this keeps us all using the same settings/versions for our tools
-
-Tools thus far:
-python2.7.4
-Django 1.5.11 (this specific version allows non-relational databases)
-django-mongodb-engine==0.6.0 (requires python2.7.4)
-djangotoolbox==1.8.0
-pymongo==3.6.0
-pytz==2018.3
-
-after you start the virtual environment, try out the server. type 'python vigilant/manage.py runserver'
-
-this 'should' set up the server painlessly, try testing it out at http://127.0.0.1:8000
+The code for Next Century project
 
 
+### To pull the most up to date files
+```
+git pull
+```
+
+### To push your stuff to the repo
+```
+git add -A .
+git commit -m "<actionverb>"
+git push origin master
+```
+
+### To start the correct environment and check to see if it's correct
+```
+source env/bin/activate
+python --version
+```
+should state python 2.7.14
+
+### To deactivate the environment type the following at any time
+```
+deactivate
+```
+
+### To run the django server
+```
+cd vigilant_site
+python manage.py runserver
+```
 
