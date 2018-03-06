@@ -20,7 +20,7 @@ git push origin master
 source env/bin/activate
 python --version
 ```
-should state python 2.7.14
+should state python 3.6.4
 
 ### To deactivate the environment type the following at any time
 ```
