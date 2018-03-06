@@ -1,4 +1,4 @@
-#!/home/sean/Programming/school-programming/vigilant/bin/python2.7
+#!/home/sean/Programming/school-programming/vigilant/env/bin/python3
 from django.core import management
 
 if __name__ == "__main__":

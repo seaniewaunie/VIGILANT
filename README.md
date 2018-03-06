@@ -29,7 +29,7 @@ deactivate
 
 ### To run the django server
 ```
-cd vigilant_site
+cd backend
 python manage.py runserver
 ```
 
