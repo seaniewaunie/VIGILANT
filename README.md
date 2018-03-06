@@ -33,3 +33,9 @@ cd backend
 python manage.py runserver
 ```
 
+### To run the npm server
+```
+cd frontend
+npm start
+```
+
