@@ -5,7 +5,7 @@ import './Header.css';
 class Header extends Component {
   render() {
     return (
-      <div className="w3-container">
+      <div className="Header">
         <ul>
             <li><img src={logo} className="Header-logo" alt="logo" /></li>
             <li><a href = "#">VIGILANT</a></li>
