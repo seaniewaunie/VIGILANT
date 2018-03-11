@@ -36,6 +36,7 @@ python manage.py runserver
 ### To run the npm server
 ```
 cd frontend
+npm install (only do this the first time you run it)
 npm start
 ```
 
