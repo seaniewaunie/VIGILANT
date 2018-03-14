@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
-//import logo from './logo.svg';
-//import './css/Visualization.css';
+import heatmap from './images/heat-map icon.png';
 
 class Visualization extends Component {
   render() {

@@ -7,6 +7,7 @@ import barchart from './images/barchart icon.png';
 import linegraph from './images/line graph icon.png';
 import piechart from './images/pie chart icon.png';
 import timeline from './images/timeline icon.png';
+import tablechart from './images/table icon.png';
 
 class Header extends Component {
 
@@ -53,8 +54,6 @@ class AddVisualization extends Component {
   handleShow() {
     this.setState({ show: true });
   }	
-  
-  
   render() {
     
     const heattip = <Tooltip id="tooltip-modal">Heat Map</Tooltip>;
@@ -62,6 +61,7 @@ class AddVisualization extends Component {
     const linetip = <Tooltip id="tooltip-modal">Line Graph</Tooltip>;
     const pitip = <Tooltip id="tooltip-modal">Pie Chart</Tooltip>;
     const timetip = <Tooltip id="tooltip-modal">Timeline</Tooltip>;
+    const tabletip = <Tooltip id="tooltip-modal">Table</Tooltip>;
     
     return (
     <Nav>
@@ -103,7 +103,13 @@ class AddVisualization extends Component {
                     <OverlayTrigger placement="top" overlay={timetip}>
                     <Thumbnail src={timeline} responsive />
                     </OverlayTrigger>
+                </Col>
+                <Col xs={4} sm={4} md={2}>
+                    <OverlayTrigger placement="top" overlay={tabletip}>
+                    <Thumbnail src={tablechart} responsive />
+                    </OverlayTrigger>
                 </Col> 
+
               </Row>
 
             </Grid>
