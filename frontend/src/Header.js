@@ -2,11 +2,11 @@ import React, { Component } from 'react';
 import logo from './logo.svg';
 import './css/Header.css';
 import { Button, Col, Grid, Tooltip, Thumbnail, Navbar, Nav, NavItem, NavDropdown, MenuItem, Modal, OverlayTrigger, Row } from 'react-bootstrap'; 
-import heatmap from 'images/heat-map icon.png';
-import barchart from 'images/barchart icon.png';
-import linegraph from 'images/line graph icon.png';
-import piechart from 'images/pie chart icon.png';
-import timeline from 'images/timeline icon.png';
+import heatmap from './images/heat-map icon.png';
+import barchart from './images/barchart icon.png';
+import linegraph from './images/line graph icon.png';
+import piechart from './images/pie chart icon.png';
+import timeline from './images/timeline icon.png';
 
 class Header extends Component {
 
