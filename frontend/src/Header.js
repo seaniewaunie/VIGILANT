@@ -9,6 +9,7 @@ import piechart from './images/pie chart icon.png';
 import timeline from './images/timeline icon.png';
 import tablechart from './images/table icon.png';
 import {HeatMap, LineGraph, PieChart, BarChart, TimeLine, TableChart} from './Visualizations'
+import {LocalFilter} from './Filters'
 
 class Header extends Component {
     constructor(props){
@@ -30,6 +31,7 @@ class Header extends Component {
                 <AddVisualization
                     addOne={this.props.addOne}
                     hideOne={this.props.hideOne}
+                    counter={this.props.counter}
                 />
                 
                 <Nav pullRight>
@@ -64,6 +66,7 @@ class AddVisualization extends Component {
       show: false,
       selected: false,
       type: '',
+      id: props.counter,
     };
   }
 
@@ -79,25 +82,25 @@ class AddVisualization extends Component {
     var element;
     switch(type){
         case 'Heat Map':
-            element = <HeatMap />;
+            element = <HeatMap id={this.state.id}/>;
             break;
         case 'Bar Chart':
-            element = <BarChart />;
+            element = <BarChart id={this.state.id}/>;
             break;
         case 'Line Graph':
-            element = <LineGraph />;
+            element = <LineGraph id={this.state.id}/>;
             break;
         case 'Pie Chart':
-            element = <PieChart />;
+            element = <PieChart id={this.state.id}/>;
             break;
         case 'Timeline':
-            element = <TimeLine />;
+            element = <TimeLine id={this.state.id}/>;
             break;
         case 'Table Chart':
-            element = <TableChart />;
+            element = <TableChart id={this.state.id} />;
             break;
         default:
-            console.log("error, unhandeled element selected in Add visualization");
+            console.log("error, unhandled element selected in Add visualization");
     }
     this.handleClose();
     this.addOne(element);
@@ -136,6 +139,7 @@ class AddVisualization extends Component {
             handleAdd={this.handleAdd}
             handleClose={this.handleClose}
             type={this.state.type}
+            id={this.state.id}
       />
     ) : (
       <ShowOptions 
@@ -190,8 +194,10 @@ function ShowFilter(props){
             </Modal.Header>
             
             <Modal.Body>
-                <p>Displaying Local Filter Options for a {props.type}</p>
-                // this will be there a filter goes
+                <LocalFilter
+                    id = {props.id}                     
+                    type = {props.type}
+                />
             </Modal.Body>
             
             <Modal.Footer> 

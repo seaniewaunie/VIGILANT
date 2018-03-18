@@ -50,6 +50,7 @@ class App extends Component {
                 <Header 
                     addOne={this.addOne}
                     hideOne={this.hideOne}
+                    counter={this.state.counter}
                 /> 
                 <Grid id="grid">
                     <FormatGrid 
