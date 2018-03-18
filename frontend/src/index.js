@@ -6,7 +6,7 @@ import Header from './Header';
 import Visual from './Visualization'
 import registerServiceWorker from './registerServiceWorker';
 
-ReactDOM.render(<Header />, document.getElementById('header'));
+//ReactDOM.render(<Header />, document.getElementById('header'));
 
 ReactDOM.render(<Visual />, document.getElementById('visual'));
 
