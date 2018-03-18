@@ -8,6 +8,8 @@ import linegraph from './images/line graph icon.png';
 import piechart from './images/pie chart icon.png';
 import timeline from './images/timeline icon.png';
 import tablechart from './images/table icon.png';
+import {addHeatMap} from './js/headerFunctions';
+
 
 class Header extends Component {
 
@@ -41,6 +43,7 @@ class AddVisualization extends Component {
 
     this.handleShow = this.handleShow.bind(this);
     this.handleClose = this.handleClose.bind(this);
+    this.handleHeatMap = this.handleHeatMap.bind(this);
 
     this.state = {
       show: false
@@ -54,6 +57,11 @@ class AddVisualization extends Component {
   handleShow() {
     this.setState({ show: true });
   }	
+  
+  handleHeatMap() {
+    addHeatMap();
+    this.handleClose();
+  }
   render() {
     
     const heattip = <Tooltip id="tooltip-modal">Heat Map</Tooltip>;
@@ -78,7 +86,7 @@ class AddVisualization extends Component {
               <Row className="show-grid">
                 <Col xs={4} sm={4} md={2}>
                     <OverlayTrigger placement="top" overlay={heattip}>
-                    <Thumbnail src={heatmap} responsive />
+                    <Thumbnail src={heatmap} responsive onClick={this.handleHeatMap} />
                     </OverlayTrigger>
                 </Col>
                 <Col xs={4} sm={4} md={2}>
