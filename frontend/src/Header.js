@@ -55,64 +55,101 @@ class AddVisualization extends Component {
     this.handlePieChart = this.handlePieChart.bind(this);
     this.handleTimeLine = this.handleTimeLine.bind(this);
     this.handleTableChart = this.handleTableChart.bind(this);
+    this.handleAdd = this.handleAdd.bind(this);
 
     this.addOne = this.props.addOne.bind(this);
     this.hideOne= this.props.hideOne.bind(this);
 
     this.state = {
-      show: false
+      show: false,
+      selected: false,
+      type: '',
     };
   }
 
   handleClose() {
-    this.setState({ show: false });
+    this.setState({ show: false, selected: false, type: '' });
   }
 
   handleShow() {
     this.setState({ show: true });
-  }	
+  }
+
+  handleAdd(type){
+    var element;
+    switch(type){
+        case 'Heat Map':
+            element = <HeatMap />;
+            break;
+        case 'Bar Chart':
+            element = <BarChart />;
+            break;
+        case 'Line Graph':
+            element = <LineGraph />;
+            break;
+        case 'Pie Chart':
+            element = <PieChart />;
+            break;
+        case 'Timeline':
+            element = <TimeLine />;
+            break;
+        case 'Table Chart':
+            element = <TableChart />;
+            break;
+        default:
+            console.log("error, unhandeled element selected in Add visualization");
+    }
+    this.handleClose();
+    this.addOne(element);
+    this.setState({ selected: false, type: '' });
+  }
   
   handleHeatMap() {
-    this.handleClose();
-    this.addOne(<HeatMap />);
+    this.setState({ selected: true, type: 'Heat Map' });
   }
 
   handleBarChart() {
-    this.handleClose();
-    this.addOne(<BarChart />);
+    this.setState({ selected: true, type: 'Bar Chart' });
   }
 
   handleLineGraph() {
-    this.handleClose();
-    this.addOne(<LineGraph />);
+    this.setState({ selected: true, type: 'Line Graph' });
   }
 
   handlePieChart() {
-    this.handleClose();
-    this.addOne(<PieChart />);
+    this.setState({ selected: true, type: 'Pie Chart' });
   }
 
 
   handleTimeLine() {
-    this.handleClose();
-    this.addOne(<TimeLine />);
+    this.setState({ selected: true, type: 'Timeline' });
   }
 
 
   handleTableChart() {
-    this.handleClose();
-    this.addOne(<TableChart />);
+    this.setState({ selected: true, type: 'Table Chart' });
   }
 
-    render() {
-    
-    const heattip = <Tooltip id="tooltip-modal">Heat Map</Tooltip>;
-    const bartip = <Tooltip id="tooltip-modal">Bar Chart</Tooltip>;
-    const linetip = <Tooltip id="tooltip-modal">Line Graph</Tooltip>;
-    const pitip = <Tooltip id="tooltip-modal">Pie Chart</Tooltip>;
-    const timetip = <Tooltip id="tooltip-modal">Timeline</Tooltip>;
-    const tabletip = <Tooltip id="tooltip-modal">Table</Tooltip>;
-    
+  render() {
+    var show = this.state.selected ? (
+      <ShowFilter 
+            handleAdd={this.handleAdd}
+            handleClose={this.handleClose}
+            type={this.state.type}
+      />
+    ) : (
+      <ShowOptions 
+            handleHeatMap={this.handleHeatMap}
+            handleBarChart={this.handleBarChart}
+            handleLineGraph={this.handleLineGraph}
+            handlePieChart={this.handlePieChart}
+            handleTimeLine={this.handleTimeLine}
+            handleTableChart={this.handleTableChart}
+            handleClose={this.handleClose}
+
+      />
+
+    );
     return (
     <Nav>
         <NavItem eventKey={1} onClick={this.handleShow}>
@@ -120,53 +157,9 @@ class AddVisualization extends Component {
         </NavItem>
 
         <Modal show={this.state.show} onHide={this.handleClose}>
-          <Modal.Header closeButton>
-            <Modal.Title>Select a Visualization To Add Below!</Modal.Title>
-          </Modal.Header>
-          <Modal.Body>
-            <Grid>
-              <Row className="show-grid">
-                <Col xs={4} sm={4} md={2}>
-                    <OverlayTrigger placement="top" overlay={heattip}>
-                    <Thumbnail src={heatmap} responsive onClick={this.handleHeatMap} />
-                    </OverlayTrigger>
-                </Col>
-                <Col xs={4} sm={4} md={2}>
-                    <OverlayTrigger placement="top" overlay={bartip}>
-                    <Thumbnail src={barchart} responsive onClick={this.handleBarChart} />
-                    </OverlayTrigger>
-                </Col> 
-                <Col xs={4} sm={4} md={2}>
-                    <OverlayTrigger placement="top" overlay={linetip}>
-                    <Thumbnail placement="top"src={linegraph} responsive  onClick={this.handleLineGraph} />
-                    </OverlayTrigger>
-                </Col>                  
-              </Row>
-              
-              <Row className="show-grid">
-                <Col xs={4} sm={4} md={2}>
-                    <OverlayTrigger placement="top" overlay={pitip}>
-                    <Thumbnail src={piechart} responsive  onClick={this.handlePieChart} />
-                    </OverlayTrigger>
-                </Col>
-                <Col xs={4} sm={4} md={2}>
-                    <OverlayTrigger placement="top" overlay={timetip}>
-                    <Thumbnail src={timeline} responsive  onClick={this.handleTimeLine} />
-                    </OverlayTrigger>
-                </Col>
-                <Col xs={4} sm={4} md={2}>
-                    <OverlayTrigger placement="top" overlay={tabletip}>
-                    <Thumbnail src={tablechart} responsive onClick={this.handleTableChart}  />
-                    </OverlayTrigger>
-                </Col> 
+            
+          {show}
 
-              </Row>
-
-            </Grid>
-          </Modal.Body>
-          <Modal.Footer>
-            <Button onClick={this.handleClose}>Close</Button>
-          </Modal.Footer>
         </Modal>
     </Nav>
     );
@@ -185,6 +178,97 @@ class GlobalFilter extends Component {
         </NavItem>
     );
   }
+}
+
+function ShowFilter(props){
+    var options = [];
+
+    options.push(
+        <div>
+            <Modal.Header closeButton>
+                <Modal.Title>Customize The Visualization Below</Modal.Title>
+            </Modal.Header>
+            
+            <Modal.Body>
+                <p>Displaying Local Filter Options for a {props.type}</p>
+                // this will be there a filter goes
+            </Modal.Body>
+            
+            <Modal.Footer> 
+                <Button bsStyle="danger" onClick={props.handleClose}>Close</Button>
+                <Button bsStyle="success" onClick={() => props.handleAdd(props.type)}>Add</Button>
+            </Modal.Footer>
+
+
+        </div>
+    );
+    return options;
+}
+
+function ShowOptions(props){
+     
+    const heattip = <Tooltip id="tooltip-modal">Heat Map</Tooltip>;
+    const bartip = <Tooltip id="tooltip-modal">Bar Chart</Tooltip>;
+    const linetip = <Tooltip id="tooltip-modal">Line Graph</Tooltip>;
+    const pitip = <Tooltip id="tooltip-modal">Pie Chart</Tooltip>;
+    const timetip = <Tooltip id="tooltip-modal">Timeline</Tooltip>;
+    const tabletip = <Tooltip id="tooltip-modal">Table</Tooltip>;
+    
+    var options = [];
+    options.push(
+        <div>
+        <Modal.Header closeButton>
+            <Modal.Title>Select a Visualization To Add Below</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <Grid>
+              <Row className="show-grid">
+                <Col xs={4} sm={3} md={2}>
+                    <OverlayTrigger placement="top" overlay={heattip}>
+                    <Thumbnail src={heatmap} responsive onClick={props.handleHeatMap} />
+                    </OverlayTrigger>
+                </Col>
+                <Col xs={4} sm={3} md={2}>
+                    <OverlayTrigger placement="top" overlay={bartip}>
+                    <Thumbnail src={barchart} responsive onClick={props.handleBarChart} />
+                    </OverlayTrigger>
+                </Col> 
+                <Col xs={4} sm={3} md={2}>
+                    <OverlayTrigger placement="top" overlay={linetip}>
+                    <Thumbnail placement="top"src={linegraph} responsive  onClick={props.handleLineGraph} />
+                    </OverlayTrigger>
+                </Col>                  
+              </Row>
+              
+              <Row className="show-grid">
+                <Col xs={4} sm={3} md={2}>
+                    <OverlayTrigger placement="top" overlay={pitip}>
+                    <Thumbnail src={piechart} responsive  onClick={props.handlePieChart} />
+                    </OverlayTrigger>
+                </Col>
+                <Col xs={4} sm={3} md={2}>
+                    <OverlayTrigger placement="top" overlay={timetip}>
+                    <Thumbnail src={timeline} responsive  onClick={props.handleTimeLine} />
+                    </OverlayTrigger>
+                </Col>
+                <Col xs={4} sm={3} md={2}>
+                    <OverlayTrigger placement="top" overlay={tabletip}>
+                    <Thumbnail src={tablechart} responsive onClick={props.handleTableChart}  />
+                    </OverlayTrigger>
+                </Col> 
+
+              </Row>
+
+            </Grid>
+          </Modal.Body>
+
+          <Modal.Footer>
+            <Button bsStyle="danger" onClick={props.handleClose}>Close</Button>
+          </Modal.Footer>
+
+        </div>
+    );
+    return options;
 }
 
 export default Header;

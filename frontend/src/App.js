@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import './css/App.css';
-import {HeatMap, LineGraph, PieChart, BarChart} from './Visualizations'
+import {HeatMap, LineGraph, PieChart, BarChart, TimeLine, TableChart} from './Visualizations'
 import { Grid, Row } from 'react-bootstrap'; 
 import Header from './Header';
 
@@ -10,12 +10,14 @@ class App extends Component {
     constructor() {
         super();
         this.state = {
-            counter: 4,
+            counter: 6,
             visuals: [
                 <HeatMap id='0'/>,
-                <LineGraph id='1'/>,
-                <PieChart id='2'/>,
-                <BarChart id='3'/>,
+                <BarChart id='1'/>,
+                <LineGraph id='2'/>,
+                <PieChart id='3'/>,
+                <TimeLine id='4'/>,
+                <TableChart id='5'/>,
             ],
             hiddenVisuals: [
             ],
