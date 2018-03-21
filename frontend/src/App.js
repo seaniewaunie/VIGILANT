@@ -12,12 +12,12 @@ class App extends Component {
         this.state = {
             counter: 6,
             visuals: [
-                <HeatMap id='0'/>,
-                <BarChart id='1'/>,
-                <LineGraph id='2'/>,
-                <PieChart id='3'/>,
-                <TimeLine id='4'/>,
-                <TableChart id='5'/>,
+                <HeatMap id='0' key='0'/>,
+                <BarChart id='1' key='1'/>,
+                <LineGraph id='2' key='2'/>,
+                <PieChart id='3' key='3'/>,
+                <TimeLine id='4' key='4'/>,
+                <TableChart id='5' key='5'/>,
             ],
             hiddenVisuals: [
             ],
@@ -74,6 +74,7 @@ function FormatGrid(props) {
         grid.push(
             <Row key={i} >
                 <FormatRow 
+                    key={i}
                     currentRow={rowNum} 
                     visuals={props.visuals} 
                 />

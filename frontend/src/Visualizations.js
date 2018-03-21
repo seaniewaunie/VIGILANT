@@ -6,6 +6,7 @@ import piechart from './images/pie chart icon.png';
 import timeline from './images/timeline icon.png';
 import tablechart from './images/table icon.png';
 import { Col, Thumbnail } from 'react-bootstrap'; 
+//import Routes from './routes';
 
 var XSMALL = 6;
 var SMALL = 3;
@@ -108,11 +109,19 @@ export class TableChart extends Component {
         this.state = {
             id : props.id,
         };
+
+        this.handleClick = this.handleClick.bind(this);
+
     }
+    
+    handleClick(){
+        console.log("table chart ", this.state.id, " clicked.");
+    }
+
     render() {
         return(
             <Col xs={XSMALL} sm={SMALL} md={MD} key={this.state.id}>
-                <Thumbnail src={tablechart} />
+                <Thumbnail href="#" src={tablechart} onClick={this.handleClick} responsive='true'/>
             </Col>
         );
     }

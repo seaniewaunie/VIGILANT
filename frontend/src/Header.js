@@ -197,6 +197,7 @@ class GlobalFilter extends Component {
 
   handleUpdate() {
     console.log("This will adjust the filter for all visuals");
+    this.handleClose();
   }
 
   render() {
@@ -239,6 +240,7 @@ function ShowFilter(props){
             
             <Modal.Body>
                 <Filter
+                    key = {props.id}
                     id = {props.id}                     
                     type = {props.type}
                     scope = {props.scope}

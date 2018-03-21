@@ -91,7 +91,7 @@ function SelectorDropdown(props){
     var element = [];
     for(let i in selections){
         element.push(
-            <option value={selections[i]}>{selections[i]}</option>
+            <option key={i} value={selections[i]}>{selections[i]}</option>
         );
     }
     
