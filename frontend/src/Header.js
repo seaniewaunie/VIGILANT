@@ -9,7 +9,7 @@ import piechart from './images/pie chart icon.png';
 import timeline from './images/timeline icon.png';
 import tablechart from './images/table icon.png';
 import {HeatMap, LineGraph, PieChart, BarChart, TimeLine, TableChart} from './Visualizations'
-import {LocalFilter} from './Filters'
+import Filter from './Filters'
 
 class Header extends Component {
     constructor(props){
@@ -34,11 +34,13 @@ class Header extends Component {
                     counter={this.props.counter}
                 />
                 
+                <GlobalFilter />               
+                
                 <Nav pullRight>
                   <NavItem eventKey={1} href="#">Hide</NavItem>
                   <NavItem eventKey={2} href="#">Unhide</NavItem>
-                  <GlobalFilter />
                 </Nav>
+
               </Navbar.Collapse>
             </Navbar>
         );
@@ -171,38 +173,81 @@ class AddVisualization extends Component {
 }
 
 class GlobalFilter extends Component {
-	constructor(props) {
-		super(props)
-	}
-	
+    constructor(props) {
+        super(props);
+
+        this.handleShow = this.handleShow.bind(this);
+        this.handleClose = this.handleClose.bind(this);
+        this.handleUpdate = this.handleUpdate.bind(this);
+
+        this.state = {
+          show: false,
+          scope: 'global',
+        };
+
+    }
+
+  handleClose() {
+    this.setState({ show: false });
+  }
+
+  handleShow() {
+    this.setState({ show: true });
+  }
+
+  handleUpdate() {
+    console.log("This will adjust the filter for all visuals");
+  }
+
   render() {
     return (
-        <NavItem eventKey={1} href="#">
+    <Nav pullRight>
+        <NavItem eventKey={1} onClick={this.handleShow}>
             Global Filter
         </NavItem>
+
+        <Modal show={this.state.show} onHide={this.handleClose}>
+            <ShowFilter
+                handleAdd={this.handleUpdate}
+                handleClose={this.handleClose}
+                scope={this.state.scope}
+            />
+        </Modal>
+    </Nav>
     );
   }
 }
 
 function ShowFilter(props){
     var options = [];
+    var element;
+    var title;
+    if(props.scope === 'global'){
+        element = 'Update';
+        title = "Customize All Visualizations Below";
+    }
+    else{
+        element = 'Add';
+        title = "Customize The Visualization Below";
+    }
 
     options.push(
         <div>
             <Modal.Header closeButton>
-                <Modal.Title>Customize The Visualization Below</Modal.Title>
+                <Modal.Title>{title}</Modal.Title>
             </Modal.Header>
             
             <Modal.Body>
-                <LocalFilter
+                <Filter
                     id = {props.id}                     
                     type = {props.type}
+                    scope = {props.scope}
                 />
             </Modal.Body>
             
             <Modal.Footer> 
                 <Button bsStyle="danger" onClick={props.handleClose}>Close</Button>
-                <Button bsStyle="success" onClick={() => props.handleAdd(props.type)}>Add</Button>
+                <Button bsStyle="success" onClick={() => props.handleAdd(props.type)}>{element}</Button>
             </Modal.Footer>
 
 
