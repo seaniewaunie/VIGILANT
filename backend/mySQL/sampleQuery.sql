@@ -1,0 +1,9 @@
+
+
+-- THIS QUERY WILL FIND ALL BURGLARY DATA
+SELECT
+    *
+FROM
+    crimedata
+WHERE
+	description LIKE 'BURGLARY'
