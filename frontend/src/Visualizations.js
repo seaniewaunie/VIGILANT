@@ -30,8 +30,8 @@ export class HeatMap extends Component {
     }
     render() {
         return(
-            <Col xs={XSMALL} sm={SMALL} md={MD} key={this.state.id}>
-                <Thumbnail src={heatmap} />
+            <Col xs={2*XSMALL} sm={2*SMALL} md={MD} key={this.state.id}>
+                <Thumbnail src={heatmap}/>
             </Col>
         );
     }
@@ -126,6 +126,4 @@ export class TableChart extends Component {
         );
     }
 }
-
-
 

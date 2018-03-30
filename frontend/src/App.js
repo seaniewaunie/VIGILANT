@@ -3,7 +3,7 @@ import './css/App.css';
 import {HeatMap, LineGraph, PieChart, BarChart, TimeLine, TableChart} from './Visualizations'
 import { Grid, Row } from 'react-bootstrap'; 
 import Header from './Header';
-
+import TableFS from './visuals/Table.js';
 var VIS_PER_ROW = 4;
 
 class App extends Component {
@@ -52,13 +52,15 @@ class App extends Component {
                     hideOne={this.hideOne}
                     counter={this.state.counter}
                 /> 
-                <Grid id="grid">
+                <Grid fluid={true} id="grid">
                     <FormatGrid 
                         counter={this.state.counter} 
                         visuals={this.state.visuals}
                     />
                 </Grid>
- 
+                <TableFS />
+
+
             </div>
         );
     }
