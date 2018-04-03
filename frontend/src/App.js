@@ -4,21 +4,23 @@ import {HeatMap, LineGraph, PieChart, BarChart, TimeLine, TableChart} from './Vi
 import { Grid, Row } from 'react-bootstrap'; 
 import Header from './Header';
 import TableFS from './visuals/Table.js';
-var VIS_PER_ROW = 4;
+import LineGraphFS from './visuals/LineGraph.js';
+
+var VIS_PER_ROW = 6;
 
 class App extends Component {
     constructor() {
         super();
         this.state = {
-            counter: 6,
             visuals: [
                 <HeatMap id='0' key='0'/>,
                 <BarChart id='1' key='1'/>,
                 <LineGraph id='2' key='2'/>,
                 <PieChart id='3' key='3'/>,
                 <TimeLine id='4' key='4'/>,
-                <TableChart id='5' key='5'/>,
+//                <TableChart id='5' key='5'/>,
             ],
+            counter: 0,
             hiddenVisuals: [
             ],
         };
@@ -45,6 +47,7 @@ class App extends Component {
     }
 
     render() {
+        this.state.counter = this.state.visuals.length;
         return (
             <div>
                 <Header 
@@ -59,7 +62,7 @@ class App extends Component {
                     />
                 </Grid>
                 <TableFS />
-
+                <LineGraphFS />
 
             </div>
         );

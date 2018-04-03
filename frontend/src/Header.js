@@ -38,7 +38,7 @@ class Header extends Component {
                 
                 <Nav pullRight>
                   <NavItem eventKey={1} href="#">Hide</NavItem>
-                  <NavItem eventKey={2} href="#">Unhide</NavItem>
+                  <NavItem eventKey={2} href="#">Reveal</NavItem>
                 </Nav>
 
               </Navbar.Collapse>
@@ -53,6 +53,7 @@ class AddVisualization extends Component {
 
     this.handleShow = this.handleShow.bind(this);
     this.handleClose = this.handleClose.bind(this);
+
     this.handleHeatMap = this.handleHeatMap.bind(this);
     this.handleBarChart = this.handleBarChart.bind(this);
     this.handleLineGraph = this.handleLineGraph.bind(this);
@@ -276,9 +277,15 @@ function ShowOptions(props){
           <Modal.Body>
             <Grid>
               <Row className="show-grid">
-                <Col xs={4} sm={3} md={2}>
+{/*                <Col xs={4} sm={3} md={2}>
                     <OverlayTrigger placement="top" overlay={heattip}>
                     <Thumbnail src={heatmap} responsive onClick={props.handleHeatMap} />
+                    </OverlayTrigger>
+                </Col>
+*/}
+                <Col xs={4} sm={3} md={2}>
+                    <OverlayTrigger placement="top" overlay={pitip}>
+                    <Thumbnail src={piechart} responsive  onClick={props.handlePieChart} />
                     </OverlayTrigger>
                 </Col>
                 <Col xs={4} sm={3} md={2}>
@@ -292,13 +299,8 @@ function ShowOptions(props){
                     </OverlayTrigger>
                 </Col>                  
               </Row>
-              
+ {/*             
               <Row className="show-grid">
-                <Col xs={4} sm={3} md={2}>
-                    <OverlayTrigger placement="top" overlay={pitip}>
-                    <Thumbnail src={piechart} responsive  onClick={props.handlePieChart} />
-                    </OverlayTrigger>
-                </Col>
                 <Col xs={4} sm={3} md={2}>
                     <OverlayTrigger placement="top" overlay={timetip}>
                     <Thumbnail src={timeline} responsive  onClick={props.handleTimeLine} />
@@ -309,8 +311,8 @@ function ShowOptions(props){
                     <Thumbnail src={tablechart} responsive onClick={props.handleTableChart}  />
                     </OverlayTrigger>
                 </Col> 
-
               </Row>
+*/}
 
             </Grid>
           </Modal.Body>

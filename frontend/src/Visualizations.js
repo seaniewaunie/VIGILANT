@@ -8,9 +8,9 @@ import tablechart from './images/table icon.png';
 import { Col, Thumbnail } from 'react-bootstrap'; 
 //import Routes from './routes';
 
-var XSMALL = 6;
-var SMALL = 3;
-var MD = 3;
+var XSMALL = 4;
+var SMALL = 2;
+var MD = 2;
 
 export default class Visualizations extends Component {
   render() {
