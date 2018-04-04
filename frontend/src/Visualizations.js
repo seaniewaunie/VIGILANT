@@ -7,7 +7,6 @@ import timeline from './images/timeline icon.png';
 import tablechart from './images/table icon.png';
 import { Col, Thumbnail } from 'react-bootstrap'; 
 import LineGraphFS from './visuals/LineGraph.js';
-import BarChartFS from './visuals/BarChart.js';
 //import Routes from './routes';
 
 var XSMALL = 4;
@@ -103,17 +102,9 @@ export class BarChart extends Component {
     }
     render() {
         return(
-            /*<Col xs={XSMALL} sm={SMALL} md={MD} key={this.state.id}>
+            <Col xs={XSMALL} sm={SMALL} md={MD} key={this.state.id}>
                 <p>{this.state.name}</p>
                 <Thumbnail src={barchart} />
-            </Col>*/
-			<Col xs={XSMALL} sm={SMALL} md={MD} key={this.state.id}>
-                {/*<Thumbnail src={barchart} />*/}
-                <p>{this.state.name}</p>
-                <BarChartFS
-                    name={this.state.name}
-                    id={this.state.id}
-                />
             </Col>
         );
     }
