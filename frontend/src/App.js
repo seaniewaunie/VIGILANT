@@ -14,9 +14,9 @@ class App extends Component {
         this.state = {
             visuals: [
                 <HeatMap id='0' key='0'/>,
-                <BarChart id='1' key='1'/>,
-                <LineGraph id='2' key='2'/>,
-                <PieChart id='3' key='3'/>,
+                <BarChart id='1' name='Default Bar Chart' key='1'/>,
+                <LineGraph id='2' name='Default Line Graph' key='2'/>,
+                <PieChart id='3' name='Default Time Line' key='3'/>,
                 <TimeLine id='4' key='4'/>,
 //                <TableChart id='5' key='5'/>,
             ],
@@ -62,7 +62,6 @@ class App extends Component {
                     />
                 </Grid>
                 <TableFS />
-                <LineGraphFS />
 
             </div>
         );
@@ -91,7 +90,7 @@ function FormatGrid(props) {
 }
 
 function FormatRow(props){
-    var row = [];
+   var row = [];
     var rowNum = props.currentRow;
     for(var j=rowNum*VIS_PER_ROW; j < (rowNum+1)*VIS_PER_ROW; j++){
         row.push(

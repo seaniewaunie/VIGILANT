@@ -21,6 +21,9 @@ class TableFS extends Component {
             Header: 'Date',
             width: 103
         }, {
+            accessor: 'crimetime',
+            Header: 'Time', 
+        }, {
             accessor: 'crimecode', 
             Header: 'Crime Code',
             width: 90
@@ -54,7 +57,8 @@ class TableFS extends Component {
             Header: 'Premise'
         }, {
             accessor: 'total_incidents', 
-            Header: 'Total Incidents'
+            Header: 'Total Incidents',
+            width: 50
         },
     ];
 

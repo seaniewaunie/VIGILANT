@@ -6,12 +6,19 @@ import { Line as LineChart } from 'react-chartjs';
 
 class LineGraphFS extends Component {
 
-  constructor() {
-    super();
-
+  constructor(props) {
+    super(props);
+    
+    this.compress = this.compress.bind(this);
+    this.expand = this.expand.bind(this);
     this.getData = this.getData.bind(this);
+    this.handleClick = this.handleClick.bind(this);
 
     this.state = {
+        fullscreen: false,
+        height: "200",
+        width: "200",
+        name : props.name,
         data : this.getData(),
         chartOptions : {
             ///Boolean - Whether grid lines are shown across the chart
@@ -82,18 +89,36 @@ class LineGraphFS extends Component {
                 pointStrokeColor: "#fff",
                 pointHighlightFill: "#fff",
                 pointHighlightStroke: "rgba(220,220,220,1)",
-                data: [65, 59, 80, 81, 56, 55, 40]        
+                data: [65, 59, 80, 81, 56, 55, 40]
             },
         ],
     }
     return data;
   }
 
+  handleClick() {
+    this.setState({fullscreen: !this.state.fullscreen}, () => {
+        this.state.fullscreen ? this.expand() : this.compress();
+    });
+
+  }
+
+  compress() {
+    //this.setState({height:"200", width:"200"});
+    console.log("Compressing Visual from full screen");
+  }
+
+  expand() {
+    //this.setState({height:"150", width:"150"}); 
+    console.log("Expanding Visual to full screen");
+  }
+
+
   render() {   
     const { data, chartOptions } = this.state;
     return (
-        <div className="LineGraphFS">
-           <LineChart data={data} options={chartOptions} width="600" height="250" /> 
+        <div className="LineChartFS" onClick={this.handleClick}>
+            <LineChart data={data} options={chartOptions} height={this.state.height} width={this.state.width}/> 
         </div>
     );
   }

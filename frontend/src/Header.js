@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import logo from './logo.svg';
 import './css/Header.css';
-import { Button, Col, Grid, Tooltip, Thumbnail, Navbar, Nav, NavItem, NavDropdown, MenuItem, Modal, OverlayTrigger, Row } from 'react-bootstrap'; 
+import { Button, Col, Grid, FormGroup, ControlLabel, FormControl, HelpBlock, Tooltip, Thumbnail, Navbar, Nav, NavItem, NavDropdown, MenuItem, Modal, OverlayTrigger, Row } from 'react-bootstrap'; 
 import heatmap from './images/heat-map icon.png';
 import barchart from './images/barchart icon.png';
 import linegraph from './images/line graph icon.png';
@@ -51,6 +51,9 @@ class AddVisualization extends Component {
   constructor(props, context) {
     super(props, context);
 
+    this.getValidationState = this.getValidationState.bind(this);
+    this.handleChange = this.handleChange.bind(this);
+
     this.handleShow = this.handleShow.bind(this);
     this.handleClose = this.handleClose.bind(this);
 
@@ -70,31 +73,32 @@ class AddVisualization extends Component {
       selected: false,
       type: '',
       id: props.counter,
+      name : '',
     };
   }
 
   handleClose() {
-    this.setState({ show: false, selected: false, type: '' });
+    this.setState({ show: false, selected: false, type: '', name: '' });
   }
 
   handleShow() {
     this.setState({ show: true });
   }
 
-  handleAdd(type){
+  handleAdd(){
     var element;
-    switch(type){
+    switch(this.state.type){
         case 'Heat Map':
             element = <HeatMap id={this.state.id}/>;
             break;
         case 'Bar Chart':
-            element = <BarChart id={this.state.id}/>;
+            element = <BarChart id={this.state.id} name={this.state.name} key={this.state.id} />;
             break;
         case 'Line Graph':
-            element = <LineGraph id={this.state.id}/>;
+            element = <LineGraph id={this.state.id} name={this.state.name} key={this.state.id}/>;
             break;
         case 'Pie Chart':
-            element = <PieChart id={this.state.id}/>;
+            element = <PieChart id={this.state.id} name={this.state.name} key={this.state.id} />;
             break;
         case 'Timeline':
             element = <TimeLine id={this.state.id}/>;
@@ -103,27 +107,39 @@ class AddVisualization extends Component {
             element = <TableChart id={this.state.id} />;
             break;
         default:
-            console.log("error, unhandled element selected in Add visualization");
+            console.log("error, unhandled element selected in Add visualization: ", this.state.type);
     }
     this.handleClose();
     this.addOne(element);
     this.setState({ selected: false, type: '' });
   }
-  
+ 
+  getValidationState() {
+    const length = this.state.name.length;
+    if (length > 0) return 'success';
+//    else if (length > 0) return 'warning';
+//    else if (length > 0) return 'error';
+    return 'warning';
+  }
+
+  handleChange(e) {
+    this.setState({ name: e.target.value });
+  }
+
   handleHeatMap() {
     this.setState({ selected: true, type: 'Heat Map' });
   }
 
   handleBarChart() {
-    this.setState({ selected: true, type: 'Bar Chart' });
+    this.setState({ selected: true, type: 'Bar Chart' }, this.handleAdd);
   }
 
   handleLineGraph() {
-    this.setState({ selected: true, type: 'Line Graph' });
+    this.setState({ selected: true, type: 'Line Graph' }, this.handleAdd);
   }
 
   handlePieChart() {
-    this.setState({ selected: true, type: 'Pie Chart' });
+    this.setState({ selected: true, type: 'Pie Chart' }, this.handleAdd);
   }
 
 
@@ -137,7 +153,7 @@ class AddVisualization extends Component {
   }
 
   render() {
-    var show = this.state.selected ? (
+/*    var show = this.state.selected ? (
       <ShowFilter 
             handleAdd={this.handleAdd}
             handleClose={this.handleClose}
@@ -157,6 +173,21 @@ class AddVisualization extends Component {
       />
 
     );
+*/
+    var show = (
+      <ShowOptions 
+            handleHeatMap={this.handleHeatMap}
+            handleBarChart={this.handleBarChart}
+            handleLineGraph={this.handleLineGraph}
+            handlePieChart={this.handlePieChart}
+            handleTimeLine={this.handleTimeLine}
+            handleTableChart={this.handleTableChart}
+            handleClose={this.handleClose}
+            getValidationState={this.getValidationState}
+            handleChange={this.handleChange}
+      />
+    );
+
     return (
     <Nav>
         <NavItem eventKey={1} onClick={this.handleShow}>
@@ -272,7 +303,24 @@ function ShowOptions(props){
     options.push(
         <div>
         <Modal.Header closeButton>
-            <Modal.Title>Select a Visualization To Add Below</Modal.Title>
+            <Modal.Title>
+                <form>
+                    <FormGroup
+                      controlId="formBasicText"
+                      validationState={props.getValidationState()}
+                    >
+                      <ControlLabel>Add Visualization</ControlLabel>
+                      <FormControl
+                        type="text"
+                        value={props.name}
+                        placeholder="Visualization Name"
+                        onChange={props.handleChange}
+                      />
+                      <FormControl.Feedback />
+                      <HelpBlock>After entering a name, click on which visualization you would like</HelpBlock>
+                    </FormGroup>
+              </form>            
+            </Modal.Title>
           </Modal.Header>
           <Modal.Body>
             <Grid>
