@@ -12,6 +12,7 @@ import LineGraphFS from './visuals/LineGraph.js';
 var XSMALL = 4;
 var SMALL = 2;
 var MD = 2;
+var nameString = "Visualization ";
 
 export default class Visualizations extends Component {
   render() {
@@ -42,7 +43,7 @@ export class LineGraph extends Component {
     constructor(props){
         super();
 
-        var chartName = "New Line Graph";
+        var chartName = nameString + props.id;
         if(props.name != '') chartName = props.name; 
         
         this.state = {
@@ -69,7 +70,7 @@ export class PieChart extends Component {
     constructor(props){
         super();
 
-        var chartName = "New Pie Chart";
+        var chartName = nameString + props.id;
         if(props.name != '') chartName = props.name; 
         
         this.state = {
@@ -92,7 +93,7 @@ export class BarChart extends Component {
     constructor(props){
         super();
 
-        var chartName = "New Bar Chart";
+        var chartName = nameString + props.id;
         if(props.name != '') chartName = props.name; 
  
         this.state = {

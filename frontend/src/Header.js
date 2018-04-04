@@ -13,7 +13,7 @@ import Filter from './Filters'
 
 class Header extends Component {
     constructor(props){
-        super();
+        super(props);
         
     }
 
@@ -110,15 +110,12 @@ class AddVisualization extends Component {
             console.log("error, unhandled element selected in Add visualization: ", this.state.type);
     }
     this.handleClose();
-    this.addOne(element);
-    this.setState({ selected: false, type: '' });
+    this.setState({ selected: false, type: '' }, () => { this.addOne(element); });
   }
  
   getValidationState() {
     const length = this.state.name.length;
     if (length > 0) return 'success';
-//    else if (length > 0) return 'warning';
-//    else if (length > 0) return 'error';
     return 'warning';
   }
 
@@ -131,15 +128,15 @@ class AddVisualization extends Component {
   }
 
   handleBarChart() {
-    this.setState({ selected: true, type: 'Bar Chart' }, this.handleAdd);
+    this.setState({ selected: true, type: 'Bar Chart', id: this.state.id+1}, this.handleAdd);
   }
 
   handleLineGraph() {
-    this.setState({ selected: true, type: 'Line Graph' }, this.handleAdd);
+    this.setState({ selected: true, type: 'Line Graph', id: this.state.id+1}, this.handleAdd);
   }
 
   handlePieChart() {
-    this.setState({ selected: true, type: 'Pie Chart' }, this.handleAdd);
+    this.setState({ selected: true, type: 'Pie Chart', id: this.state.id+1}, this.handleAdd);
   }
 
 
@@ -304,7 +301,7 @@ function ShowOptions(props){
         <div>
         <Modal.Header closeButton>
             <Modal.Title>
-                <form>
+                {/*<form>*/}
                     <FormGroup
                       controlId="formBasicText"
                       validationState={props.getValidationState()}
@@ -319,7 +316,7 @@ function ShowOptions(props){
                       <FormControl.Feedback />
                       <HelpBlock>After entering a name, click on which visualization you would like</HelpBlock>
                     </FormGroup>
-              </form>            
+              {/*</form>*/}        
             </Modal.Title>
           </Modal.Header>
           <Modal.Body>

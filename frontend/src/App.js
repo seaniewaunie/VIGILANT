@@ -20,7 +20,7 @@ class App extends Component {
                 <TimeLine id='4' key='4'/>,
 //                <TableChart id='5' key='5'/>,
             ],
-            counter: 0,
+            counter: 5,
             hiddenVisuals: [
             ],
         };
@@ -32,7 +32,7 @@ class App extends Component {
         var newVisual = vis;
         this.state.visuals.push(newVisual)
         this.setState({
-            counter: this.state.counter + 1,
+            counter: this.state.visuals.length,
         })
     }
 
