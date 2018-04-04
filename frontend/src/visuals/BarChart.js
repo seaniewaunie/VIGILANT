@@ -1,7 +1,7 @@
 // Full Screen impl.
 import React, { Component } from 'react';
 import jsonData from '../json/big.js';
-import { Bar as BarGraph } from 'react-chartjs';
+import { Bar as BarGraph } from 'react-chartjs-2';
 
 class BarChartFS extends Component {
 	

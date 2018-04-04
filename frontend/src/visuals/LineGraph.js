@@ -2,7 +2,7 @@
 // https://github.com/reactjs/react-chartjs
 import React, { Component } from 'react';
 import jsonData from '../json/big.js';
-import { Line as LineChart } from 'react-chartjs';
+import { Line as LineChart } from 'react-chartjs-2';
 
 class LineGraphFS extends Component {
 
