@@ -8,6 +8,7 @@ This script will download the dataset from the BCPD as a file
 and use that to store data into the database.
 '''
 
+
 import json, subprocess, time
 import mysql.connector
 from mysql.connector import errorcode
@@ -18,11 +19,26 @@ cmd = ['./dl.sh']
 process = subprocess.Popen(cmd)
 process.wait()
 
+
+def executeScriptsFromFile(filename):
+    fd = open(filename, 'r')
+    sqlFile = fd.read()
+    fd.close()
+    sqlCommands = sqlFile.split(';')
+
+    for command in sqlCommands:
+        try:
+            if command.strip() != '':
+                cursor.execute(command)
+        except  msg:
+            print ("Command skipped: "+ msg)
+
+
 # code to connect to MySQL server
 try:
-  cnx = mysql.connector.connect(user='randolph',
-                                password='password',
-                                host='10.0.2.2',
+  cnx = mysql.connector.connect(user='Randy',
+                                password='RandyRules123',
+                                host='127.0.0.1',
                                 database='VigilantDB')
   cursor= cnx.cursor()
   
@@ -31,11 +47,13 @@ except mysql.connector.Error as err:
     print("Something is wrong with your user name or password")
   elif err.errno == errorcode.ER_BAD_DB_ERROR:
     print("Database does not exist")
+    executeScriptsFromFile('../mySQL/createAll.sql')
+    cnx.commit()
+    
   else:
     print(err)
-else:
-  print("HOORAH")
 
+print("BRU")
 
 count = 0
 with open('4ih5-d5d5.json') as dataFile:
