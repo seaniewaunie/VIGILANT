@@ -8,6 +8,7 @@ import tablechart from './images/table icon.png';
 import { Col, Thumbnail } from 'react-bootstrap'; 
 import LineGraphFS from './visuals/LineGraph.js';
 import BarChartFS from './visuals/BarChart.js';
+import PieChartFS from './visuals/PieChart.js';
 //import Routes from './routes';
 
 var XSMALL = 4;
@@ -82,8 +83,12 @@ export class PieChart extends Component {
     render() {
         return(
             <Col xs={XSMALL} sm={SMALL} md={MD} key={this.state.id}>
-                <p>{this.state.name}</p>
-                <Thumbnail src={piechart} />
+				{/*<Thumbnail src={piechart} />*/}
+				<p>{this.state.name}</p>
+                <PieChartFS
+                    name={this.state.name}
+                    id={this.state.id}
+                />
             </Col>
         );
     }
@@ -104,10 +109,6 @@ export class BarChart extends Component {
     }
     render() {
         return(
-            /*<Col xs={XSMALL} sm={SMALL} md={MD} key={this.state.id}>
-                <p>{this.state.name}</p>
-                <Thumbnail src={barchart} />
-            </Col>*/
 			<Col xs={XSMALL} sm={SMALL} md={MD} key={this.state.id}>
                 {/*<Thumbnail src={barchart} />*/}
                 <p>{this.state.name}</p>

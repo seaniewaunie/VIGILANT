@@ -16,7 +16,7 @@ class App extends Component {
                 <HeatMap id='0' key='0'/>,
                 <BarChart id='1' name='Default Bar Chart' key='1'/>,
                 <LineGraph id='2' name='Default Line Graph' key='2'/>,
-                <PieChart id='3' name='Default Time Line' key='3'/>,
+                <PieChart id='3' name='Default Pie Chart' key='3'/>,
                 <TimeLine id='4' key='4'/>,
 //                <TableChart id='5' key='5'/>,
             ],

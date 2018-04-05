@@ -1,10 +1,12 @@
 // Full Screen impl.
-//Notes: currently using dummy data
+//Notes: currently using dummy data, and displayed with patterned sections for colorblind accessibility issues
 import React, { Component } from 'react';
 import jsonData from '../json/big.js';
-import { Bar as BarGraph } from 'react-chartjs-2';
+import { Pie as PieChart} from 'react-chartjs-2';
+import pattern from 'patternomaly';
 
-class BarChartFS extends Component {
+
+class PieChartFS extends Component {
 	
 	constructor(props) {
     super(props);
@@ -32,14 +34,19 @@ class BarChartFS extends Component {
     // 127.0.0.1:8000/api
     // and will return a json of the data
     var data = {
-        labels: [ "January", "February", "March", "April", "May", "June", "July"],
-        datasets : [
+		datasets : [
             {
-                label: "Data Label",
-                data: [65, 59, 80, 81, 56, 55, 40]
-            },
+                data: [10, 20, 30, 40],
+				backgroundColor: [
+				pattern.draw('square', '#ff6384'),
+				pattern.draw('circle', '#36a2eb'),
+				pattern.draw('diamond', '#cc65fe'),
+				pattern.draw('triangle', '#ffce56'),
+				]
+            }
         ],
-    }
+		labels: [ "January", "February", "March", "April"]
+    };
     return data;
   }	
   
@@ -63,20 +70,13 @@ class BarChartFS extends Component {
 
   
  render() {
-	/*const x_axis = [
-        {
-            accessor: 'premise', 
-            Header: 'premise',
-
-        },
-	];*/
 	
 	const {data} = this.state; 
     return (
-        <div className="BarChartFS" onClick={this.handleClick}>
-			<BarGraph data={data} height={this.state.height} width={this.state.width}/> 
+        <div className="PieChartFS" onClick={this.handleClick}>
+			<PieChart data={data} height={this.state.height} width={this.state.width}/> 
         </div>
     );
   }
 }
-export default BarChartFS;
+export default PieChartFS;
