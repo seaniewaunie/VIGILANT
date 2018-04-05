@@ -27,18 +27,20 @@ def executeScriptsFromFile(filename):
     sqlCommands = sqlFile.split(';')
 
     for command in sqlCommands:
+        print (command)
         try:
             if command.strip() != '':
                 cursor.execute(command)
-        except  msg:
-            print ("Command skipped: "+ msg)
+        except:
+            print ("Command skipped: ")
 
 
 # code to connect to MySQL server
 try:
   cnx = mysql.connector.connect(user='Randy',
                                 password='RandyRules123',
-                                host='127.0.0.1',
+                                #host='127.0.0.1',
+                                host='10.0.2.2',
                                 database='VigilantDB')
   cursor= cnx.cursor()
   
@@ -56,6 +58,9 @@ except mysql.connector.Error as err:
 print("BRU")
 
 count = 0
+executeScriptsFromFile('../mySQL/createAll.sql')
+cnx.commit()
+
 with open('4ih5-d5d5.json') as dataFile:
     dat = json.load(dataFile)
     print(type(dat[0]))
@@ -65,21 +70,22 @@ with open('4ih5-d5d5.json') as dataFile:
                 "(crime_ID, date, time, description, district) "
                 "VALUES (%s, %s, %s, %s, %s)")
     
-        
+
     for v in dat:
         try:
             
             data = (count, v['crimedate'][:10], v['crimetime'], v['description'], v['district'])
             
             print (v['crimedate'][:10])
-            cursor.execute(add_data, data)
-            cnx.commit()
+            #cursor.execute(add_data, data)
+            #cnx.commit()
             count += 1
             
             print("date: " + v['crimedate'])
             print("time: " + v['crimetime'])
             print("description: " + v['description'])
             #print("weapon: " + v['weapon'])
+            print("code: " + v['crimecode'])
             #print("address: " + v['location'])
             print("district: " + v['district'])
             #print("neighborhood: " + v['neighborhood'])
