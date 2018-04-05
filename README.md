@@ -47,7 +47,7 @@ pip freeze > requirements.txt
 ### To run the npm server
 ```
 cd frontend
-npm install (only do this the first time you run it)
+npm install (do this anytime the package.json file has been modified)
 npm start
 ```
 

@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './css/index.css';
 import App from './App';
-import Header from './Header';
+//import Header from './Header';
 import Visual from './Visualization'
 import registerServiceWorker from './registerServiceWorker';
 

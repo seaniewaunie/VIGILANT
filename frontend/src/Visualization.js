@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import heatmap from './images/heat-map icon.png';
 
 class Visualization extends Component {
   render() {

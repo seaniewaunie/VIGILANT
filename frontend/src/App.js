@@ -3,22 +3,24 @@ import './css/App.css';
 import {HeatMap, LineGraph, PieChart, BarChart, TimeLine, TableChart} from './Visualizations'
 import { Grid, Row } from 'react-bootstrap'; 
 import Header from './Header';
+import TableFS from './visuals/Table.js';
+import LineGraphFS from './visuals/LineGraph.js';
 
-var VIS_PER_ROW = 4;
+var VIS_PER_ROW = 6;
 
 class App extends Component {
     constructor() {
         super();
         this.state = {
-            counter: 6,
             visuals: [
                 <HeatMap id='0' key='0'/>,
-                <BarChart id='1' key='1'/>,
-                <LineGraph id='2' key='2'/>,
-                <PieChart id='3' key='3'/>,
+                <BarChart id='1' name='Default Bar Chart' key='1'/>,
+                <LineGraph id='2' name='Default Line Graph' key='2'/>,
+                <PieChart id='3' name='Default Pie Chart' key='3'/>,
                 <TimeLine id='4' key='4'/>,
-                <TableChart id='5' key='5'/>,
+//                <TableChart id='5' key='5'/>,
             ],
+            counter: 5,
             hiddenVisuals: [
             ],
         };
@@ -30,7 +32,7 @@ class App extends Component {
         var newVisual = vis;
         this.state.visuals.push(newVisual)
         this.setState({
-            counter: this.state.counter + 1,
+            counter: this.state.visuals.length,
         })
     }
 
@@ -45,6 +47,7 @@ class App extends Component {
     }
 
     render() {
+        this.state.counter = this.state.visuals.length;
         return (
             <div>
                 <Header 
@@ -52,13 +55,14 @@ class App extends Component {
                     hideOne={this.hideOne}
                     counter={this.state.counter}
                 /> 
-                <Grid id="grid">
+                <Grid fluid={true} id="grid">
                     <FormatGrid 
                         counter={this.state.counter} 
                         visuals={this.state.visuals}
                     />
                 </Grid>
- 
+                <TableFS />
+
             </div>
         );
     }
@@ -86,7 +90,7 @@ function FormatGrid(props) {
 }
 
 function FormatRow(props){
-    var row = [];
+   var row = [];
     var rowNum = props.currentRow;
     for(var j=rowNum*VIS_PER_ROW; j < (rowNum+1)*VIS_PER_ROW; j++){
         row.push(
