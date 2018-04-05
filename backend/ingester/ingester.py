@@ -13,6 +13,7 @@ import json, subprocess, time
 import mysql.connector
 from mysql.connector import errorcode
 from datetime import date
+import calendar
 
 # code to run other script
 cmd = ['./dl.sh']
@@ -20,6 +21,7 @@ process = subprocess.Popen(cmd)
 process.wait()
 
 
+# function will run sql script from a given file location
 def executeScriptsFromFile(filename):
     fd = open(filename, 'r')
     sqlFile = fd.read()
@@ -33,6 +35,24 @@ def executeScriptsFromFile(filename):
                 cursor.execute(command)
         except:
             print ("Command skipped: ")
+
+            
+# Function will return day given date string
+def getWeekday(date_):
+    year = int(date_[:4])
+    month = int(date_[5:7])
+    day = int(date_[8:10])
+    dates = date(year, month, day)
+      
+    return{
+        '0' : 'Mon',
+        '1' : 'Tue',
+        '2' : 'Wed',
+        '3' : 'Thu',
+        '4' : 'Fri',
+        '5' : 'Sat',
+        '6' : 'Sun'
+    }.get(str(dates.weekday()), 'error')
 
 
 # code to connect to MySQL server
@@ -58,6 +78,8 @@ except mysql.connector.Error as err:
 print("BRU")
 
 count = 0
+
+# resets tables
 executeScriptsFromFile('../mySQL/createAll.sql')
 cnx.commit()
 
@@ -67,39 +89,107 @@ with open('4ih5-d5d5.json') as dataFile:
    
     
     add_data = ("INSERT INTO CrimeData "
-                "(crime_ID, date, time, description, district) "
-                "VALUES (%s, %s, %s, %s, %s)")
+                "(crime_ID, date, time, description, district, day, weapon, address, neighborhood, premise, inside_outside, latitude, longitude) "
+                "VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)")
     
 
     for v in dat:
+
+        # calculates day
+        day = getWeekday(v['crimedate'])
+
+        # check for other values
+        
         try:
-            
-            data = (count, v['crimedate'][:10], v['crimetime'], v['description'], v['district'])
-            
-            print (v['crimedate'][:10])
-            #cursor.execute(add_data, data)
-            #cnx.commit()
-            count += 1
-            
-            print("date: " + v['crimedate'])
-            print("time: " + v['crimetime'])
-            print("description: " + v['description'])
-            #print("weapon: " + v['weapon'])
-            print("code: " + v['crimecode'])
-            #print("address: " + v['location'])
-            print("district: " + v['district'])
-            #print("neighborhood: " + v['neighborhood'])
-            #print("premise: " + v['premise'])
-            #print("inside/outside: " + v['inside_outside'])
-            #print("lat/lon: " + str(v['location_1']['coordinates']))
-
-            # testing to load values for description and district
-
-
-            
+            weapon = v['weapon']
         except KeyError:
-            print("something was caight")
+            weapon = None;
+        print (weapon)
+
+        try:
+            address  = v['location']
+        except KeyError:
+            address = None;
+        print (address)
+
+        try:
+            neighborhood  = v['neighborhood']
+
+        except KeyError:
+            neighborhood = None
+        print (neighborhood)
+            
+        try:
+            premise  = v['premise']
+        except KeyError:
+            premise = None
+        print (premise)
+
+        try:
+            in_out  = v['inside_outside']
+        except KeyError:
+            in_out = None
+        print (in_out)
+
+
+        try:    
+            latitude = v['latitude']
+        except KeyError:
+            print("ERROR: latitude")
+            latitude = None
+        print (latitude)
+                
+
+        try:    
+            longitude = v['longitude']
+        except KeyError:
+            print("ERROR: longitude")
+            longitude = None
+        print (longitude)
+                
+
+        #print(v['latitude'])
+
+            
+            
+        data = (count, v['crimedate'][:10], v['crimetime'], v['description'], v['district'], day, weapon, address, neighborhood, premise, in_out, latitude, longitude)
+            
+        
+        cursor.execute(add_data, data)
+        cnx.commit()
+        count += 1
+
+        # Values that every entry has
+        
+        print("date: " + v['crimedate'][:10])
+        print("day: "+ day)
+        print("time: " + v['crimetime'])
+        print("description: " + v['description'])
+        print("code: " + v['crimecode'])
+        print("district: " + v['district'])
+
+        # Values that not all entries have
+        #print("weapon: " + v['weapon'])
+        
+        #print("address: " + v['location'])
+
+        #print("neighborhood: " + v['neighborhood'])
+        #print("premise: " + v['premise'])
+        #print("inside/outside: " + v['inside_outside'])
+        #print("lat/lon: " + str(v['location_1']['coordinates']))
+
+        # testing to load values for description and district
+
         print (" ------------ ")
             
-time.sleep(2)
+#except KeyError:
+ #   print("something was caight")
+
+            
+
+
+# test code
+#executeScriptsFromFile('../mySQL/sampleQuery.sql')
+cnx.commit()
+
 cnx.close()
