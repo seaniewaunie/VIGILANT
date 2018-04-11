@@ -127,6 +127,16 @@ with open('4ih5-d5d5.json') as dataFile:
 
         try:
             in_out  = v['inside_outside']
+
+            # normalize data to I or O
+            if (in_out[0] == 'O'):
+                in_out = 'O'
+            elif (in_out[0] == 'I'):
+                in_out = 'I'
+            else:
+                in_out = 'ERROR'
+                
+            
         except KeyError:
             in_out = None
         print (in_out)
@@ -151,7 +161,6 @@ with open('4ih5-d5d5.json') as dataFile:
         #print(v['latitude'])
 
             
-            
         data = (count, v['crimedate'][:10], v['crimetime'], v['description'], v['district'], day, weapon, address, neighborhood, premise, in_out, latitude, longitude)
             
         
@@ -159,8 +168,7 @@ with open('4ih5-d5d5.json') as dataFile:
         cnx.commit()
         count += 1
 
-        # Values that every entry has
-        
+        # Values that every entry has        
         print("date: " + v['crimedate'][:10])
         print("day: "+ day)
         print("time: " + v['crimetime'])
@@ -168,15 +176,6 @@ with open('4ih5-d5d5.json') as dataFile:
         print("code: " + v['crimecode'])
         print("district: " + v['district'])
 
-        # Values that not all entries have
-        #print("weapon: " + v['weapon'])
-        
-        #print("address: " + v['location'])
-
-        #print("neighborhood: " + v['neighborhood'])
-        #print("premise: " + v['premise'])
-        #print("inside/outside: " + v['inside_outside'])
-        #print("lat/lon: " + str(v['location_1']['coordinates']))
 
         # testing to load values for description and district
 
