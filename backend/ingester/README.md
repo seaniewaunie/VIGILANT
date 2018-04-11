@@ -16,6 +16,6 @@ Will prompt you for your password immediatly after putting the command
 Once you are logged in to your account
 
 ```
-\g USE DATABASE VigilantDB__
-\g SELECT day, date, weapon FROM CrimeData__
+\g USE DATABASE VigilantDB
+\g SELECT day, date, weapon FROM CrimeData
 ```
