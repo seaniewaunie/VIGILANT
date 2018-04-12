@@ -84,7 +84,7 @@ DATABASES = {
         'NAME': 'VigilantDB',
         'USER': 'sean',
         'PASSWORD': 'hugs123',
-        'HOST': 'localhost',
+        'HOST': '',
         'PORT': '',
     }
 }

@@ -30,3 +30,26 @@
     cursor:pointer;
 }
 
+#top {
+    overflow:auto;
+    width: 100%;
+}
+
+#sidebar {
+    width: 10em;
+    max-width: 10%;
+}
+
+#heatmap {
+    float:left;
+}
+
+#defaultVisuals {
+}
+
+#grid{
+}
+
+#table{
+    clear: both;
+}
