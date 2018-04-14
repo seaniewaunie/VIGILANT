@@ -1,11 +1,8 @@
 import React, { Component } from 'react';
 import heatmap from './images/heat-map icon.png';
-import barchart from './images/barchart icon.png';
-import linegraph from './images/line graph icon.png';
-import piechart from './images/pie chart icon.png';
 import timeline from './images/timeline icon.png';
 import tablechart from './images/table icon.png';
-import { Col, Thumbnail } from 'react-bootstrap'; 
+import { Col, Thumbnail } from 'react-bootstrap';
 import LineGraphFS from './visuals/LineGraph.js';
 import BarChartFS from './visuals/BarChart.js';
 import PieChartFS from './visuals/PieChart.js';
@@ -34,9 +31,7 @@ export class HeatMap extends Component {
     }
     render() {
         return(
-            <Col xs={2*XSMALL} sm={2*SMALL} md={MD} key={this.state.id}>
-                <Thumbnail src={heatmap}/>
-            </Col>
+            <Thumbnail src={heatmap}/>
         );
     }
 }
@@ -46,8 +41,8 @@ export class LineGraph extends Component {
         super();
 
         var chartName = nameString + props.id;
-        if(props.name != '') chartName = props.name; 
-        
+        if(props.name !== '') chartName = props.name;
+
         this.state = {
             id : props.id,
             name : chartName,
@@ -57,7 +52,7 @@ export class LineGraph extends Component {
         return(
             <Col xs={XSMALL} sm={SMALL} md={MD} key={this.state.id}>
                 {/*<Thumbnail src={linegraph} />*/}
-                <p>{this.state.name}</p>
+                <p align='center'>{this.state.name}</p>
                 <LineGraphFS
                     name={this.state.name}
                     id={this.state.id}
@@ -73,8 +68,8 @@ export class PieChart extends Component {
         super();
 
         var chartName = nameString + props.id;
-        if(props.name != '') chartName = props.name; 
-        
+        if(props.name !== '') chartName = props.name;
+
         this.state = {
             id : props.id,
             name : chartName,
@@ -82,14 +77,13 @@ export class PieChart extends Component {
     }
     render() {
         return(
-            <Col xs={XSMALL} sm={SMALL} md={MD} key={this.state.id}>
-				{/*<Thumbnail src={piechart} />*/}
-				<p>{this.state.name}</p>
-                <PieChartFS
-                    name={this.state.name}
-                    id={this.state.id}
-                />
-            </Col>
+          <Col xs={XSMALL} sm={SMALL} md={MD} key={this.state.id}>
+               <p align='center'>{this.state.name}</p>
+               <PieChartFS
+                   name={this.state.name}
+                   id={this.state.id}
+               />
+           </Col>
         );
     }
 }
@@ -100,8 +94,8 @@ export class BarChart extends Component {
         super();
 
         var chartName = nameString + props.id;
-        if(props.name != '') chartName = props.name; 
- 
+        if(props.name !== '') chartName = props.name;
+
         this.state = {
             id : props.id,
             name : chartName,
@@ -109,9 +103,8 @@ export class BarChart extends Component {
     }
     render() {
         return(
-			<Col xs={XSMALL} sm={SMALL} md={MD} key={this.state.id}>
-                {/*<Thumbnail src={barchart} />*/}
-                <p>{this.state.name}</p>
+           <Col xs={XSMALL} sm={SMALL} md={MD} key={this.state.id}>
+                <p align='center'>{this.state.name}</p>
                 <BarChartFS
                     name={this.state.name}
                     id={this.state.id}
@@ -147,7 +140,7 @@ export class TableChart extends Component {
         this.handleClick = this.handleClick.bind(this);
 
     }
-    
+
     handleClick(){
         console.log("table chart ", this.state.id, " clicked.");
     }
@@ -160,4 +153,3 @@ export class TableChart extends Component {
         );
     }
 }
-

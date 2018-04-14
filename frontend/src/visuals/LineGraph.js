@@ -1,23 +1,27 @@
-// Full Screen 
+// Full Screen
 // https://github.com/reactjs/react-chartjs
 import React, { Component } from 'react';
 import jsonData from '../json/big.js';
 import { Line as LineChart } from 'react-chartjs-2';
 
+console.log(jsonData);
+
 class LineGraphFS extends Component {
 
   constructor(props) {
     super(props);
-    
+
     this.compress = this.compress.bind(this);
     this.expand = this.expand.bind(this);
     this.getData = this.getData.bind(this);
+    this.getCounts = this.getCounts.bind(this);
     this.handleClick = this.handleClick.bind(this);
+
 
     this.state = {
         fullscreen: false,
-        height: "200",
-        width: "200",
+        height: 200,
+        width: 200,
         name : props.name,
         data : this.getData(),
         chartOptions : {
@@ -78,22 +82,36 @@ class LineGraphFS extends Component {
     // the api will be a link, something like
     // 127.0.0.1:8000/api
     // and will return a json of the data
+
+
+    var dates = jsonData.map(dates => dates.crimedate);
+//    console.log(dates);
+    var times = jsonData.map(times => times.crimetime);
+    // counting the number of occurances
+
+
     var data = {
-        labels: [ "January", "February", "March", "April", "May", "June", "July"],
+        labels: times,
         datasets : [
             {
-                label: "Data Label",
-                fillColor: "rgba(220,220,220,0.2)",
-                strokeColor: "rgba(220,220,220,1)",
-                pointColor: "rgba(220,220,220,1)",
-                pointStrokeColor: "#fff",
-                pointHighlightFill: "#fff",
-                pointHighlightStroke: "rgba(220,220,220,1)",
-                data: [65, 59, 80, 81, 56, 55, 40]
+                label: "# of Crimes at Different Times",
+                data: this.getCounts(times),
             },
+
         ],
     }
     return data;
+  }
+
+  // counts the number of similar values in an array
+  // and returns an array of the counts
+  getCounts(arr){
+    var counts = {};
+    for (var i = 0; i < arr.length; i++) {
+        counts[arr[i]] = 1 + (counts[arr[i]] || 0);
+    }
+    console.log(counts);
+    return Object.values(counts);
   }
 
   handleClick() {
@@ -109,20 +127,19 @@ class LineGraphFS extends Component {
   }
 
   expand() {
-    //this.setState({height:"150", width:"150"}); 
+    //this.setState({height:"150", width:"150"});
     console.log("Expanding Visual to full screen");
   }
 
 
-  render() {   
+  render() {
     const { data, chartOptions } = this.state;
     return (
         <div className="LineChartFS" onClick={this.handleClick}>
-            <LineChart data={data} options={chartOptions} height={this.state.height} width={this.state.width}/> 
+            <LineChart data={data} options={chartOptions} height={this.state.height} width={this.state.width}/>
         </div>
     );
   }
 }
 
 export default LineGraphFS;
-
