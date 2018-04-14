@@ -2,7 +2,14 @@
 
 from django.conf.urls import url
 from rest_framework.authtoken import views as drf_views
+from django.contrib import admin
+from django.urls import include, path
+from . import views
+
+
 
 urlpatterns = [
-    url(r'^auth$', drf_views.obtain_auth_token, name='auth'),
+	path('', views.ListCrimes.as_view()),
+	path('<int:pk>/', views.DetailCrime.as_view()),
+	path('gfilter/', views.GlobalFilter.as_view()),
 ]
