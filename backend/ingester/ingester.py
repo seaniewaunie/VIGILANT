@@ -182,7 +182,7 @@ with open('4ih5-d5d5.json') as dataFile:
 
         print(v['district'])
         
-        data = (count, v['crimedate'][:10], v['crimetime'], v['description'], v['district'], day, weapon, address, neighborhood, premise, in_out, latitude, longitude, post, v['crimecode'])
+        data = (count, v['crimedate'][:10], v['crimetime'], v['description'], fistrict, day, weapon, address, neighborhood, premise, in_out, latitude, longitude, post, v['crimecode'])
             
         
         cursor.execute(add_data, data)
