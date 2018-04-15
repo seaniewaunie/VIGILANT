@@ -180,7 +180,8 @@ with open('4ih5-d5d5.json') as dataFile:
         
         #print(v['latitude'])
 
-            
+        print(v['district'])
+        
         data = (count, v['crimedate'][:10], v['crimetime'], v['description'], v['district'], day, weapon, address, neighborhood, premise, in_out, latitude, longitude, post, v['crimecode'])
             
         
