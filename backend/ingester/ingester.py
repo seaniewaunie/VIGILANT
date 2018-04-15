@@ -171,8 +171,13 @@ with open('4ih5-d5d5.json') as dataFile:
          #   print("ERROR: post")
             post = None
         #print (post)
-                
 
+        try:
+            district = v['district']
+        except KeyError:
+            print("found district error")
+            district = "none"
+        
         #print(v['latitude'])
 
             
