@@ -26,7 +26,7 @@ class ApiCrimedata(models.Model):
 
     class Meta:
         managed = False
-        db_table = 'api_crimedata'
+        db_table = 'api_CrimeData'
 
 
 class AuthGroup(models.Model):
@@ -100,7 +100,7 @@ class Crimedata(models.Model):
     date = models.DateField()
     time = models.TimeField()
     day = models.CharField(max_length=10)
-    code = models.CharField(max_length=10)
+    #code = models.CharField(max_length=10)
     description = models.CharField(max_length=45)
     district = models.CharField(max_length=45)
     weapon = models.CharField(max_length=45, blank=True, null=True)
@@ -113,7 +113,7 @@ class Crimedata(models.Model):
 
     class Meta:
         managed = False
-        db_table = 'crimedata'
+        db_table = 'CrimeData'
 
 
 class DjangoAdminLog(models.Model):

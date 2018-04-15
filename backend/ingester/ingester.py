@@ -57,8 +57,8 @@ def getWeekday(date_):
 
 # code to connect to MySQL server
 try:
-  cnx = mysql.connector.connect(user='Lindsay',
-                                password='ZetGrl6814',
+  cnx = mysql.connector.connect(user='sean',
+                                password='hugs123',
                                 host='127.0.0.1',
                                 #host='10.0.2.2',
                                 database='VigilantDB')
