@@ -89,8 +89,8 @@ with open('4ih5-d5d5.json') as dataFile:
    
     
     add_data = ("INSERT INTO CrimeData "
-                "(crime_ID, date, time, description, district, day, weapon, address, neighborhood, premise, inside_outside, latitude, longitude) "
-                "VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)")
+                "(crime_ID, date, time, description, district, day, weapon, address, neighborhood, premise, inside_outside, latitude, longitude, post, code) "
+                "VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)")
     
 
     for v in dat:
@@ -156,12 +156,19 @@ with open('4ih5-d5d5.json') as dataFile:
             print("ERROR: longitude")
             longitude = None
         print (longitude)
+
+        try:    
+            post = v['post']
+        except KeyError:
+            print("ERROR: post")
+            post = None
+        print (post)
                 
 
         #print(v['latitude'])
 
             
-        data = (count, v['crimedate'][:10], v['crimetime'], v['description'], v['district'], day, weapon, address, neighborhood, premise, in_out, latitude, longitude)
+        data = (count, v['crimedate'][:10], v['crimetime'], v['description'], v['district'], day, weapon, address, neighborhood, premise, in_out, latitude, longitude, post, v['crimecode'])
             
         
         cursor.execute(add_data, data)
