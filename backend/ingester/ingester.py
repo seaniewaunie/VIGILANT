@@ -14,11 +14,17 @@ import mysql.connector
 from mysql.connector import errorcode
 from datetime import date
 import calendar
+#import pandas as pd
+#from sodapy import Socrata
 
 # code to run other script
 cmd = ['./dl.sh']
 process = subprocess.Popen(cmd)
 process.wait()
+
+#client = Socrata("data.baltimore.gov", None)
+
+#results = client.get("4ih5-d5d5", limit=2000)
 
 
 # function will run sql script from a given file location
@@ -28,8 +34,10 @@ def executeScriptsFromFile(filename):
     fd.close()
     sqlCommands = sqlFile.split(';')
 
+    print("executing script: " + filename)
+    
     for command in sqlCommands:
-        print (command)
+        #print (command)
         try:
             if command.strip() != '':
                 cursor.execute(command)
@@ -57,8 +65,8 @@ def getWeekday(date_):
 
 # code to connect to MySQL server
 try:
-  cnx = mysql.connector.connect(user='Lindsay',
-                                password='ZetGrl6814',
+  cnx = mysql.connector.connect(user='Randy',
+                                password='RandyRules123',
                                 host='127.0.0.1',
                                 #host='10.0.2.2',
                                 database='VigilantDB')
@@ -75,7 +83,7 @@ except mysql.connector.Error as err:
   else:
     print(err)
 
-print("BRU")
+#print("BRU")
 
 count = 0
 
@@ -85,12 +93,12 @@ cnx.commit()
 
 with open('4ih5-d5d5.json') as dataFile:
     dat = json.load(dataFile)
-    print(type(dat[0]))
+    #print(type(dat[0]))
    
     
     add_data = ("INSERT INTO CrimeData "
-                "(crime_ID, date, time, description, district, day, weapon, address, neighborhood, premise, inside_outside, latitude, longitude) "
-                "VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)")
+                "(crime_ID, date, time, description, district, day, weapon, address, neighborhood, premise, inside_outside, latitude, longitude, post, code) "
+                "VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)")
     
 
     for v in dat:
@@ -104,26 +112,26 @@ with open('4ih5-d5d5.json') as dataFile:
             weapon = v['weapon']
         except KeyError:
             weapon = None;
-        print (weapon)
+        #print (weapon)
 
         try:
             address  = v['location']
         except KeyError:
             address = None;
-        print (address)
+        #print (address)
 
         try:
             neighborhood  = v['neighborhood']
 
         except KeyError:
             neighborhood = None
-        print (neighborhood)
+        #print (neighborhood)
             
         try:
             premise  = v['premise']
         except KeyError:
             premise = None
-        print (premise)
+        #print (premise)
 
         try:
             in_out  = v['inside_outside']
@@ -139,29 +147,42 @@ with open('4ih5-d5d5.json') as dataFile:
             
         except KeyError:
             in_out = None
-        print (in_out)
+        #print (in_out)
 
 
         try:    
             latitude = v['latitude']
         except KeyError:
-            print("ERROR: latitude")
+         #   print("ERROR: latitude")
             latitude = None
-        print (latitude)
+        #print (latitude)
                 
 
         try:    
             longitude = v['longitude']
         except KeyError:
-            print("ERROR: longitude")
+            #print("ERROR: longitude")
             longitude = None
-        print (longitude)
-                
+        #print (longitude)
 
+        try:    
+            post = v['post']
+        except KeyError:
+         #   print("ERROR: post")
+            post = None
+        #print (post)
+
+        try:
+            district = v['district']
+        except KeyError:
+            print("found district error")
+            district = "none"
+        
         #print(v['latitude'])
 
-            
-        data = (count, v['crimedate'][:10], v['crimetime'], v['description'], v['district'], day, weapon, address, neighborhood, premise, in_out, latitude, longitude)
+        print(v['district'])
+        
+        data = (count, v['crimedate'][:10], v['crimetime'], v['description'], fistrict, day, weapon, address, neighborhood, premise, in_out, latitude, longitude, post, v['crimecode'])
             
         
         cursor.execute(add_data, data)
@@ -169,17 +190,17 @@ with open('4ih5-d5d5.json') as dataFile:
         count += 1
 
         # Values that every entry has        
-        print("date: " + v['crimedate'][:10])
-        print("day: "+ day)
-        print("time: " + v['crimetime'])
-        print("description: " + v['description'])
-        print("code: " + v['crimecode'])
-        print("district: " + v['district'])
+        #print("date: " + v['crimedate'][:10])
+        #print("day: "+ day)
+        #print("time: " + v['crimetime'])
+        #print("description: " + v['description'])
+        #print("code: " + v['crimecode'])
+        #print("district: " + v['district'])
 
 
         # testing to load values for description and district
 
-        print (" ------------ ")
+        #print (" ------------ ")
             
 #except KeyError:
  #   print("something was caight")

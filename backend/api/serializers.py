@@ -10,7 +10,8 @@ from . import models
 class CrimeSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = models.Crimedata
-        fields = ('crime_id', 'date', 'time', 'day', 'code', 'description', 'district', 'weapon', 'address', 'neighborhood', 'premise', 'inside_outside', 'latitude', 'longitude' )
+        fields = ('crime_id', 'date', 'time', 'day', 'description', 'district', 'weapon', 'address', 'neighborhood', 'premise', 'inside_outside', 'latitude', 'longitude' )
+        # TODO: add code to the list above
 
 class GlobalFilterSerializer(serializers.HyperlinkedModelSerializer):
 	class Meta:

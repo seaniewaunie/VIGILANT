@@ -86,10 +86,10 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 
 DATABASES = {
     'default': {
-		'NAME': 'vigilantdb',
+		'NAME': 'VigilantDB',
 		'ENGINE': 'django.db.backends.mysql',
-		'USER': 'root',
-		'PASSWORD': '*ZetGrl6814*',
+		'USER': 'sean',
+		'PASSWORD': 'hugs123',
 		'HOST': 'localhost',
 		'PORT': '3306',
     }

@@ -26,7 +26,7 @@ class ApiCrimedata(models.Model):
 
     class Meta:
         managed = False
-        db_table = 'api_crimedata'
+        db_table = 'api_CrimeData'
 
 
 class AuthGroup(models.Model):
@@ -114,7 +114,7 @@ class Crimedata(models.Model):
 
     class Meta:
         managed = False
-        db_table = 'crimedata'
+        db_table = 'CrimeData'
 
 
 class DjangoAdminLog(models.Model):
