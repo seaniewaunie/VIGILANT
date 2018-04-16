@@ -9,8 +9,8 @@ import PieChartFS from './visuals/PieChart.js';
 //import Routes from './routes';
 
 var XSMALL = 4;
-var SMALL = 2;
-var MD = 2;
+var SMALL = 4;
+var MD = 4;
 var nameString = "Visualization ";
 
 export default class Visualizations extends Component {
