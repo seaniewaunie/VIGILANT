@@ -12,5 +12,5 @@ urlpatterns = [
 	path('', views.ListCrimes.as_view()),
 	path('<int:pk>/', views.DetailCrime.as_view()),
 	#path('gfilter/start_date=<start_date>&end_date=<end_date>&start_time=<start_time>&end_time=<end_time>', views.GlobalFilter.as_view()),
-	re_path(r'^gfilter/(?P<start_date>.*)&(?P<end_date>.*)&(?P<start_time>.*)&(?P<end_time>.*)$', views.GlobalFilter.as_view()),
+	re_path(r'^gfilter/start_date=(?P<start_date>.*)&end_date=(?P<end_date>.*)&start_time=(?P<start_time>.*)&end_time=(?P<end_time>.*)&codes=(?P<codes>\[(\w*)(,*\w*)*\])$', views.GlobalFilter.as_view()),
 ]
