@@ -30,26 +30,30 @@
     cursor:pointer;
 }
 
-#top {
-    overflow:auto;
-    width: 100%;
+.header{
+  position:'relative';
+  z-index: 999;
 }
 
-#sidebar {
-    width: 10em;
-    max-width: 10%;
+.topRow{
+  margin:15px 0 0 15px;
 }
 
-#heatmap {
-    float:left;
+.filter{
+  position:'relative';
+  z-index: 998;
 }
 
-#defaultVisuals {
+.userVisuals{
+  //border: 5px solid blue;
+}
+
+.userVisuals div{
 }
 
 #grid{
 }
 
-#table{
-    clear: both;
+.table{
+    margin: 15px 0px 0px 0px;
 }
