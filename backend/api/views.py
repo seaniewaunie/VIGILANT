@@ -28,8 +28,10 @@ class GlobalFilter(APIView):
 		queryset = models.Crimedata.objects.all()
 		return queryset
 
-	def get(self, request, start_date, end_date):
-		queryset = models.Crimedata.objects.filter(date__range=[start_date, end_date]).order_by("date")
+	def get(self, request, start_date, end_date, start_time, end_time):
+		time = "20"
+		print(time + ":00:00")
+		queryset = models.Crimedata.objects.filter(date__range=[start_date, end_date], time__range=[start_time+":00:00", end_time+":00:00"]).order_by("date")
 		return_json = {'labels': [], 'values': []}
 		start_d = datetime.datetime.strptime(start_date, "%Y-%m-%d")
 		end_d = datetime.datetime.strptime(end_date, "%Y-%m-%d")
