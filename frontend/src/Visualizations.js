@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import heatmap from './images/heat-map icon.png';
 import timeline from './images/timeline icon.png';
 import tablechart from './images/table icon.png';
-import { Col, Thumbnail } from 'react-bootstrap';
+import {Well, Col, Thumbnail } from 'react-bootstrap';
 import LineGraphFS from './visuals/LineGraph.js';
 import BarChartFS from './visuals/BarChart.js';
 import PieChartFS from './visuals/PieChart.js';
@@ -51,12 +51,13 @@ export class LineGraph extends Component {
     render() {
         return(
             <Col xs={XSMALL} sm={SMALL} md={MD} key={this.state.id}>
-                {/*<Thumbnail src={linegraph} />*/}
-                <p align='center'>{this.state.name}</p>
+              <Well>
+                <p align='center'><b>{this.state.name}</b></p>
                 <LineGraphFS
                     name={this.state.name}
                     id={this.state.id}
                 />
+              </Well>
             </Col>
         );
     }
@@ -78,11 +79,13 @@ export class PieChart extends Component {
     render() {
         return(
           <Col xs={XSMALL} sm={SMALL} md={MD} key={this.state.id}>
-               <p align='center'>{this.state.name}</p>
+            <Well>
+               <p align='center'><b>{this.state.name}</b></p>
                <PieChartFS
                    name={this.state.name}
                    id={this.state.id}
                />
+             </Well>
            </Col>
         );
     }
@@ -104,11 +107,13 @@ export class BarChart extends Component {
     render() {
         return(
            <Col xs={XSMALL} sm={SMALL} md={MD} key={this.state.id}>
-                <p align='center'>{this.state.name}</p>
+             <Well>
+                <p align='center'><b>{this.state.name}</b></p>
                 <BarChartFS
                     name={this.state.name}
                     id={this.state.id}
                 />
+              </Well>
             </Col>
         );
     }

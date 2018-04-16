@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import axios from 'axios';
 import './css/App.css';
 import {HeatMap} from './Visualizations'
 import { Grid, Row, Col } from 'react-bootstrap';
@@ -10,6 +11,7 @@ import Filter from './Filters.js';
 
 var VIS_PER_ROW = 3;
 var VIS_SIZE = 6;
+var TABLE_SIZE = 12;
 
 class App extends Component {
     constructor() {
@@ -31,6 +33,18 @@ class App extends Component {
         this.addOne = this.addOne.bind(this);
         this.hideOne = this.hideOne.bind(this);
         this.toggleGlobalFilter = this.toggleGlobalFilter.bind(this);
+        this.updateGlobalFilterRequest = this.updateGlobalFilterRequest.bind(this);
+    }
+
+    // on page load, default data must be set
+    componentDidMount() {
+      /*
+      axios.get(`http://127.0.0.1:8000/api/gfilter/{this.props.subreddit}.json`)
+        .then(res => {
+          const posts = res.data.data.children.map(obj => obj.data);
+          this.setState({ posts });
+        });
+      */
     }
 
     addOne(vis){
@@ -56,12 +70,25 @@ class App extends Component {
         if(this.state.sidebarOpen){
           VIS_PER_ROW=3;
           VIS_SIZE=6;
+          TABLE_SIZE = 12;
         }
         else{
           VIS_PER_ROW=2;
           VIS_SIZE=5;
+          TABLE_SIZE = 9;
         }
         console.log(VIS_PER_ROW);
+    }
+
+    updateGlobalFilterRequest(uriString){
+      console.log(uriString);
+      /*
+      axios.get(`http://127.0.0.1:8000/api/gfilter/?{uriString}`)
+        .then(res => {
+          const posts = res.data.data.children.map(obj => obj.data);
+          this.setState({ posts });
+        });
+      */
     }
 
     render() {
@@ -74,6 +101,7 @@ class App extends Component {
                     id="rightSide"
                     scope = {this.state.filterType}
                     key = '0'
+                    updateRequest = {this.updateGlobalFilterRequest}
                 />
             );
 //*/
@@ -102,9 +130,7 @@ class App extends Component {
                     <Col xs={4} sm={VIS_SIZE} md={VIS_SIZE-1}>
                         <DefaultVisuals />
                     </Col>
-                    <Col xs={1} sm={1} md={1}>
-                    </Col>
-                    <Col xs={2} sm={2} md={2} className="filter">
+                    <Col xs={2} sm={2} md={3} className="filter">
                       {filter}
                     </Col>
                   </Row>
@@ -119,7 +145,7 @@ class App extends Component {
                     </div>
                   </Row>
                   <Row className="table">
-                    <Col xs={4} sm={VIS_SIZE*2} md={VIS_SIZE*2}>
+                    <Col xs={4} sm={TABLE_SIZE} md={TABLE_SIZE}>
                       <TableFS />
                     </Col>
                   </Row>

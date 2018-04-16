@@ -7,6 +7,8 @@ import linegraph from './images/line graph icon.png';
 import piechart from './images/pie chart icon.png';
 import {HeatMap, LineGraph, PieChart, BarChart, TimeLine, TableChart} from './Visualizations'
 
+var NAME_LENGTH = 40;
+
 class Header extends Component {
     constructor(props){
         super(props);
@@ -82,7 +84,7 @@ class AddVisualization extends Component {
   }
 
   handleAdd(){
-    if(this.state.name.length < 14){
+    if(this.state.name.length < NAME_LENGTH){
       var element;
       switch(this.state.type){
           case 'Heat Map':
@@ -114,7 +116,7 @@ class AddVisualization extends Component {
   getValidationState() {
     const length = this.state.name.length;
     if(length === 0) return 'warning';
-    else if (length > 0 && length < 14) return 'success';
+    else if (length > 0 && length < NAME_LENGTH) return 'success';
     else return 'error';
   }
 

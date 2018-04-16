@@ -1,10 +1,48 @@
 import React, { Component } from 'react';
 import './css/Filters.css';
-import {Well, FormGroup, ControlLabel, FormControl, Col} from 'react-bootstrap';
+import {Form, Well, FormGroup, ControlLabel, FormControl, Col} from 'react-bootstrap';
 import {AutoAffix} from 'react-overlays';
-
+import DatetimeRangePicker from 'react-datetime-range-picker';
 
 //http://localhost:8000/api/gfilter/start_date=2016-01-09&end_date=2018-02-17
+
+class uri {
+  constructor(start_date, end_date) {
+    this.start_date = start_date;
+    this.end_date = end_date;
+  }
+
+  set setStartDate(start_date){
+    this.start_date = start_date;
+  }
+
+  set setEndDate(end_date){
+    this.end_date = end_date;
+  }
+
+  get getString(){
+    return this.formatString();
+  }
+
+  formatString(){
+    var start_yr_month_day, end_yr_month_day;
+    var start_hh_mm_dd, end_hh_mm_dd;
+    // YYYY-MM-DD
+    // HH:MM:SS
+    start_yr_month_day = this.start_date.toISOString().substr(0, 10);
+    start_hh_mm_dd = this.start_date.toISOString().substring(11, 19);
+
+    end_yr_month_day = this.end_date.toISOString().substr(0, 10);
+    end_hh_mm_dd = this.end_date.toISOString().substring(11, 19);
+
+    return (
+      start_yr_month_day +
+      '&' + end_yr_month_day +
+      '&' + start_hh_mm_dd +
+      '&' + end_hh_mm_dd
+    );
+  }
+}
 
 export default class Filter extends Component {
     constructor(props){
@@ -14,13 +52,11 @@ export default class Filter extends Component {
             type: props.type,
             scope: props.scope,
             sidebarOpen: false,
-
             regions: [
                 'All',
-                'North', 'Northeast', 'East', 'Southeast',
-                'South', 'Southwest', 'West', 'Northwest',
+                'Northern', 'Northeastern', 'Eastern', 'Southeastern',
+                'Southern', 'Southwestern', 'Western', 'Northwestern',
             ], // I'm hoping this will be easy to call our django API for the regions field
-            dates: '',
             times: [
                 'All',
                 'Past Hour', 'Past Day', 'Past Week',
@@ -29,14 +65,13 @@ export default class Filter extends Component {
             crime_codes: '',
             locations: '',
             descriptions: '',
-            inside_outsides: '',
+            inside_outsides: ['Both', 'Indoor','Outdoor'],
             weapons: [
                 'All',
                 'Hand Gun', 'Assault Rifle', 'Knife',
                 'Melee Weapon', 'Other',
             ],
             posts: '',
-            districts: '',
             neighborhoods: '',
             latitudes: '',
             longitudes: '',
@@ -61,26 +96,39 @@ export default class Filter extends Component {
 
         return(
           <AutoAffix viewportOffsetTop={55}>
-            <Well className="filterOptions">
+            <Well bsSize="small" className="filterOptions">
               <b>{element}</b>
 
               <Selector
-                  key={0}
-                  selections={this.state.regions}
-                  title='Region'
+                updateRequest = {this.props.updateRequest}
+                key={2}
+                selections={this.state.times}
+                default='Past Week'
+                title='Time Frame'
               />
               <Selector
-                  key={1}
-                  selections={this.state.weapons}
-                  title='Weapon'
+                updateRequest = {this.props.updateRequest}
+                key={0}
+                selections={this.state.regions}
+                default='All'
+                title='District'
               />
-               <Selector
-                  key={2}
-                  selections={this.state.times}
-                  title='Time Frame'
+              <Selector
+                updateRequest = {this.props.updateRequest}
+                key={1}
+                selections={this.state.weapons}
+                default='All'
+                title='Weapon'
               />
-          </Well>
-        </AutoAffix>
+              <Selector
+                updateRequest = {this.props.updateRequest}
+                key={3}
+                selections={this.state.inside_outsides}
+                default='Both'
+                title='Indoor/Outdoor'
+              />
+            </Well>
+          </AutoAffix>
         );
     }
 }
@@ -92,6 +140,7 @@ class Selector extends Component{
       super(props);
 
       this.handleChange = this.handleChange.bind(this);
+      this.handleTimes = this.handleTime.bind(this);
 
       this.state = {
           value: this.props.title,
@@ -104,18 +153,34 @@ class Selector extends Component{
       this.setState({ value: e.target.value });
     }
 
+    handleTime(e){
+      //console.log(e.start);
+      //console.log(e.end);
+      var params = new uri(e.start, e.end);
+      //console.log(params.getString);
+      this.props.updateRequest(params.getString);
+    }
+
     render() {
+      var showCustomTimeFrame;
+      if(this.state.value === 'Custom'){
+        showCustomTimeFrame = (
+          <DatetimeRangePicker
+            onChange={this.handleTimes}
+          />
+        );
+      }
       return(
         <FormGroup ControlId='dropdown-basic' >
             <ControlLabel>{this.props.title}</ControlLabel>
             <FormControl
               componentClass='select'
-              value={this.state.value}
-              placeholder={this.state.value}
+              defaultValue={this.props.default}
               onChange={this.handleChange}
             >
                 <SelectorDropdown selections={this.state.selections}/>
-            </FormControl>
+            </FormControl>{' '}
+            {showCustomTimeFrame}
         </FormGroup>
       );
     }
