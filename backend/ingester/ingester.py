@@ -178,14 +178,7 @@ with open('4ih5-d5d5.json') as dataFile:
         except KeyError:
             print("found district error")
             district = "none"
-        
-        #print(v['latitude'])
 
-<<<<<<< HEAD
-#        print(v['district'])
-=======
-        #print(v['district'])
->>>>>>> 079b8295af4dd9acc33dbe0e92027c8e85d6a537
         
         data = (count, v['crimedate'][:10], v['crimetime'], v['description'], district, day, weapon, address, neighborhood, premise, in_out, latitude, longitude, post, v['crimecode'])
             
