@@ -86,10 +86,10 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 
 DATABASES = {
     'default': {
-		'NAME': 'VigilantDB',
+		'NAME': 'vigilantdb',
 		'ENGINE': 'django.db.backends.mysql',
-		'USER': 'sean',
-		'PASSWORD': 'hugs123',
+		'USER': 'root',
+		'PASSWORD': '*ZetGrl6814*',
 		'HOST': 'localhost',
 		'PORT': '3306',
     }
@@ -143,6 +143,7 @@ REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
     ]
+	#'DEFAULT_FILTER_BACKENDS': ('django_filters.rest_framework.DjangoFilterBackend',)
 }
 
 WEBPACK_LOADER = {

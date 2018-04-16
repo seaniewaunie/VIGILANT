@@ -14,11 +14,12 @@ import mysql.connector
 from mysql.connector import errorcode
 from datetime import date
 import calendar
+import sys
 #import pandas as pd
 #from sodapy import Socrata
 
 # code to run other script
-cmd = ['./dl.sh']
+cmd = [sys.executable, './dl.sh']
 process = subprocess.Popen(cmd)
 process.wait()
 
@@ -65,11 +66,11 @@ def getWeekday(date_):
 
 # code to connect to MySQL server
 try:
-  cnx = mysql.connector.connect(user='Randy',
-                                password='RandyRules123',
+  cnx = mysql.connector.connect(user='root',
+                                password='*ZetGrl6814*',
                                 host='127.0.0.1',
                                 #host='10.0.2.2',
-                                database='VigilantDB')
+                                database='vigilantdb')
   cursor= cnx.cursor()
   
 except mysql.connector.Error as err:
@@ -180,7 +181,11 @@ with open('4ih5-d5d5.json') as dataFile:
         
         #print(v['latitude'])
 
+<<<<<<< HEAD
 #        print(v['district'])
+=======
+        #print(v['district'])
+>>>>>>> 079b8295af4dd9acc33dbe0e92027c8e85d6a537
         
         data = (count, v['crimedate'][:10], v['crimetime'], v['description'], district, day, weapon, address, neighborhood, premise, in_out, latitude, longitude, post, v['crimecode'])
             

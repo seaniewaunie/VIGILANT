@@ -171,30 +171,27 @@ class AddVisualization extends Component {
     );
 */
     var show = (
-      <ShowOptions
-            handleHeatMap={this.handleHeatMap}
-            handleBarChart={this.handleBarChart}
-            handleLineGraph={this.handleLineGraph}
-            handlePieChart={this.handlePieChart}
-            handleTimeLine={this.handleTimeLine}
-            handleTableChart={this.handleTableChart}
-            handleClose={this.handleClose}
-            getValidationState={this.getValidationState}
-            handleChange={this.handleChange}
-      />
+      <Modal show={this.state.show} onHide={this.handleClose}>
+        <ShowOptions
+              handleHeatMap={this.handleHeatMap}
+              handleBarChart={this.handleBarChart}
+              handleLineGraph={this.handleLineGraph}
+              handlePieChart={this.handlePieChart}
+              handleTimeLine={this.handleTimeLine}
+              handleTableChart={this.handleTableChart}
+              handleClose={this.handleClose}
+              getValidationState={this.getValidationState}
+              handleChange={this.handleChange}
+        />
+      </Modal>
     );
 
     return (
     <Nav>
-        <NavItem eventKey={1} onClick={this.handleShow}>
-            Add Visualization
-        </NavItem>
-
-        <Modal show={this.state.show} onHide={this.handleClose}>
-
-          {show}
-
-        </Modal>
+      <NavItem eventKey={1} onClick={this.handleShow}>
+        Add Visualization
+      </NavItem>
+      {show}
     </Nav>
     );
   }

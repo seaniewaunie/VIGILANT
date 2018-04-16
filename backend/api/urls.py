@@ -11,5 +11,5 @@ from . import views
 urlpatterns = [
 	path('', views.ListCrimes.as_view()),
 	path('<int:pk>/', views.DetailCrime.as_view()),
-	path('gfilter/', views.GlobalFilter.as_view()),
+	path('gfilter/start_date=<start_date>&end_date=<end_date>&start_time=<start_time>&end_time=<end_time>', views.GlobalFilter.as_view()),
 ]
