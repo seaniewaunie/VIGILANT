@@ -99,10 +99,11 @@ class Crimedata(models.Model):
     crime_id = models.IntegerField(db_column='crime_ID', primary_key=True)  # Field name made lowercase.
     date = models.DateField()
     time = models.TimeField()
-    day = models.CharField(max_length=10)
+    day = models.CharField(max_length=5)
     code = models.CharField(max_length=10)
     description = models.CharField(max_length=45)
     district = models.CharField(max_length=45)
+    post = models.CharField(max_length=10, blank=True, null=True)
     weapon = models.CharField(max_length=45, blank=True, null=True)
     address = models.CharField(max_length=45, blank=True, null=True)
     neighborhood = models.CharField(max_length=45, blank=True, null=True)
@@ -162,17 +163,17 @@ class DjangoSession(models.Model):
 
 class Globalfilters(models.Model):
     global_filter_id = models.IntegerField(db_column='global_filter_ID', primary_key=True)  # Field name made lowercase.
-    date = models.DateField(blank=True, null=True)
-    time = models.TimeField(blank=True, null=True)
-    description = models.CharField(max_length=45, blank=True, null=True)
-    district = models.CharField(max_length=45, blank=True, null=True)
-    weapon = models.CharField(max_length=45, blank=True, null=True)
-    address = models.CharField(max_length=45, blank=True, null=True)
-    neighborhood = models.CharField(max_length=45, blank=True, null=True)
-    premise = models.CharField(max_length=45, blank=True, null=True)
-    inside_outside = models.CharField(max_length=45, blank=True, null=True)
-    latitude = models.FloatField(blank=True, null=True)
-    longitude = models.FloatField(blank=True, null=True)
+    start_date = models.DateField(blank=True, null=True)
+    end_date = models.DateField(blank=True, null=True)
+    start_time = models.TimeField(blank=True, null=True)
+    end_time = models.TimeField(blank=True, null=True)
+    code = models.CharField(max_length=300, blank=True, null=True)
+    district = models.CharField(max_length=160, blank=True, null=True)
+    weapon = models.CharField(max_length=50, blank=True, null=True)
+    start_lat = models.FloatField(blank=True, null=True)
+    end_lat = models.FloatField(blank=True, null=True)
+    start_lon = models.FloatField(blank=True, null=True)
+    end_lon = models.FloatField(blank=True, null=True)
 
     class Meta:
         managed = False
