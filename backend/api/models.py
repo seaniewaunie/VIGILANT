@@ -26,7 +26,7 @@ class ApiCrimedata(models.Model):
 
     class Meta:
         managed = False
-        db_table = 'api_CrimeData'
+        db_table = 'api_crimedata'
 
 
 class AuthGroup(models.Model):
@@ -114,7 +114,7 @@ class Crimedata(models.Model):
 
     class Meta:
         managed = False
-        db_table = 'CrimeData'
+        db_table = 'crimedata'
 
 
 class DjangoAdminLog(models.Model):
@@ -180,31 +180,35 @@ class Globalfilters(models.Model):
         db_table = 'globalfilters'
 
 
-class Localfilters(models.Model):
+class Localvisualization(models.Model):
     local_filter_id = models.IntegerField(db_column='local_filter_ID', primary_key=True)  # Field name made lowercase.
     fk_user = models.ForeignKey('Users', models.DO_NOTHING, db_column='fk_user_ID')  # Field name made lowercase.
-    date = models.DateField(blank=True, null=True)
-    time = models.TimeField(blank=True, null=True)
-    description = models.CharField(max_length=45, blank=True, null=True)
-    district = models.CharField(max_length=45, blank=True, null=True)
-    weapon = models.CharField(max_length=45, blank=True, null=True)
-    address = models.CharField(max_length=45, blank=True, null=True)
-    neighborhood = models.CharField(max_length=45, blank=True, null=True)
-    premise = models.CharField(max_length=45, blank=True, null=True)
-    inside_outside = models.CharField(max_length=45, blank=True, null=True)
-    latitude = models.FloatField(blank=True, null=True)
-    longitude = models.FloatField(blank=True, null=True)
+    name = models.CharField(max_length=100)
+    type = models.CharField(max_length=20, blank=True, null=True)
+    visible = models.IntegerField(blank=True, null=True)
+    date_hidden = models.DateField(blank=True, null=True)
+    start_date = models.DateField(blank=True, null=True)
+    end_date = models.DateField(blank=True, null=True)
+    start_time = models.TimeField(blank=True, null=True)
+    end_time = models.TimeField(blank=True, null=True)
+    code = models.CharField(max_length=300, blank=True, null=True)
+    inside_outside = models.IntegerField(blank=True, null=True)
+    weapon = models.CharField(max_length=50, blank=True, null=True)
+    district = models.CharField(max_length=160, blank=True, null=True)
+    start_lat = models.FloatField(blank=True, null=True)
+    end_lat = models.FloatField(blank=True, null=True)
+    start_lon = models.FloatField(blank=True, null=True)
+    end_lon = models.FloatField(blank=True, null=True)
 
     class Meta:
         managed = False
-        db_table = 'localfilters'
+        db_table = 'localvisualization'
 
 
 class Users(models.Model):
     user_id = models.IntegerField(db_column='user_ID', primary_key=True)  # Field name made lowercase.
     global_filter = models.ForeignKey(Globalfilters, models.DO_NOTHING, db_column='global_filter_ID', unique=True)  # Field name made lowercase.
-    password = models.CharField(max_length=45, blank=True, null=True)
-    username = models.CharField(max_length=45, blank=True, null=True)
+    username = models.CharField(max_length=45)
 
     class Meta:
         managed = False
