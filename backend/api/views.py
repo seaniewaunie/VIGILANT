@@ -32,7 +32,9 @@ class GlobalFilterStructured(APIView):
 		queryset = models.Crimedata.objects.all()
 		return queryset
 
-	def get(self, request, start_date="", end_date="", start_time="", end_time="", codes="[]", districts="[]", weapons="[]", start_lat=0.0, end_lat=0.0, start_long=0.0, end_long=0.0, i_o=""):
+	def get(self, request, start_date="", end_date="", days="[]", start_time="", end_time="", codes="[]", districts="[]", weapons="[]", start_lat=0.0, end_lat=0.0, start_long=0.0, end_long=0.0, i_o=""):
+		days_words = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]
+	
 		#put codes in a list for easy filtering
 		codes = codes.replace('[', '')
 		codes = codes.replace(']', '')
@@ -52,6 +54,16 @@ class GlobalFilterStructured(APIView):
 		for i in range(len(weapons)):
 			weapons[i] = weapons[i].upper()
 			
+		#put days in a list for easy filtering
+		days = days.replace('[', '')
+		days = days.replace(']', '')
+		days = re.split(',\s*', days)
+		if days[0] != '':
+			for i in range(len(days)):
+				days[i] = int(days[i])
+				days[i] = days_words[days[i]]
+
+		
 		s_lat = -1.0
 		e_lat = -1.0
 		s_long = -1.0
@@ -73,6 +85,10 @@ class GlobalFilterStructured(APIView):
 			queryset = queryset.filter(date__gte=start_date, time__range=[start_time, end_time]).order_by("date")
 		else:
 			queryset = queryset.filter(date__range=[start_date, end_date], time__range=[start_time, end_time]).order_by("date")
+			
+		#filter on list of days of the week
+		if days[0] != '':
+			queryset = queryset.filter(day__in=days)
 			
 		#filter on list of crime codes
 		if codes[0] != '':
@@ -136,7 +152,9 @@ class GlobalFilterRawData(APIView):
 		queryset = models.Crimedata.objects.all()
 		return queryset
 
-	def get(self, request, start_date="", end_date="", start_time="", end_time="", codes="[]", districts="[]", weapons="[]", start_lat=0.0, end_lat=0.0, start_long=0.0, end_long=0.0, i_o=""):
+	def get(self, request, start_date="", end_date="", days="[]", start_time="", end_time="", codes="[]", districts="[]", weapons="[]", start_lat=0.0, end_lat=0.0, start_long=0.0, end_long=0.0, i_o=""):
+		days_words = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]
+		
 		#put codes in a list for easy filtering
 		codes = codes.replace('[', '')
 		codes = codes.replace(']', '')
@@ -155,6 +173,15 @@ class GlobalFilterRawData(APIView):
 		weapons = re.split(',\s*', weapons)
 		for i in range(len(weapons)):
 			weapons[i] = weapons[i].upper()
+			
+		#put days in a list for easy filtering
+		days = days.replace('[', '')
+		days = days.replace(']', '')
+		days = re.split(',\s*', days)
+		if days[0] != '':
+			for i in range(len(days)):
+				days[i] = int(days[i])
+				days[i] = days_words[days[i]]
 			
 		s_lat = -1.0
 		e_lat = -1.0
@@ -177,6 +204,10 @@ class GlobalFilterRawData(APIView):
 			queryset = queryset.filter(date__gte=start_date, time__range=[start_time, end_time]).order_by("date")
 		else:
 			queryset = queryset.filter(date__range=[start_date, end_date], time__range=[start_time, end_time]).order_by("date")
+			
+		#filter on list of days of the week
+		if days[0] != '':
+			queryset = queryset.filter(day__in=days)
 			
 		#filter on list of crime codes
 		if codes[0] != '':
