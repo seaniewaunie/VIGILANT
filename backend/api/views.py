@@ -22,6 +22,31 @@ class ListCrimes(generics.ListCreateAPIView):
 class DetailCrime(generics.RetrieveUpdateDestroyAPIView):
     queryset = models.Crimedata.objects.all()
     serializer_class = serializers.CrimeSerializer
+	
+class CrimeCodeLookup(APIView):
+	serializer_class = serializers.CrimeSerializer
+	
+	def get_queryset(self):
+		queryset = models.Crimedata.objects.all()
+		return queryset
+		
+	def get(self, request):
+		queryset = self.get_queryset()
+	
+		#create the return json
+		return_json = {'data': []}
+		return_data = {}
+		for row in queryset:
+			description = row.description
+			code = row.code
+			weapon = row.weapon
+			if code not in return_data:
+				return_data[code] = [code, description, weapon]
+		for key in return_data:
+			return_json['data'].append({'label': return_data[key][0], 'value': [return_data[key][1], return_data[key][2]]})
+			
+		return http.JsonResponse(return_json)
+		
 
 	
 class GlobalFilterStructured(APIView):
