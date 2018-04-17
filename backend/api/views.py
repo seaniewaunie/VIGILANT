@@ -32,7 +32,7 @@ class GlobalFilterStructured(APIView):
 		queryset = models.Crimedata.objects.all()
 		return queryset
 
-	def get(self, request, start_date="", end_date="", days="[]", start_time="", end_time="", codes="[]", districts="[]", weapons="[]", start_lat=0.0, end_lat=0.0, start_long=0.0, end_long=0.0, i_o=""):
+	def get(self, request, start_date="", end_date="", start_time="", end_time="", days="[]", codes="[]", districts="[]", weapons="[]", start_lat=0.0, end_lat=0.0, start_long=0.0, end_long=0.0, i_o=""):
 		days_words = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]
 	
 		#put codes in a list for easy filtering
@@ -152,7 +152,7 @@ class GlobalFilterRawData(APIView):
 		queryset = models.Crimedata.objects.all()
 		return queryset
 
-	def get(self, request, start_date="", end_date="", days="[]", start_time="", end_time="", codes="[]", districts="[]", weapons="[]", start_lat=0.0, end_lat=0.0, start_long=0.0, end_long=0.0, i_o=""):
+	def get(self, request, start_date="", end_date="", start_time="", end_time="", days="[]", codes="[]", districts="[]", weapons="[]", start_lat=0.0, end_lat=0.0, start_long=0.0, end_long=0.0, i_o=""):
 		days_words = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]
 		
 		#put codes in a list for easy filtering
