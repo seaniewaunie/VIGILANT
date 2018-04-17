@@ -6,6 +6,7 @@ import {Well, Col, Thumbnail } from 'react-bootstrap';
 import LineGraphFS from './visuals/LineGraph.js';
 import BarChartFS from './visuals/BarChart.js';
 import PieChartFS from './visuals/PieChart.js';
+import HeatMapFS from './visuals/HeatMap.js';
 //import Routes from './routes';
 
 var XSMALL = 4;
@@ -31,7 +32,11 @@ export class HeatMap extends Component {
     }
     render() {
         return(
-            <Thumbnail src={heatmap}/>
+            <Col xs={XSMALL} sm={SMALL} md={MD} key={this.state.id}>
+				<HeatMapFS
+                    id={this.state.id}
+                />
+            </Col>
         );
     }
 }
