@@ -162,7 +162,7 @@ class DjangoSession(models.Model):
 
 
 class Globalfilters(models.Model):
-    global_filter_id = models.IntegerField(db_column='global_filter_ID', primary_key=True)  # Field name made lowercase.
+    global_filter_id = models.AutoField(db_column='global_filter_ID', primary_key=True)  # Field name made lowercase.
     start_date = models.DateField(blank=True, null=True)
     end_date = models.DateField(blank=True, null=True)
     start_time = models.TimeField(blank=True, null=True)
