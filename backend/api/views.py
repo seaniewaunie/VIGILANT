@@ -57,7 +57,7 @@ class GlobalFilterStructured(APIView):
 		queryset = models.Crimedata.objects.all()
 		return queryset
 
-	def get(self, request, start_date="", end_date="", start_time="", end_time="", days="[]", codes="[]", districts="[]", weapons="[]", start_lat=0.0, end_lat=0.0, start_long=0.0, end_long=0.0, i_o=""):
+	def get(self, request, start_date="", end_date="", start_time="", end_time="", days="[]", codes="[]", districts="[]", weapons="[]", start_lat=0.0, end_lat=0.0, start_long=0.0, end_long=0.0, i_o="[]"):
 		new_filter = models.Globalfilters()
 		
 		days_words = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]
@@ -90,6 +90,10 @@ class GlobalFilterStructured(APIView):
 				days[i] = int(days[i])
 				days[i] = days_words[days[i]]
 
+		i_o = i_o.replace('[', '')
+		i_o = i_o.replace(']', '')
+		i_o = re.split(',\s*', i_o)
+		#print(i_o)
 		
 		s_lat = -1.0
 		e_lat = -1.0
@@ -120,7 +124,7 @@ class GlobalFilterStructured(APIView):
 		print(new_filter.start_date)
 		print(new_filter.end_date)
 			
-		#filter on list of days of the week
+		#filter on list of i_o of the week
 		if days[0] != '' and days[0].upper() != "ALL":
 			queryset = queryset.filter(day__in=days)
 			day_string = ""
@@ -176,12 +180,12 @@ class GlobalFilterStructured(APIView):
 			new_filter.start_lon = s_long
 			new_filter.end_lon = e_long
 			
-		if i_o != "":
-			i_o = i_o.upper()
-			if i_o == "IO" or i_o == "OI" or i_o == "BOTH":
+		if i_o[0] != "":
+			i_o[0] = i_o[0].upper()
+			if i_o[0] == "BOTH":
 				queryset = queryset.filter(inside_outside__in=["I", "O"])
 			else:
-				queryset = queryset.filter(inside_outside=i_o)
+				queryset = queryset.filter(inside_outside=i_o[0])
 			#new_filter.inside_outside = i_o
 			
 		#new_filter.save()
@@ -209,7 +213,7 @@ class GlobalFilterRawData(APIView):
 		queryset = models.Crimedata.objects.all()
 		return queryset
 
-	def get(self, request, start_date="", end_date="", start_time="", end_time="", days="[]", codes="[]", districts="[]", weapons="[]", start_lat=0.0, end_lat=0.0, start_long=0.0, end_long=0.0, i_o=""):
+	def get(self, request, start_date="", end_date="", start_time="", end_time="", days="[]", codes="[]", districts="[]", weapons="[]", start_lat=0.0, end_lat=0.0, start_long=0.0, end_long=0.0, i_o="[]"):
 		days_words = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]
 		
 		#put codes in a list for easy filtering
@@ -239,6 +243,10 @@ class GlobalFilterRawData(APIView):
 			for i in range(len(days)):
 				days[i] = int(days[i])
 				days[i] = days_words[days[i]]
+				
+		i_o = i_o.replace('[', '')
+		i_o = i_o.replace(']', '')
+		i_o = re.split(',\s*', i_o)
 			
 		s_lat = -1.0
 		e_lat = -1.0
@@ -298,12 +306,12 @@ class GlobalFilterRawData(APIView):
 		if s_long != -1.0 and e_long != -1.0:
 			queryset = queryset.filter(longitude__range=[s_long, e_long])
 			
-		if i_o != "":
-			i_o = i_o.upper()
-			if i_o == "IO" or i_o == "OI" or i_o == "BOTH":
+		if i_o[0] != "":
+			i_o[0] = i_o[0].upper()
+			if i_o[0] == "BOTH":
 				queryset = queryset.filter(inside_outside__in=["I", "O"])
 			else:
-				queryset = queryset.filter(inside_outside=i_o)
+				queryset = queryset.filter(inside_outside=i_o[0])
 			
 			
 		#create the return json
