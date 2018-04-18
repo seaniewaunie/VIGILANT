@@ -326,7 +326,7 @@ class GlobalFilterRawData(APIView):
 			data['district'] = row.district
 			data['weapon'] = row.weapon
 			data['address'] = row.address
-			data['neightborhood'] = row.neighborhood
+			data['neighborhood'] = row.neighborhood
 			data['premise'] = row.premise
 			data['inside_outside'] = row.inside_outside
 			data['latitude'] = row.latitude
