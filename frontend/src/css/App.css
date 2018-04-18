@@ -32,7 +32,7 @@
 
 .header{
   position:'relative';
-  z-index: 999;
+  z-index: 2000;
 }
 
 .topRow{
@@ -41,7 +41,7 @@
 
 .filter{
   position:'relative';
-  z-index: 998;
+  z-index: 1999;
 }
 
 .userVisuals{

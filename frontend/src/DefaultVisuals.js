@@ -15,7 +15,9 @@ export default class DefaultVisuals extends Component {
   render() {
     return (
       <div>
-        <DefaultViewer />
+        <DefaultViewer
+          data ={this.props.data}
+        />
       </div>
     );
   }
@@ -35,13 +37,19 @@ class DefaultViewer extends Component {
         <b>Default Visuals</b>
         <Tabs defaultActiveKey={2} id="uncontrolled-tab-example">
           <Tab eventKey={1} title="Line Graph">
-            <LineGraphFS />
+            <LineGraphFS
+              data ={this.props.data}
+            />
           </Tab>
           <Tab eventKey={2} title="Pie Chart">
-            <PieChartFS />
+            <PieChartFS
+              data ={this.props.data}
+            />
           </Tab>
           <Tab eventKey={3} title="Bar Chart">
-            <BarChartFS />
+            <BarChartFS
+              data ={this.props.data}
+            />
           </Tab>
         </Tabs>
       </div>

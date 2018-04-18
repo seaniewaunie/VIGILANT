@@ -33,7 +33,7 @@ export class HeatMap extends Component {
     render() {
         return(
             <Col xs={XSMALL} sm={SMALL} md={MD} key={this.state.id}>
-				<HeatMapFS
+				        <HeatMapFS
                     id={this.state.id}
                 />
             </Col>
@@ -59,6 +59,7 @@ export class LineGraph extends Component {
               <Well>
                 <p align='center'><b>{this.state.name}</b></p>
                 <LineGraphFS
+                    data={this.props.data}
                     name={this.state.name}
                     id={this.state.id}
                 />
@@ -87,6 +88,7 @@ export class PieChart extends Component {
             <Well>
                <p align='center'><b>{this.state.name}</b></p>
                <PieChartFS
+                   data={this.props.data}
                    name={this.state.name}
                    id={this.state.id}
                />
@@ -115,6 +117,7 @@ export class BarChart extends Component {
              <Well>
                 <p align='center'><b>{this.state.name}</b></p>
                 <BarChartFS
+                    data={this.props.data}
                     name={this.state.name}
                     id={this.state.id}
                 />

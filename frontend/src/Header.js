@@ -27,6 +27,7 @@ class Header extends Component {
               </Navbar.Header>
               <Navbar.Collapse>
                 <AddVisualization
+                    data={this.props.data}
                     addOne={this.props.addOne}
                     hideOne={this.props.hideOne}
                     counter={this.props.counter}
@@ -91,13 +92,13 @@ class AddVisualization extends Component {
               element = <HeatMap id={this.state.id}/>;
               break;
           case 'Bar Chart':
-              element = <BarChart id={this.state.id} name={this.state.name} key={this.state.id} />;
+              element = <BarChart data={this.props.data} id={this.state.id} name={this.state.name} key={this.state.id} />;
               break;
           case 'Line Graph':
-              element = <LineGraph id={this.state.id} name={this.state.name} key={this.state.id}/>;
+              element = <LineGraph data={this.props.data}  id={this.state.id} name={this.state.name} key={this.state.id}/>;
               break;
           case 'Pie Chart':
-              element = <PieChart id={this.state.id} name={this.state.name} key={this.state.id} />;
+              element = <PieChart data={this.props.data}  id={this.state.id} name={this.state.name} key={this.state.id} />;
               break;
           case 'Timeline':
               element = <TimeLine id={this.state.id}/>;

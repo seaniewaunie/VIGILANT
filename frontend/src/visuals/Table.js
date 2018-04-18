@@ -6,96 +6,81 @@ import 'react-table/react-table.css';
 
 class TableFS extends Component {
 
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
-        data : getData()
     };
-    //console.log(this.state.data);
+    //this.getData = this.getData.bind(this);
   }
 
   render() {
     const columns = [
         {
-            accessor: 'crimedate', 
+            accessor: 'date',
             Header: 'Date',
             width: 103
         }, {
-            accessor: 'crimetime',
-            Header: 'Time', 
+            accessor: 'time',
+            Header: 'Time',
         }, {
-            accessor: 'crimecode', 
+            accessor: 'code',
             Header: 'Crime Code',
             width: 90
         }, {
-            accessor: 'description', 
+            accessor: 'description',
             Header: 'Description',
             width: 300
         }, {
-            accessor: 'district', 
+            accessor: 'weapon',
+            Header: 'Weapon'
+        }, {
+            accessor: 'district',
             Header: 'District'
         }, {
-            accessor: 'inside_outside', 
+            accessor: 'inside_outside',
             Header: 'Indoor/Outdoor',
         }, {
-            accessor: 'latitude', 
+            accessor: 'latitude',
             Header: 'Latitude'
         }, {
-            accessor: 'longitude', 
+            accessor: 'longitude',
             Header: 'Longitude'
         }, {
-            accessor: 'location', 
+            accessor: 'address',
             Header: 'Address'
         }, {
-            accessor: 'neighborhood', 
+            accessor: 'neightborhood',
             Header: 'Neighborhood'
         }, {
-            accessor: 'post', 
-            Header: 'Post'
-        }, {
-            accessor: 'premise', 
+            accessor: 'premise',
             Header: 'Premise'
-        }, {
-            accessor: 'total_incidents', 
-            Header: 'Total Incidents',
-            width: 50
         },
     ];
 
     var excludeColumns = [
-        'total_incidents'
+        'total_incidents',
+        'post'
     ];
-    
-    const { data } = this.state;
+
     return (
         <div className="TableFS">
-           <ReactTable 
+           <ReactTable
                 defaultPageSize={20}
                 className="-highlight"
-                data= {data} 
+                data= {this.props.data}
                 columns={columns}
                 defaultSorted={[
                     {
-                        id: "crimedate",
+                        id: "date",
                         desc: true
                     }
                 ]}
-            
-            
-            
-            /> 
+            />
         </div>
     );
   }
 }
 
-function getData(){
-    // this is where the function will be to access the api
-    // for data
-    // the api will be a link, something like
-    // 127.0.0.1:8000/api
-    // and will return a json of the data
-    return jsonData;
-}
+
 
 export default TableFS;

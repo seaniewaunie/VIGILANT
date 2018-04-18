@@ -7,13 +7,14 @@ import pattern from 'patternomaly';
 
 
 class PieChartFS extends Component {
-	
+
 	constructor(props) {
     super(props);
-    
+
     this.compress = this.compress.bind(this);
     this.expand = this.expand.bind(this);
     this.getData = this.getData.bind(this);
+		this.getCounts = this.getCounts.bind(this);
     this.handleClick = this.handleClick.bind(this);
 
     this.state = {
@@ -22,34 +23,41 @@ class PieChartFS extends Component {
         width: "200",
         name : props.name,
         data : this.getData(),
-        //chartOptions : {
-	
 		};
-	}	
-	
+	}
+
 	getData() {
-    // this is where the function will be to access the api
-    // for data
-    // the api will be a link, something like
-    // 127.0.0.1:8000/api
-    // and will return a json of the data
+    var dates = this.props.data.map(dates => dates.date);
+    var times = this.props.data.map(times => times.time);
+
     var data = {
-		datasets : [
-            {
-                data: [10, 20, 30, 40],
-				backgroundColor: [
-				pattern.draw('square', '#ff6384'),
-				pattern.draw('circle', '#36a2eb'),
-				pattern.draw('diamond', '#cc65fe'),
-				pattern.draw('triangle', '#ffce56'),
-				]
-            }
-        ],
-		labels: [ "January", "February", "March", "April"]
-    };
+			labels: dates,
+			datasets : [
+				{
+		      data: this.getCounts(dates),
+					backgroundColor: [
+					pattern.draw('square', '#ff6384'),
+					pattern.draw('circle', '#36a2eb'),
+					pattern.draw('diamond', '#cc65fe'),
+					pattern.draw('triangle', '#ffce56'),
+					]
+      	}
+	    ],
+		};
     return data;
-  }	
-  
+  }
+
+  // counts the number of similar values in an array
+  // and returns an array of the counts
+  getCounts(arr){
+    var counts = {};
+    for (var i = 0; i < arr.length; i++) {
+        counts[arr[i]] = 1 + (counts[arr[i]] || 0);
+    }
+    //console.log(counts);
+    return Object.values(counts);
+  }
+
   handleClick() {
     this.setState({fullscreen: !this.state.fullscreen}, () => {
         this.state.fullscreen ? this.expand() : this.compress();
@@ -63,18 +71,18 @@ class PieChartFS extends Component {
   }
 
   expand() {
-    //this.setState({height:"150", width:"150"}); 
+    //this.setState({height:"150", width:"150"});
     console.log("Expanding Visual to full screen");
   }
 
 
-  
+
  render() {
-	
-	const {data} = this.state; 
+
+	const {data} = this.state;
     return (
         <div className="PieChartFS" onClick={this.handleClick}>
-			<PieChart data={data} height={this.state.height} width={this.state.width}/> 
+					<PieChart legend={false} data={data} height={this.state.height} width={this.state.width}/>
         </div>
     );
   }
