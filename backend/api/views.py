@@ -43,7 +43,7 @@ class CrimeCodeLookup(APIView):
 			if code not in return_data:
 				return_data[code] = [code, description, weapon]
 		for key in return_data:
-			return_json['data'].append({'label': return_data[key][0], 'value': [return_data[key][1], return_data[key][2]]})
+			return_json['data'].append({'label':[return_data[key][1], return_data[key][2]] , 'value': return_data[key][0]})
 			
 		return http.JsonResponse(return_json)
 		
