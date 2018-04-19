@@ -1,11 +1,10 @@
 /* required styles */
 
  .leaflet-container {
-      height: 500px;
-      width: 500px;
-      margin: 0 auto;
+      height: 85vh;
+      margin: 0;
     }
-	
+
 .leaflet-pane,
 .leaflet-tile,
 .leaflet-marker-icon,

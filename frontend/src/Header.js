@@ -5,7 +5,7 @@ import { Button, Col, Grid, FormGroup, ControlLabel, FormControl, HelpBlock, Too
 import barchart from './images/barchart icon.png';
 import linegraph from './images/line graph icon.png';
 import piechart from './images/pie chart icon.png';
-import {HeatMap, LineGraph, PieChart, BarChart, TimeLine, TableChart} from './Visualizations'
+import {LineGraph, PieChart, BarChart} from './Visualizations'
 
 var NAME_LENGTH = 40;
 
@@ -27,14 +27,15 @@ class Header extends Component {
               </Navbar.Header>
               <Navbar.Collapse>
                 <AddVisualization
-                    data={this.props.data}
-                    addOne={this.props.addOne}
-                    hideOne={this.props.hideOne}
-                    counter={this.props.counter}
+                  data={this.props.data}
+                  addOne={this.props.addOne}
+                  hideOne={this.props.hideOne}
+                  counter={this.props.counter}
                 />
 
 
                 <Nav pullRight>
+                  <NavItem eventKey={4} href="#Table">Table</NavItem>
                   <NavItem eventKey={1} href="#">Hide</NavItem>
                   <NavItem eventKey={2} href="#">Reveal</NavItem>
                   <NavItem eventKey={3} onClick={this.props.toggleGlobalFilter}>Global Filter</NavItem>
@@ -88,9 +89,6 @@ class AddVisualization extends Component {
     if(this.state.name.length < NAME_LENGTH){
       var element;
       switch(this.state.type){
-          case 'Heat Map':
-              element = <HeatMap id={this.state.id}/>;
-              break;
           case 'Bar Chart':
               element = <BarChart data={this.props.data} id={this.state.id} name={this.state.name} key={this.state.id} />;
               break;
@@ -99,12 +97,6 @@ class AddVisualization extends Component {
               break;
           case 'Pie Chart':
               element = <PieChart data={this.props.data}  id={this.state.id} name={this.state.name} key={this.state.id} />;
-              break;
-          case 'Timeline':
-              element = <TimeLine id={this.state.id}/>;
-              break;
-          case 'Table Chart':
-              element = <TableChart id={this.state.id} />;
               break;
           default:
               console.log("error, unhandled element selected in Add visualization: ", this.state.type);
