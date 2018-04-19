@@ -59,7 +59,7 @@ try:
                                 password='CordicKillers',
                                 host='127.0.0.1',
                                 #host='10.0.2.2',
-                                database='vigilantdb')
+                                database='VigilantDB')
   cursor= cnx.cursor()
   
 except mysql.connector.Error as err:
