@@ -89,7 +89,7 @@ DATABASES = {
 		'NAME': 'vigilantdb',
 		'ENGINE': 'django.db.backends.mysql',
 		'USER': 'root',
-		'PASSWORD': '*ZetGrl6814*',
+		'PASSWORD': 'CordicKillers',
 		'HOST': 'localhost',
 		'PORT': '3306',
     }

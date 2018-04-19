@@ -67,7 +67,7 @@ def getWeekday(date_):
 # code to connect to MySQL server
 try:
   cnx = mysql.connector.connect(user='root',
-                                password='*ZetGrl6814*',
+                                password='CordicKillers',
                                 host='127.0.0.1',
                                 #host='10.0.2.2',
                                 database='vigilantdb')
@@ -98,8 +98,8 @@ with open('4ih5-d5d5.json') as dataFile:
    
     
     add_data = ("INSERT INTO CrimeData "
-                "(crime_ID, date, time, description, district, day, weapon, address, neighborhood, premise, inside_outside, latitude, longitude, post, code) "
-                "VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)")
+                "(date, time, description, district, day, weapon, address, neighborhood, premise, inside_outside, latitude, longitude, post, code) "
+                "VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)")
     
 
     for v in dat:
@@ -180,7 +180,7 @@ with open('4ih5-d5d5.json') as dataFile:
             district = "none"
 
         
-        data = (count, v['crimedate'][:10], v['crimetime'], v['description'], district, day, weapon, address, neighborhood, premise, in_out, latitude, longitude, post, v['crimecode'])
+        data = (v['crimedate'][:10], v['crimetime'], v['description'], district, day, weapon, address, neighborhood, premise, in_out, latitude, longitude, post, v['crimecode'])
             
         
         cursor.execute(add_data, data)

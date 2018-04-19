@@ -49,7 +49,187 @@ class CrimeCodeLookup(APIView):
 			
 		return http.JsonResponse(return_json)
 		
+class AddVisualization(APIView):
+	serializer_class = serializers.VisualizationSerializer
+	
+	def get_queryset(self):
+		queryset = models.Localvisualization.objects.all()
+		return queryset
+	
+	def get(self, request, name="", type=""):
+		new_visual = models.Localvisualization()
+		
+		new_visual.name = name
+		new_visual.type = type
+		new_visual.visible = 1
+		new_visual.fk_user = models.Users(pk=1)
+		
+		new_visual.save()
+		
+		return_json = {'visual_id': new_visual.pk}
+		return http.JsonResponse(return_json)
+		
+class HideVisualization(APIView):
+	serializer_class = serializers.VisualizationSerializer
+	
+	def get_queryset(self):
+		queryset = models.Localvisualization.objects.all()
+		return queryset
+	
+	def get(self, request, id=""):
+		return_json = {}
+		if id != "":
+			id = int(id)
+			visual = models.Localvisualization.objects.get(pk=id)
+			visual.visible = 0
+			date = datetime.date.today()
+			date = datetime.date(date.year, date.month, date.day)
+			visual.date_hidden = date
+			visual.save()
+			return_json['success'] = 1
+		return http.JsonResponse(return_json)
+		
+		
+class RestoreVisualization(APIView):
+	serializer_class = serializers.VisualizationSerializer
+	
+	def get_queryset(self):
+		queryset = models.Localvisualization.objects.all()
+		return queryset
+		
+	def get(self, request, id=""):
+		return_json = {}
+		if id != "":
+			id = int(id)
+			visual = models.Localvisualization.objects.get(pk=id)
+			visual.visible = 1
+			visual.date_hidden = None
+			visual.save()
+			return_json['success'] = 1
+		return http.JsonResponse(return_json)
+		
+class SetLocalFilter(APIView):
+	serializer_class = serializers.VisualizationSerializer
+	
+	def get_queryset(self):
+		queryset = models.Localvisualization.objects.all()
+		return queryset
+		
+	def get(self, request, id="", start_date="", end_date="", start_time="", end_time="", days="[]", codes="[]", districts="[]", weapons="[]", start_lat=0.0, end_lat=0.0, start_long=0.0, end_long=0.0, i_o="[]"):	
+		return_json = {}
+		if id != "":
+			id = int(id)
+			visual = models.Localvisualization.objects.get(pk=id)
+			days_words = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]
+	
+			#put codes in a list for easy filtering
+			codes = codes.replace('[', '')
+			codes = codes.replace(']', '')
+			codes = re.split(',\s*', codes)
+			
+			#put districts in a list for easy filtering
+			districts = districts.replace('[', '')
+			districts = districts.replace(']', '')
+			districts = re.split(',\s*', districts)
+			for i in range(len(districts)):
+				districts[i] = districts[i].upper()
+				
+			#put weapons in a list for easy filtering
+			weapons = weapons.replace('[', '')
+			weapons = weapons.replace(']', '')
+			weapons = re.split(',\s*', weapons)
+			for i in range(len(weapons)):
+				weapons[i] = weapons[i].upper()
+				
+			#put days in a list for easy filtering
+			days = days.replace('[', '')
+			days = days.replace(']', '')
+			days = re.split(',\s*', days)
+			if days[0] != '' and days[0].upper() != "ALL":
+				for i in range(len(days)):
+					days[i] = int(days[i])
+					days[i] = days_words[days[i]]
 
+			i_o = i_o.replace('[', '')
+			i_o = i_o.replace(']', '')
+			i_o = re.split(',\s*', i_o)
+			
+			s_lat = -1.0
+			e_lat = -1.0
+			s_long = -1.0
+			e_long = -1.0
+				
+			#if start times and end times are empty, set them to default values
+			if start_time == "":
+				start_time = "00:00:00"
+			if end_time == "":
+				end_time = "23:59:59"
+				
+			visual.start_time = start_time
+			visual.end_time = end_time
+				
+			queryset = self.get_queryset()
+			#filter based on provided start_date / end_date and start time/end time
+			if start_date == "" and end_date != "":
+				visual.start_date = start_date
+			elif end_date == "":
+				visual.end_date = end_date
+			else:
+				visual.start_date = start_date
+				visual.end_date = end_date
+			
+				
+			#filter on list of i_o of the week
+			if days[0] != '' and days[0].upper() != "ALL":
+				day_string = ""
+				for day in days:
+					day_string = day_string + day + ","
+				visual.day = day_string
+				
+			#filter on list of crime codes
+			if codes[0] != '':
+				code_string = ""
+				for code in codes:
+					code_string = code_string + code + ","
+				visual.code = code_string
+				
+			#filter on list of districts
+			if districts[0] != '':
+				district_string = ""
+				for district in districts:
+					district_string = district_string + district + ","
+				visual.district = district_string
+				
+			if weapons[0] != '':
+				weapon_string = ""
+				for weapon in weapons:
+					weapon_string = weapon_string + weapon + ","
+				visual.weapon = weapon_string
+
+			
+			if start_lat != "" and end_lat != "":
+				s_lat = float(start_lat)
+				e_lat = float(end_lat)
+			if start_long != "" and end_long != "":
+				s_long = float(start_long)
+				e_long = float(end_long)
+
+				
+			if s_lat != -1.0 and e_lat != -1.0:
+				visual.start_lat = s_lat
+				visual.end_lat = e_lat
+			if s_long != -1.0 and e_long != -1.0:
+				visual.start_lon = s_long
+				visual.end_lon = e_long
+				
+			if i_o[0] != "":
+				i_o[0] = i_o[0].upper()
+				visual.inside_outside = i_o[0]
+				
+			visual.save()
+			return_json['success'] = 1
+		return http.JsonResponse(return_json)
+		
 	
 class GlobalFilterStructured(APIView):
 	serializer_class = serializers.CrimeSerializer
@@ -108,6 +288,9 @@ class GlobalFilterStructured(APIView):
 		if end_time == "":
 			end_time = "23:59:59"
 			
+		new_filter.start_time = start_time
+		new_filter.end_time = end_time
+			
 		queryset = self.get_queryset()
 		#filter based on provided start_date / end_date and start time/end time
 		if start_date == "" and end_date == "":
@@ -132,7 +315,7 @@ class GlobalFilterStructured(APIView):
 			day_string = ""
 			for day in days:
 				day_string = day_string + day + ","
-			#new_filter.days = day_string
+			new_filter.day = day_string
 			
 		#filter on list of crime codes
 		if codes[0] != '':
@@ -188,7 +371,7 @@ class GlobalFilterStructured(APIView):
 				queryset = queryset.filter(inside_outside__in=["I", "O"])
 			else:
 				queryset = queryset.filter(inside_outside=i_o[0])
-			#new_filter.inside_outside = i_o
+			new_filter.inside_outside = i_o[0]
 			
 		new_filter.save()
 			
@@ -266,6 +449,9 @@ class GlobalFilterRawData(APIView):
 		if end_time == "":
 			end_time = "23:59:59"
 			
+		new_filter.start_time = start_time
+		new_filter.end_time = end_time
+			
 		queryset = self.get_queryset()
 		#filter based on provided start_date / end_date and start time/end time
 		if start_date == "" and end_date == "":
@@ -290,7 +476,7 @@ class GlobalFilterRawData(APIView):
 			day_string = ""
 			for day in days:
 				day_string = day_string + day + ","
-			#new_filter.days = day_string
+			new_filter.day = day_string
 			
 		#filter on list of crime codes
 		if codes[0] != '':
@@ -346,7 +532,7 @@ class GlobalFilterRawData(APIView):
 				queryset = queryset.filter(inside_outside__in=["I", "O"])
 			else:
 				queryset = queryset.filter(inside_outside=i_o[0])
-			#new_filter.inside_outside = i_o
+			new_filter.inside_outside = i_o[0]
 			
 		new_filter.save()
 			

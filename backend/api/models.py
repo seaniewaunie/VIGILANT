@@ -96,7 +96,7 @@ class AuthUserUserPermissions(models.Model):
 
 
 class Crimedata(models.Model):
-    crime_id = models.IntegerField(db_column='crime_ID', primary_key=True)  # Field name made lowercase.
+    crime_id = models.AutoField(db_column='crime_ID', primary_key=True)  # Field name made lowercase.
     date = models.DateField()
     time = models.TimeField()
     day = models.CharField(max_length=5)
@@ -168,6 +168,8 @@ class Globalfilters(models.Model):
     start_time = models.TimeField(blank=True, null=True)
     end_time = models.TimeField(blank=True, null=True)
     code = models.CharField(max_length=300, blank=True, null=True)
+    day = models.CharField(max_length=50, blank=True, null=True)
+    inside_outside = models.CharField(max_length=10, blank=True, null=True)
     district = models.CharField(max_length=160, blank=True, null=True)
     weapon = models.CharField(max_length=50, blank=True, null=True)
     start_lat = models.FloatField(blank=True, null=True)
@@ -181,7 +183,7 @@ class Globalfilters(models.Model):
 
 
 class Localvisualization(models.Model):
-    local_filter_id = models.IntegerField(db_column='local_filter_ID', primary_key=True)  # Field name made lowercase.
+    local_filter_id = models.AutoField(db_column='local_filter_ID', primary_key=True)  # Field name made lowercase.
     fk_user = models.ForeignKey('Users', models.DO_NOTHING, db_column='fk_user_ID')  # Field name made lowercase.
     name = models.CharField(max_length=100)
     type = models.CharField(max_length=20, blank=True, null=True)
@@ -191,8 +193,9 @@ class Localvisualization(models.Model):
     end_date = models.DateField(blank=True, null=True)
     start_time = models.TimeField(blank=True, null=True)
     end_time = models.TimeField(blank=True, null=True)
+    day = models.CharField(max_length=40, blank=True, null=True)
     code = models.CharField(max_length=300, blank=True, null=True)
-    inside_outside = models.IntegerField(blank=True, null=True)
+    inside_outside = models.CharField(max_length=10, blank=True, null=True)
     weapon = models.CharField(max_length=50, blank=True, null=True)
     district = models.CharField(max_length=160, blank=True, null=True)
     start_lat = models.FloatField(blank=True, null=True)
