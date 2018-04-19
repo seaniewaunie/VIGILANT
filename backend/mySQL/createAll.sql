@@ -22,7 +22,7 @@ USE `VigilantDB` ;
 DROP TABLE IF EXISTS `VigilantDB`.`CrimeData` ;
 
 CREATE TABLE IF NOT EXISTS `VigilantDB`.`CrimeData` (
-  `crime_ID` INT NOT NULL,
+  `crime_ID` INT NOT NULL AUTO_INCREMENT,
   `date` DATE NOT NULL,
   `time` TIME NOT NULL,
   `day` VARCHAR(5) NOT NULL,
@@ -47,12 +47,14 @@ ENGINE = InnoDB;
 DROP TABLE IF EXISTS `VigilantDB`.`GlobalFilters` ;
 
 CREATE TABLE IF NOT EXISTS `VigilantDB`.`GlobalFilters` (
-  `global_filter_ID` INT NOT NULL,
+  `global_filter_ID` INT NOT NULL AUTO_INCREMENT,
   `start_date` DATE NULL,
   `end_date` DATE NULL,
   `start_time` TIME NULL,
   `end_time` TIME NULL,
   `code` VARCHAR(300) NULL,
+  `day` VARCHAR(50) NULL,
+  `inside_outside` VARCHAR(10) NULL,
   `district` VARCHAR(160) NULL,
   `weapon` VARCHAR(50) NULL,
   `start_lat` FLOAT NULL,
@@ -89,7 +91,7 @@ ENGINE = InnoDB;
 DROP TABLE IF EXISTS `VigilantDB`.`LocalVisualization` ;
 
 CREATE TABLE IF NOT EXISTS `VigilantDB`.`LocalVisualization` (
-  `local_filter_ID` INT NOT NULL,
+  `local_filter_ID` INT NOT NULL AUTO_INCREMENT,
   `fk_user_ID` INT NOT NULL,
   `name` VARCHAR(100) NOT NULL,
   `type` VARCHAR(20) NULL,
@@ -99,8 +101,9 @@ CREATE TABLE IF NOT EXISTS `VigilantDB`.`LocalVisualization` (
   `end_date` DATE NULL,
   `start_time` TIME NULL,
   `end_time` TIME NULL,
+  `day` VARCHAR(40) NULL,
   `code` VARCHAR(300) NULL,
-  `inside_outside` TINYINT NULL,
+  `inside_outside` VARCHAR(10) NULL,
   `weapon` VARCHAR(50) NULL,
   `district` VARCHAR(160) NULL,
   `start_lat` FLOAT NULL,
