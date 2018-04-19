@@ -103,27 +103,17 @@ export default class Filter extends Component {
                 title='Time Frame'
               />
               <MultiSelector
+                multi={true}
+                stayOpen = {true}
                 updateRequest = {this.props.updateRequest}
-                key={4}
-                selections = {this.state.days}
-                default={this.state.settings.current_days}
-                title='Days'
+                key={6}
+                selections={this.state.crime_codes}
+                default={this.state.settings.current_codes}
+                title='Codes'
               />
               <MultiSelector
-                updateRequest = {this.props.updateRequest}
-                key={1}
-                selections={this.state.weapons}
-                default={this.state.settings.current_weapons}
-                title='Weapons'
-              />
-              <MultiSelector
-                updateRequest = {this.props.updateRequest}
-                key={3}
-                selections={this.state.inside_outsides}
-                default={this.state.settings.current_io}
-                title='Indoor/Outdoor'
-              />
-              <MultiSelector
+                multi={true}
+                stayOpen = {true}
                 updateRequest = {this.props.updateRequest}
                 key={5}
                 selections = {this.state.regions}
@@ -131,12 +121,30 @@ export default class Filter extends Component {
                 title='Districts'
               />
               <MultiSelector
-                disabled={true}
+                multi={true}
+                stayOpen = {true}
                 updateRequest = {this.props.updateRequest}
-                key={6}
-                selections={this.state.crime_codes}
-                default={this.state.settings.current_codes}
-                title='Crime Code'
+                key={4}
+                selections = {this.state.days}
+                default={this.state.settings.current_days}
+                title='Days'
+              />
+              <MultiSelector
+                multi={true}
+                stayOpen = {true}
+                updateRequest = {this.props.updateRequest}
+                key={1}
+                selections={this.state.weapons}
+                default={this.state.settings.current_weapons}
+                title='Weapons'
+              />
+              <MultiSelector
+                multi={true}
+                updateRequest = {this.props.updateRequest}
+                key={3}
+                selections={this.state.inside_outsides}
+                default={this.state.settings.current_io}
+                title='Indoor/Outdoor'
               />
             </Well>
           </AutoAffix>

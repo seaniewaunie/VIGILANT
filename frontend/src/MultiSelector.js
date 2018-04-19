@@ -21,7 +21,7 @@ export default class MultiSelectField extends Component{
       title: title,
       removeSelected: false,
       disabled: this.props.disabled,
-      stayOpen: true,
+      stayOpen: this.props.stayOpen,
       value: [this.props.default],
       rtl: false,
       options: this.props.selections,
@@ -54,7 +54,7 @@ export default class MultiSelectField extends Component{
   				<Select
   					closeOnSelect={!stayOpen}
   					disabled={disabled}
-  					multi
+  					multi={true}
   					onChange={this.handleSelectChange}
   					options={this.state.options}
   					placeholder='All'

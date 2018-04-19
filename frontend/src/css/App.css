@@ -1,33 +1,10 @@
-.App ul{
-
+.App {
+  margin: 0px 0px 0px 0px;
+  width: 100%;
 }
 
-.App li{
-    display: block;
-    background: #666;
-    margin: 5px 5px 3px 5px;
-    float:left;
-}
-
-.App li.small{
-    width: 10em;
-    height: 10em;
-}
-
-.App li.medium{
-    width: 95%;
-    height: 20em;
-
-}
-
-.App li.large{
-    width: 95%;
-    height: 40em;
-}
-
-.App li:hover{
-    background:#999;
-    cursor:pointer;
+.timeline{
+  height: 5vh;
 }
 
 .header{
@@ -36,7 +13,8 @@
 }
 
 .topRow{
-  margin:15px 0 0 15px;
+    margin: 15px 0px 55px 0px;
+    width: 100%;
 }
 
 .filter{
@@ -44,8 +22,12 @@
   z-index: 1999;
 }
 
+.filterHolder {
+
+}
+
 .userVisuals{
-  //border: 5px solid blue;
+    margin: 0px 0px 55px 0px;
 }
 
 .userVisuals div{
@@ -54,6 +36,11 @@
 #grid{
 }
 
+.table-reference{
+    margin: 0px 0px 55px 0px;
+    //border: 5px solid black;
+}
+
 .table{
-    margin: 15px 0px 0px 0px;
+    margin: 125px 0px 55px 0px;
 }

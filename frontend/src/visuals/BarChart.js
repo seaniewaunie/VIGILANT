@@ -16,32 +16,40 @@ class BarChartFS extends Component {
 
     this.state = {
         fullscreen: false,
-        height: 200,
-        width: 200,
-        name : props.name,
+        height: 0,
+        width: 0,
+        name : '',
         data : [],
         //chartOptions : {
-
     };
   }
 
   componentWillMount() {
-    var dates = this.props.data.map(dates => dates.date);
-    var times = this.props.data.map(times => times.time);
+    console.log(this.props.data);
+    if(this.props.data !== undefined){
+  		this.setState({
+        fullscreen: false,
+        height: this.props.height,
+        width: this.props.width,
+        name : this.props.name,
+        data : [{
+          labels: this.props.data,
+          datasets : [
+              {
+                  label: this.props.name,
+                  data: this.getCounts(this.props.data),
+              },
 
-    var data = {
-        labels: dates,
-        datasets : [
-            {
-                label: "# of Crimes at Different Times",
-                data: this.getCounts(dates),
-            },
-
-        ],
+          ]
+        }],
+      })
     }
-		this.setState({data});
+
   }
 
+  componentDidMount() {
+    console.log(this.state.data);
+  }
 
   // counts the number of similar values in an array
   // and returns an array of the counts
@@ -76,10 +84,9 @@ class BarChartFS extends Component {
 
 
  render() {
-    const {data} = this.state;
     return (
         <div className="BarChartFS" onClick={this.handleClick}>
-			<BarGraph data={data} height={this.state.height} width={this.state.width}/>
+			       <BarGraph data={this.state.data} height={this.state.height} width={this.state.width}/>
         </div>
     );
   }

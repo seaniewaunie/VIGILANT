@@ -49,7 +49,7 @@ class TableFS extends Component {
             accessor: 'address',
             Header: 'Address'
         }, {
-            accessor: 'neightborhood',
+            accessor: 'neighborhood',
             Header: 'Neighborhood'
         }, {
             accessor: 'premise',

@@ -4,10 +4,11 @@ import {AutoAffix} from 'react-overlays';
 import axios from 'axios';
 import './css/App.css';
 import HeatMapFS from './visuals/HeatMap.js';
+import TimeLine from './Timeline.js';
 import Header from './Header';
 import TableFS from './visuals/Table.js';
-import DefaultVisuals from './DefaultVisuals.js';
 import Filter from './Filters.js';
+import {LineGraph, PieChart, BarChart} from './Visualizations'
 
 var VIS_PER_ROW = 3;
 var VIS_SIZE = 6;
@@ -44,6 +45,20 @@ class App extends Component {
             },
 
             visualsData: [],
+            crimesInfo: {
+              dates : [],
+              times: [],
+              codes: [],
+              descriptions: [],
+              weapons: [],
+              districts: [],
+              doors: [],
+              lats: [],
+              lons: [],
+              addresses: [],
+              neighborhoods: [],
+              premises: [],
+            }
 
         };
 
@@ -62,9 +77,20 @@ class App extends Component {
       axios.get(`http://127.0.0.1:8000/api/codelookup/`)
         .then(
           res => {
-          this.setState({filterCodes: res.data.data});
+          this.setState({filterCodes: res.data.data}, () => {
+            console.log("got filter codes");
+          });
         });
-        this.makeRequest();
+
+      this.makeRequest();
+
+      this.setState({
+        visuals: [
+          <LineGraph data={this.state.crimesInfo.dates} id={0} name={'Trend of Crime'} key={0} />,
+          <PieChart data={this.state.crimesInfo.weapons} id={1} name={'Weapon Distribution'} key={1} />,
+          <BarChart data={this.state.crimesInfo.doors} id={2} name={'Indoor/Outdoor Distribution'} key={2} />,
+        ],
+      })
     }
 
     addOne(vis){
@@ -116,8 +142,27 @@ class App extends Component {
       axios.get(req, {responseType: 'json'})
       .then(res => {
         const visualsData = res.data.data;
-        this.setState({ visualsData }, () => {
-            console.log("response: ", this.state.visualsData)
+        this.setState(
+          {
+            visualsData,
+            crimesInfo: {
+              dates: visualsData.map(dates => dates.date),
+              times: visualsData.map(times => times.time),
+              codes: visualsData.map(codes => codes.code),
+              descriptions: visualsData.map(descriptions => descriptions.description),
+              weapons: visualsData.map(weapons => weapons.weapon),
+              districts: visualsData.map(districts => districts.district),
+              doors: visualsData.map(doors => doors.inside_outside),
+              lats: visualsData.map(lats => lats.latitude),
+              lons: visualsData.map(lons => lons.longitude),
+              addresses: visualsData.map(addresses => addresses.address),
+              neighborhoods: visualsData.map(neighborhoods => neighborhoods.neighborhood),
+              premises: visualsData.map(premises => premises.premise),
+            },
+          },
+          () => {
+          console.log("response: ", this.state.visualsData)
+          //console.log("lat: ", this.state.crimesInfo.lats)
         });
       });
     }
@@ -170,7 +215,7 @@ class App extends Component {
             this.makeRequest();
           });
           break;
-        case 'Crime Code':
+        case 'Codes':
           var newRequest = this.state.requestURL;
           var newSettings = this.state.GF_settings;
           newRequest.codes = uriString;
@@ -210,39 +255,38 @@ class App extends Component {
 //        filter.push(<p>woo!</p>);
         }
         return (
-            <div id="app">
-                <Grid fluid={true}>
+            <div className="App">
+                <Grid fluid>
+                  <a name="home"></a>
                   <Row>
                     <AutoAffix>
                       <div className="header">
                           <Header
-                              data ={this.state.visualsData}
+                              data ={this.state.crimesInfo}
                               addOne={this.addOne}
                               hideOne={this.hideOne}
                               counter={this.state.counter}
                               toggleGlobalFilter={this.toggleGlobalFilter}
                           />
+                          <TimeLine className='timeline' dates={this.state.crimesInfo.dates}/>
                       </div>
                     </AutoAffix>
                   </Row>
                   <Row className="topRow">
-                    <Col xs={4} sm={VIS_SIZE} md={VIS_SIZE}>
+                    <Col xs={4} sm={TABLE_SIZE} md={TABLE_SIZE}>
                         <HeatMapFS
                             data ={this.state.visualsData}
                         />
                     </Col>
-                    <Col xs={4} sm={VIS_SIZE} md={VIS_SIZE-1}>
-                        <DefaultVisuals
-                            data ={this.state.visualsData}
-                        />
-                    </Col>
-                    <Col xs={2} sm={2} md={3} className="filter">
-                      {filter}
+                    <Col xs={2} sm={2} md={3} className="filterHolder">
+                      <div className="filter">
+                        {filter}
+                      </div>
                     </Col>
                   </Row>
                   <Row className="userVisuals">
                     <div>
-                        <Grid fluid={true} id="grid">
+                        <Grid fluid id="grid">
                             <FormatGrid
                                 counter={this.state.counter}
                                 visuals={this.state.visuals}
@@ -250,8 +294,11 @@ class App extends Component {
                         </Grid>
                     </div>
                   </Row>
+                  <Row className="table-reference" >
+                    <div><a name="Table"></a></div>
+                  </Row>
                   <Row className="table">
-                    <Col xs={4} sm={TABLE_SIZE} md={TABLE_SIZE}>
+                    <Col xs={TABLE_SIZE} sm={TABLE_SIZE} md={TABLE_SIZE}>
                       <TableFS
                         data = {this.state.visualsData}
                       />

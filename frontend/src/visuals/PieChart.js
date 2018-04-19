@@ -78,11 +78,9 @@ class PieChartFS extends Component {
 
 
  render() {
-
-	const {data} = this.state;
     return (
         <div className="PieChartFS" onClick={this.handleClick}>
-					<PieChart legend={false} data={data} height={this.state.height} width={this.state.width}/>
+					<PieChart legend={false} data={this.state.data} height={this.state.height} width={this.state.width}/>
         </div>
     );
   }

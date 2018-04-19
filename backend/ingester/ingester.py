@@ -14,14 +14,25 @@ import mysql.connector
 from mysql.connector import errorcode
 from datetime import date
 import calendar
-import sys
+import sys, os
 #import pandas as pd
 #from sodapy import Socrata
 
 # code to run other script
+'''
 cmd = [sys.executable, './dl.sh']
 process = subprocess.Popen(cmd)
 process.wait()
+'''
+
+
+try:
+    os.remove("4ih5-d5d5.json")
+except OSError:
+    print("error found")
+    pass
+    
+cmd = subprocess.check_call([r"./dl.sh"])
 
 #client = Socrata("data.baltimore.gov", None)
 
@@ -86,12 +97,12 @@ except mysql.connector.Error as err:
 
 #print("BRU")
 
-count = 0
+#count = 0
 
 # resets tables
 executeScriptsFromFile('../mySQL/createAll.sql')
 cnx.commit()
-
+print("Executed Script")
 with open('4ih5-d5d5.json') as dataFile:
     dat = json.load(dataFile)
     #print(type(dat[0]))
@@ -176,16 +187,20 @@ with open('4ih5-d5d5.json') as dataFile:
         try:
             district = v['district']
         except KeyError:
-            print("found district error")
+            #print("found district error")
             district = "none"
 
         
+<<<<<<< HEAD
         data = (v['crimedate'][:10], v['crimetime'], v['description'], district, day, weapon, address, neighborhood, premise, in_out, latitude, longitude, post, v['crimecode'])
+=======
+        data = (0, v['crimedate'][:10], v['crimetime'], v['description'], district, day, weapon, address, neighborhood, premise, in_out, latitude, longitude, post, v['crimecode'])
+>>>>>>> d02d22cfc2d52fe4574c52c6557a5fc009a926fd
             
         
         cursor.execute(add_data, data)
         cnx.commit()
-        count += 1
+        #count += 1
 
         # Values that every entry has        
         #print("date: " + v['crimedate'][:10])
