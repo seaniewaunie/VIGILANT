@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import uri from './js/uriUtil.js';
 import moment from 'moment-timezone';
 import DatetimeRangePicker from 'react-datetime-range-picker';
-import {Form, FormGroup, ControlLabel, FormControl, Col} from 'react-bootstrap';
+import {FormGroup, ControlLabel, FormControl} from 'react-bootstrap';
 
 export default class Selector extends Component{
     constructor(props){
@@ -27,7 +27,8 @@ export default class Selector extends Component{
         console.log(this.state.title);
         if(this.state.title === 'Time Frame'){
           var today = moment();
-          var past;
+          let past;
+          let params
           switch(this.state.value){
             case 'Past Week':
               past = moment().subtract(7, 'days');
@@ -37,7 +38,7 @@ export default class Selector extends Component{
               break;
             case 'Past Hour':
               past = moment().subtract(1, 'hour');
-              var params = new uri(past, today);
+              params = new uri(past, today);
               params.setStartTime = past.toISOString().substring(11, 19)
               params.setEndTime = today.toISOString().substring(11, 19)
               this.props.updateRequest(params.getString, this.state.title, this.state.value);
@@ -56,7 +57,7 @@ export default class Selector extends Component{
               return;
         }
 
-        var params = new uri(past, today);
+        params = new uri(past, today);
         this.props.updateRequest(params.getString, this.state.title, this.state.value);
       }
       });
@@ -127,7 +128,7 @@ export default class Selector extends Component{
         );
       }
       return(
-        <FormGroup ControlId='dropdown-basic' >
+        <FormGroup>
             <ControlLabel>{this.props.title}</ControlLabel>
             <FormControl
               componentClass='select'

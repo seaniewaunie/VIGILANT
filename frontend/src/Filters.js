@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import './css/Filters.css';
-import axios from 'axios';
 import {Well} from 'react-bootstrap';
 import {AutoAffix} from 'react-overlays';
 import Selector from './Selector.js';
 import MultiSelector from './MultiSelector.js';
+import {RingLoader} from 'react-spinners';
 
 // request crimecode options from /api/codelookup/
 
@@ -12,10 +12,10 @@ export default class Filter extends Component {
     constructor(props){
         super(props);
         this.state = {
-            id: props.id,
-            type: props.type,
-            scope: props.scope,
-            sidebarOpen: false,
+            id: this.props.id,
+            type: this.props.type,
+            scope: this.props.scope,
+            sidebarOpen: this.props.show,
             regions: [
                 {label: 'Central', value: 'central',},
                 {label: 'Northern', value: 'northern',},
@@ -67,7 +67,7 @@ export default class Filter extends Component {
               current_times: this.props.settings.times,
               current_days: this.props.settings.days,
               current_codes: this.props.settings.codes,
-            }
+            },
         };
 
         this.onSetSidebarOpen = this.onSetSidebarOpen.bind(this);
@@ -90,14 +90,21 @@ export default class Filter extends Component {
             element = <p>Local Filter settings for a {this.state.type}</p>;
         }
 
+        if(this.props.show){
+          return null;
+        }
+        else if(this.props.filterCodes === undefined){
+          return(<RingLoader color={'#123abc'} size={300}/>);
+        }
+
         return(
-          <AutoAffix viewportOffsetTop={55}>
+          <AutoAffix viewportOffsetTop={115}>
             <Well bsSize="small" className="filterOptions">
               <b>{element}</b>
 
               <Selector
                 updateRequest = {this.props.updateRequest}
-                key={2}
+                key={300}
                 selections={this.state.times}
                 default={this.state.settings.current_times}
                 title='Time Frame'
@@ -106,8 +113,8 @@ export default class Filter extends Component {
                 multi={true}
                 stayOpen = {true}
                 updateRequest = {this.props.updateRequest}
-                key={6}
-                selections={this.state.crime_codes}
+                key={301}
+                selections={this.props.filterCodes}
                 default={this.state.settings.current_codes}
                 title='Codes'
               />
@@ -115,7 +122,7 @@ export default class Filter extends Component {
                 multi={true}
                 stayOpen = {true}
                 updateRequest = {this.props.updateRequest}
-                key={5}
+                key={302}
                 selections = {this.state.regions}
                 default={this.state.settings.current_region}
                 title='Districts'
@@ -124,7 +131,7 @@ export default class Filter extends Component {
                 multi={true}
                 stayOpen = {true}
                 updateRequest = {this.props.updateRequest}
-                key={4}
+                key={303}
                 selections = {this.state.days}
                 default={this.state.settings.current_days}
                 title='Days'
@@ -133,15 +140,16 @@ export default class Filter extends Component {
                 multi={true}
                 stayOpen = {true}
                 updateRequest = {this.props.updateRequest}
-                key={1}
+                key={304}
                 selections={this.state.weapons}
                 default={this.state.settings.current_weapons}
                 title='Weapons'
               />
               <MultiSelector
+                className="open-up"
                 multi={true}
                 updateRequest = {this.props.updateRequest}
-                key={3}
+                key={305}
                 selections={this.state.inside_outsides}
                 default={this.state.settings.current_io}
                 title='Indoor/Outdoor'

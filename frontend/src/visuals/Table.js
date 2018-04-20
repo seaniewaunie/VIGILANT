@@ -1,6 +1,5 @@
 // Full Screen impl.
 import React, { Component } from 'react';
-import jsonData from '../json/big.js';
 import ReactTable from 'react-table';
 import 'react-table/react-table.css';
 
@@ -55,11 +54,6 @@ class TableFS extends Component {
             accessor: 'premise',
             Header: 'Premise'
         },
-    ];
-
-    var excludeColumns = [
-        'total_incidents',
-        'post'
     ];
 
     return (

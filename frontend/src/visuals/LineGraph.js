@@ -1,7 +1,6 @@
 // Full Screen
 // https://github.com/reactjs/react-chartjs
 import React, { Component } from 'react';
-import jsonData from '../json/big.js';
 import { Line as LineChart } from 'react-chartjs-2';
 
 //console.log(jsonData);
@@ -28,7 +27,7 @@ class LineGraphFS extends Component {
   }
 
   getData() {
-    var dates = this.props.data.map(dates => dates.date);
+    //var dates = this.props.data.map(dates => dates.date);
     var times = this.props.data.map(times => times.time);
 
     var data = {

@@ -48,7 +48,7 @@ export default class uri {
     var start_hh_mm_dd, end_hh_mm_dd;
     // YYYY-MM-DD
     // HH:MM:SS
-    if(this.start_date != '' && this.end_date != ''){
+    if(this.start_date !== '' && this.end_date !== ''){
       start_yr_month_day = this.start_date.toISOString().substr(0, 10);
       end_yr_month_day = this.end_date.toISOString().substr(0, 10);
     }

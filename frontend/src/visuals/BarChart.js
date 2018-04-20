@@ -1,56 +1,28 @@
-// Full Screen impl.
-//Notes: currently using dummy data
-import React, { Component } from 'react';
-import jsonData from '../json/big.js';
-import { Bar as BarGraph } from 'react-chartjs-2';
+import React, {Component} from 'react';
+import {BarChart} from 'react-easy-chart';
+import {RingLoader} from 'react-spinners';
+import {Well, Col} from 'react-bootstrap';
 
-class BarChartFS extends Component {
-
-  constructor(props) {
+export default class BarChartFS extends Component {
+  constructor(props){
     super(props);
 
-    this.compress = this.compress.bind(this);
-    this.expand = this.expand.bind(this);
-    this.getCounts = this.getCounts.bind(this);
-    this.handleClick = this.handleClick.bind(this);
-
     this.state = {
-        fullscreen: false,
-        height: 0,
-        width: 0,
-        name : '',
-        data : [],
-        //chartOptions : {
-    };
+      dates: this.props.currentData,
+      data: this.mapToDataArray(this.getCounts(this.props.currentData)),
+    }
+    this.getCounts = this.getCounts.bind(this);
+    this.mapToDataArray = this.mapToDataArray.bind(this);
   }
+
 
   componentWillMount() {
-    console.log(this.props.data);
-    if(this.props.data !== undefined){
-  		this.setState({
-        fullscreen: false,
-        height: this.props.height,
-        width: this.props.width,
-        name : this.props.name,
-        data : [{
-          labels: this.props.data,
-          datasets : [
-              {
-                  label: this.props.name,
-                  data: this.getCounts(this.props.data),
-              },
-
-          ]
-        }],
-      })
-    }
-
+    this.setState({
+      name: this.props.name,
+      dates: this.props.currentData,
+      data: this.mapToDataArray(this.getCounts(this.props.currentData)),
+    })
   }
-
-  componentDidMount() {
-    console.log(this.state.data);
-  }
-
   // counts the number of similar values in an array
   // and returns an array of the counts
   getCounts(arr){
@@ -58,37 +30,51 @@ class BarChartFS extends Component {
     for (var i = 0; i < arr.length; i++) {
         counts[arr[i]] = 1 + (counts[arr[i]] || 0);
     }
-    console.log(counts);
-    return Object.values(counts);
+    //console.log("counts returns", counts);
+    return counts;
   }
 
-
-
-  handleClick() {
-    this.setState({fullscreen: !this.state.fullscreen}, () => {
-        this.state.fullscreen ? this.expand() : this.compress();
-    });
-
+  mapToDataArray(arr){
+    var data = [];
+    console.log(arr);
+    let xName;
+    for(var i in arr){
+      xName = i;
+      if(i === 'null') xName='unspecified';
+      data.push({x: xName, y: arr[i]});
+    }
+    console.log('map to data returns: ', data)
+    return data;
   }
 
-  compress() {
-    //this.setState({height:"200", width:"200"});
-    console.log("Compressing Visual from full screen");
+  shouldComponentUpdate(nextProps, nextState) {
+    return true;
   }
 
-  expand() {
-    //this.setState({height:"150", width:"150"});
-    console.log("Expanding Visual to full screen");
-  }
+  render() {
 
+    if(this.props.currentData === undefined){
+      return(<RingLoader color={'#123abc'} />);
+    }
+    else if(this.props.currentData.length === 0)
+      return(<p style={{textAlign:'center'}}>No Crimes to Display</p>);
 
-
- render() {
     return (
-        <div className="BarChartFS" onClick={this.handleClick}>
-			       <BarGraph data={this.state.data} height={this.state.height} width={this.state.width}/>
-        </div>
+     <Col xs={4} sm={4} md={4} key={this.state.id}>
+       <Well>
+          <p align='center'><b>{this.state.name}</b></p>
+          <BarChart
+            className="timeline"
+            width={350}
+            axisLabels={{x: 'My x Axis', y: 'My y Axis'}}
+            axes
+            colorBars
+            xTickNumber={5}
+            yTickNumber={5}
+            data={this.mapToDataArray(this.getCounts(this.props.currentData))}
+          />
+      </Well>
+    </Col>
     );
   }
 }
-export default BarChartFS;

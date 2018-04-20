@@ -17,6 +17,7 @@ class Header extends Component {
 
     render() {
         return (
+          <div>
             <Navbar inverse collapseOnSelect>
               <Navbar.Header>
                 <Navbar.Brand> <img src={logo} className="Header-logo" alt="logo" /> </Navbar.Brand>
@@ -40,9 +41,10 @@ class Header extends Component {
                   <NavItem eventKey={2} href="#">Reveal</NavItem>
                   <NavItem eventKey={3} onClick={this.props.toggleGlobalFilter}>Global Filter</NavItem>
                 </Nav>
-
               </Navbar.Collapse>
             </Navbar>
+            {this.props.children}
+          </div>
         );
     }
 }
@@ -183,7 +185,7 @@ class AddVisualization extends Component {
 
     return (
     <Nav>
-      <NavItem eventKey={1} onClick={this.handleShow}>
+      <NavItem eventKey={0} onClick={this.handleShow}>
         Add Visualization
       </NavItem>
       {show}

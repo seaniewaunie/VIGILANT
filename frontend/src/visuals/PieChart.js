@@ -1,7 +1,6 @@
 // Full Screen impl.
 //Notes: currently using dummy data, and displayed with patterned sections for colorblind accessibility issues
 import React, { Component } from 'react';
-import jsonData from '../json/big.js';
 import { Pie as PieChart} from 'react-chartjs-2';
 import pattern from 'patternomaly';
 
@@ -19,8 +18,8 @@ class PieChartFS extends Component {
 
     this.state = {
         fullscreen: false,
-        height: "200",
-        width: "200",
+        height: 200,
+        width: 200,
         name : props.name,
         data : this.getData(),
 		};
@@ -28,7 +27,7 @@ class PieChartFS extends Component {
 
 	getData() {
     var dates = this.props.data.map(dates => dates.date);
-    var times = this.props.data.map(times => times.time);
+    //var times = this.props.data.map(times => times.time);
 
     var data = {
 			labels: dates,
@@ -80,7 +79,7 @@ class PieChartFS extends Component {
  render() {
     return (
         <div className="PieChartFS" onClick={this.handleClick}>
-					<PieChart legend={false} data={this.state.data} height={this.state.height} width={this.state.width}/>
+					<PieChart data={this.state.data} height={this.state.height} width={this.state.width}/>
         </div>
     );
   }

@@ -8,7 +8,8 @@ import TimeLine from './Timeline.js';
 import Header from './Header';
 import TableFS from './visuals/Table.js';
 import Filter from './Filters.js';
-import {LineGraph, PieChart, BarChart} from './Visualizations'
+import {LineGraph, PieChart} from './Visualizations'
+import BarChartFS from './visuals/BarChart';
 
 var VIS_PER_ROW = 3;
 var VIS_SIZE = 6;
@@ -25,7 +26,7 @@ class App extends Component {
             hideMode: false,
             revealMode: false,
             filterType: 'global',
-            filterCodes: '',
+            filterCodes: this.getFilterCodes(),
             GF_settings: {
               times: 'Past Month',
               days: '',
@@ -63,6 +64,7 @@ class App extends Component {
         };
 
         this.addOne = this.addOne.bind(this);
+        this.getFilterCodes = this.getFilterCodes.bind(this);
         this.hideOne = this.hideOne.bind(this);
         this.makeRequest = this.makeRequest.bind(this);
         this.toggleGlobalFilter = this.toggleGlobalFilter.bind(this);
@@ -74,23 +76,8 @@ class App extends Component {
 
     // on page load, default data must be set
     componentDidMount() {
-      axios.get(`http://127.0.0.1:8000/api/codelookup/`)
-        .then(
-          res => {
-          this.setState({filterCodes: res.data.data}, () => {
-            console.log("got filter codes");
-          });
-        });
-
+      this.getFilterCodes();
       this.makeRequest();
-
-      this.setState({
-        visuals: [
-          <LineGraph data={this.state.crimesInfo.dates} id={0} name={'Trend of Crime'} key={0} />,
-          <PieChart data={this.state.crimesInfo.weapons} id={1} name={'Weapon Distribution'} key={1} />,
-          <BarChart data={this.state.crimesInfo.doors} id={2} name={'Indoor/Outdoor Distribution'} key={2} />,
-        ],
-      })
     }
 
     addOne(vis){
@@ -164,14 +151,42 @@ class App extends Component {
           console.log("response: ", this.state.visualsData)
           //console.log("lat: ", this.state.crimesInfo.lats)
         });
+
+        this.setState({
+          visuals: [
+            //<LineGraph data={this.state.crimesInfo.dates} id={0} name={'Trend of Crime'} key={0} />,
+            //<PieChart data={this.state.crimesInfo.weapons} id={1} name={'Weapon Distribution'} key={1} />,
+            <BarChartFS name={"Indoor/Outdoor Distribution"} key={0} id={0} currentData={this.state.crimesInfo.doors}/>,
+            <BarChartFS name={"Weapon Distribution"} key={1} id={1} currentData={this.state.crimesInfo.weapons}/>,
+            <BarChartFS name={"Number of Crimes Each Day"} key={2} id={2} currentData={this.state.crimesInfo.dates}/>,
+            //<BarChartFS name={"Number of Crimes Between Time Range"} key={3} id={3} currentData={this.state.crimesInfo.times}/>,
+            <BarChartFS name={"Distribution of Crimes by Code"} key={4} id={4} currentData={this.state.crimesInfo.codes}/>,
+            <BarChartFS name={"Distribution of Crimes by District"} key={5} id={5} currentData={this.state.crimesInfo.districts}/>,
+            <BarChartFS name={"Distribution of Crimes by Address"} key={6} id={6} currentData={this.state.crimesInfo.addresses}/>,
+            <BarChartFS name={"Distribution of Crimes by Neighborhood"} key={7} id={7} currentData={this.state.crimesInfo.neighborhoods}/>,
+            <BarChartFS name={"Distribution of Crimes by Premise"} key={8} id={8} currentData={this.state.crimesInfo.premises}/>,
+            <BarChartFS name={"Distribution of Crimes by Description"} key={9} id={9} currentData={this.state.crimesInfo.descriptions}/>,
+          ],
+        })
       });
     }
 
+    getFilterCodes() {
+      axios.get(`http://127.0.0.1:8000/api/codelookup/`)
+        .then(res => {
+          const filterCodes = res.data.data;
+          this.setState(
+            {
+              filterCodes,
+            });
+        });
+    }
+
     updateGlobalFilterRequest(uriString, selection, value){
+      let newRequest = this.state.requestURL;
+      let newSettings = this.state.GF_settings;
       switch(selection){
         case 'Time Frame':
-          var newRequest = this.state.requestURL;
-          var newSettings = this.state.GF_settings;
           newRequest.timeframe = uriString;
           newSettings.times = value;
           //console.log(uriString + ' from ' + selection);
@@ -180,8 +195,6 @@ class App extends Component {
           });
           break;
         case 'Districts':
-          var newRequest = this.state.requestURL;
-          var newSettings = this.state.GF_settings;
           newRequest.regions = uriString;
           newSettings.regions = value;
           this.setState({requestURL: newRequest, GF_settings: newSettings} , ()=>{
@@ -189,8 +202,6 @@ class App extends Component {
           });
           break;
         case 'Days':
-          var newRequest = this.state.requestURL;
-          var newSettings = this.state.GF_settings;
           newRequest.days = uriString;
           newSettings.days = value;
           this.setState({requestURL: newRequest, GF_settings: newSettings} , ()=>{
@@ -198,8 +209,6 @@ class App extends Component {
           });
           break;
         case 'Weapons':
-          var newRequest = this.state.requestURL;
-          var newSettings = this.state.GF_settings;
           newRequest.weapons = uriString;
           newSettings.weapons = value;
           this.setState({requestURL: newRequest, GF_settings: newSettings} , ()=>{
@@ -207,8 +216,6 @@ class App extends Component {
           });
           break;
         case 'Indoor/Outdoor':
-          var newRequest = this.state.requestURL;
-          var newSettings = this.state.GF_settings;
           newRequest.io = uriString;
           newSettings.io = value;
           this.setState({requestURL: newRequest, GF_settings: newSettings} , ()=>{
@@ -216,8 +223,6 @@ class App extends Component {
           });
           break;
         case 'Codes':
-          var newRequest = this.state.requestURL;
-          var newSettings = this.state.GF_settings;
           newRequest.codes = uriString;
           newSettings.codes = value;
           this.setState({requestURL: newRequest, GF_settings: newSettings} , ()=>{
@@ -238,22 +243,6 @@ class App extends Component {
 
     render() {
         this.state.counter = this.state.visuals.length;
-        var filter = [];
-        if(this.state.sidebarOpen === true){
-//*
-            filter.push(
-                <Filter
-                    id="rightSide"
-                    filterCodes = {this.state.filterCodes}
-                    scope = {this.state.filterType}
-                    key = '0'
-                    updateRequest = {this.updateGlobalFilterRequest}
-                    settings = {this.state.GF_settings}
-                />
-            );
-//*/
-//        filter.push(<p>woo!</p>);
-        }
         return (
             <div className="App">
                 <Grid fluid>
@@ -267,10 +256,11 @@ class App extends Component {
                               hideOne={this.hideOne}
                               counter={this.state.counter}
                               toggleGlobalFilter={this.toggleGlobalFilter}
-                          />
-                          <TimeLine className='timeline' dates={this.state.crimesInfo.dates}/>
+                          >
+                          </Header>
                       </div>
                     </AutoAffix>
+                    <TimeLine key={500} dates={this.state.crimesInfo.dates}/>
                   </Row>
                   <Row className="topRow">
                     <Col xs={4} sm={TABLE_SIZE} md={TABLE_SIZE}>
@@ -280,7 +270,15 @@ class App extends Component {
                     </Col>
                     <Col xs={2} sm={2} md={3} className="filterHolder">
                       <div className="filter">
-                        {filter}
+                        <Filter
+                            id="rightSide"
+                            filterCodes = {this.state.filterCodes}
+                            scope = {this.state.filterType}
+                            key = {499}
+                            updateRequest = {this.updateGlobalFilterRequest}
+                            settings = {this.state.GF_settings}
+                            show={!this.state.sidebarOpen}
+                        />
                       </div>
                     </Col>
                   </Row>
@@ -320,9 +318,9 @@ function FormatGrid(props) {
     for(var i=0; i < rows; i++){
         // add each row to an html object to return
         grid.push(
-            <Row key={i} >
+            <Row key={100+i} >
                 <FormatRow
-                    key={i}
+                    key={200+i}
                     currentRow={rowNum}
                     visuals={props.visuals}
                 />

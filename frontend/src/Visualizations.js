@@ -103,11 +103,11 @@ export class BarChart extends Component {
     constructor(props){
         super();
 
-        var chartName = nameString + props.id;
-        if(props.name !== '') chartName = props.name;
+        var chartName = nameString + this.props.id;
+        if(this.props.name !== '') chartName = this.props.name;
 
         this.state = {
-            id : props.id,
+            id : this.props.id,
             name : chartName,
         };
     }
@@ -117,9 +117,7 @@ export class BarChart extends Component {
              <Well>
                 <p align='center'><b>{this.state.name}</b></p>
                 <BarChartFS
-                    data={this.props.data}
-                    name={this.state.name}
-                    id={this.state.id}
+                    key={2} currentData={this.props.currentData}
                 />
               </Well>
             </Col>

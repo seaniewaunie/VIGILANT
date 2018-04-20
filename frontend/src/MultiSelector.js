@@ -25,6 +25,7 @@ export default class MultiSelectField extends Component{
       value: [this.props.default],
       rtl: false,
       options: this.props.selections,
+      multi: this.props.multi
     };
 
     this.handleSelectChange = this.handleSelectChange.bind(this);
@@ -49,12 +50,12 @@ export default class MultiSelectField extends Component{
 	render () {
 		const { disabled, stayOpen, value } = this.state;
 		return (
-      <FormGroup ControlId='dropdown-basic' >
+      <FormGroup >
           <ControlLabel>{this.props.title}</ControlLabel>
   				<Select
   					closeOnSelect={!stayOpen}
   					disabled={disabled}
-  					multi={true}
+  					multi={this.state.multi}
   					onChange={this.handleSelectChange}
   					options={this.state.options}
   					placeholder='All'

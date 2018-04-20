@@ -3,27 +3,24 @@
   width: 100%;
 }
 
-.timeline{
-  height: 5vh;
-}
-
 .header{
   position:'relative';
   z-index: 2000;
+  margin: 0;
 }
 
 .topRow{
-    margin: 15px 0px 55px 0px;
+    margin: 0 0px 55px 0px;
     width: 100%;
 }
 
 .filter{
   position:'relative';
   z-index: 1999;
+  margin: 0;
 }
 
 .filterHolder {
-
 }
 
 .userVisuals{
