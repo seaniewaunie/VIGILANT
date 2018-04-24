@@ -98,7 +98,7 @@ export default class Filter extends Component {
         }
 
         return(
-          <AutoAffix viewportOffsetTop={115}>
+          <AutoAffix viewportOffsetTop={70}>
             <Well bsSize="small" className="filterOptions">
               <b>{element}</b>
 
