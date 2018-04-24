@@ -1,48 +1,28 @@
-// Full Screen
-// https://github.com/reactjs/react-chartjs
-import React, { Component } from 'react';
-import { Line as LineChart } from 'react-chartjs-2';
+import React, {Component} from 'react';
+import {LineChart} from 'react-easy-chart';
+import {RingLoader} from 'react-spinners';
+import {Well, Col} from 'react-bootstrap';
 
-//console.log(jsonData);
-
-class LineGraphFS extends Component {
-
-  constructor(props) {
+export default class LineGraphFS extends Component {
+  constructor(props){
     super(props);
 
-    this.compress = this.compress.bind(this);
-    this.expand = this.expand.bind(this);
-    this.getData = this.getData.bind(this);
-    this.getCounts = this.getCounts.bind(this);
-    this.handleClick = this.handleClick.bind(this);
-
-
     this.state = {
-        fullscreen: false,
-        height: 200,
-        width: 200,
-        name : props.name,
-        data : this.getData(),
-    };
-  }
-
-  getData() {
-    //var dates = this.props.data.map(dates => dates.date);
-    var times = this.props.data.map(times => times.time);
-
-    var data = {
-        labels: times,
-        datasets : [
-            {
-                label: "# of Crimes at Different Times",
-                data: this.getCounts(times),
-            },
-
-        ],
+      dates: [],
+      data: {},
     }
-    return data;
+    this.getCounts = this.getCounts.bind(this);
+    this.mapToDataArray = this.mapToDataArray.bind(this);
   }
 
+
+  componentWillMount() {
+    this.setState({
+      name: this.props.name,
+      dates: this.props.currentData,
+      data: this.mapToDataArray(this.getCounts(this.props.currentData)),
+    })
+  }
   // counts the number of similar values in an array
   // and returns an array of the counts
   getCounts(arr){
@@ -50,36 +30,51 @@ class LineGraphFS extends Component {
     for (var i = 0; i < arr.length; i++) {
         counts[arr[i]] = 1 + (counts[arr[i]] || 0);
     }
-    //console.log(counts);
-    return Object.values(counts);
+    //console.log("counts returns", counts);
+    return counts;
   }
 
-  handleClick() {
-    this.setState({fullscreen: !this.state.fullscreen}, () => {
-        this.state.fullscreen ? this.expand() : this.compress();
-    });
-
+  mapToDataArray(arr){
+    var data = [];
+    console.log(arr);
+    let xName;
+    for(var i in arr){
+      xName = i;
+      if(i === 'null') xName='unspecified';
+      data.push({x: xName, y: arr[i]});
+    }
+    console.log('map to data returns: ', data)
+    return data;
   }
 
-  compress() {
-    //this.setState({height:"200", width:"200"});
-    console.log("Compressing Visual from full screen");
+  shouldComponentUpdate(nextProps, nextState) {
+    return true;
   }
-
-  expand() {
-    //this.setState({height:"150", width:"150"});
-    console.log("Expanding Visual to full screen");
-  }
-
 
   render() {
-    const { data, chartOptions } = this.state;
+
+    if(this.props.currentData === undefined){
+      return(<RingLoader color={'#123abc'} />);
+    }
+    else if(this.props.currentData.length === 0)
+      return(<p style={{textAlign:'center'}}>No Crimes to Display</p>);
+
     return (
-        <div className="LineChartFS" onClick={this.handleClick}>
-            <LineChart data={data} options={chartOptions} height={this.state.height} width={this.state.width}/>
-        </div>
+     <Col xs={4} sm={4} md={4} key={this.state.id}>
+       <Well>
+          <p align='center'><b>{this.state.name}</b></p>
+          <LineChart
+            className="timeline"
+            width={350}
+            axisLabels={{x: 'My x Axis', y: 'My y Axis'}}
+            axes
+            colorBars
+            xTickNumber={5}
+            yTickNumber={5}
+            data={this.mapToDataArray(this.getCounts(this.props.currentData))}
+          />
+      </Well>
+    </Col>
     );
   }
 }
-
-export default LineGraphFS;

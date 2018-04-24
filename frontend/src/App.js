@@ -8,8 +8,9 @@ import TimeLine from './Timeline.js';
 import Header from './Header';
 import TableFS from './visuals/Table.js';
 import Filter from './Filters.js';
-import {LineGraph, PieChart} from './Visualizations'
+import { PieChart} from './Visualizations';
 import BarChartFS from './visuals/BarChart';
+import LineGraphFS from './visuals/LineGraph';
 
 var VIS_PER_ROW = 3;
 var VIS_SIZE = 6;
@@ -47,6 +48,7 @@ class App extends Component {
 
             visualsData: [],
             crimesInfo: {
+              days: [],
               dates : [],
               times: [],
               codes: [],
@@ -59,8 +61,7 @@ class App extends Component {
               addresses: [],
               neighborhoods: [],
               premises: [],
-            }
-
+            },
         };
 
         this.addOne = this.addOne.bind(this);
@@ -133,6 +134,7 @@ class App extends Component {
           {
             visualsData,
             crimesInfo: {
+              days: visualsData.map(days => days.day),
               dates: visualsData.map(dates => dates.date),
               times: visualsData.map(times => times.time),
               codes: visualsData.map(codes => codes.code),
@@ -149,25 +151,25 @@ class App extends Component {
           },
           () => {
           console.log("response: ", this.state.visualsData)
+          this.setState({
+            visuals: [
+              //<LineGraph data={this.state.crimesInfo.dates} id={0} name={'Trend of Crime'} key={0} />,
+              //<PieChart data={this.state.crimesInfo.weapons} id={1} name={'Weapon Distribution'} key={1} />,
+              <BarChartFS name={"Distribution of Crimes by Day"} key={10} id={10} currentData={this.state.crimesInfo.days}/>,
+              <BarChartFS name={"Indoor/Outdoor Distribution"} key={0} id={0} currentData={this.state.crimesInfo.doors}/>,
+              <BarChartFS name={"Weapon Distribution"} key={1} id={1} currentData={this.state.crimesInfo.weapons}/>,
+              <BarChartFS name={"Number of Crimes Each Day"} key={2} id={2} currentData={this.state.crimesInfo.dates}/>,
+              //<BarChartFS name={"Number of Crimes Between Time Range"} key={3} id={3} currentData={this.state.crimesInfo.times}/>,
+              <BarChartFS name={"Distribution of Crimes by Code"} key={4} id={4} currentData={this.state.crimesInfo.codes}/>,
+              <BarChartFS name={"Distribution of Crimes by District"} key={5} id={5} currentData={this.state.crimesInfo.districts}/>,
+              //<BarChartFS name={"Distribution of Crimes by Address"} key={6} id={6} currentData={this.state.crimesInfo.addresses}/>,
+              //<BarChartFS name={"Distribution of Crimes by Neighborhood"} key={7} id={7} currentData={this.state.crimesInfo.neighborhoods}/>,
+              //<BarChartFS name={"Distribution of Crimes by Premise"} key={8} id={8} currentData={this.state.crimesInfo.premises}/>,
+              //<BarChartFS name={"Distribution of Crimes by Description"} key={9} id={9} currentData={this.state.crimesInfo.descriptions}/>,
+            ],
+          })
           //console.log("lat: ", this.state.crimesInfo.lats)
         });
-
-        this.setState({
-          visuals: [
-            //<LineGraph data={this.state.crimesInfo.dates} id={0} name={'Trend of Crime'} key={0} />,
-            //<PieChart data={this.state.crimesInfo.weapons} id={1} name={'Weapon Distribution'} key={1} />,
-            <BarChartFS name={"Indoor/Outdoor Distribution"} key={0} id={0} currentData={this.state.crimesInfo.doors}/>,
-            <BarChartFS name={"Weapon Distribution"} key={1} id={1} currentData={this.state.crimesInfo.weapons}/>,
-            <BarChartFS name={"Number of Crimes Each Day"} key={2} id={2} currentData={this.state.crimesInfo.dates}/>,
-            //<BarChartFS name={"Number of Crimes Between Time Range"} key={3} id={3} currentData={this.state.crimesInfo.times}/>,
-            <BarChartFS name={"Distribution of Crimes by Code"} key={4} id={4} currentData={this.state.crimesInfo.codes}/>,
-            <BarChartFS name={"Distribution of Crimes by District"} key={5} id={5} currentData={this.state.crimesInfo.districts}/>,
-            <BarChartFS name={"Distribution of Crimes by Address"} key={6} id={6} currentData={this.state.crimesInfo.addresses}/>,
-            <BarChartFS name={"Distribution of Crimes by Neighborhood"} key={7} id={7} currentData={this.state.crimesInfo.neighborhoods}/>,
-            <BarChartFS name={"Distribution of Crimes by Premise"} key={8} id={8} currentData={this.state.crimesInfo.premises}/>,
-            <BarChartFS name={"Distribution of Crimes by Description"} key={9} id={9} currentData={this.state.crimesInfo.descriptions}/>,
-          ],
-        })
       });
     }
 

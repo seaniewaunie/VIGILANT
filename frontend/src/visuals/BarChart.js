@@ -8,13 +8,12 @@ export default class BarChartFS extends Component {
     super(props);
 
     this.state = {
-      dates: this.props.currentData,
-      data: this.mapToDataArray(this.getCounts(this.props.currentData)),
+      dates: [],
+      data: {},
     }
     this.getCounts = this.getCounts.bind(this);
     this.mapToDataArray = this.mapToDataArray.bind(this);
   }
-
 
   componentWillMount() {
     this.setState({
@@ -60,13 +59,13 @@ export default class BarChartFS extends Component {
       return(<p style={{textAlign:'center'}}>No Crimes to Display</p>);
 
     return (
-     <Col xs={4} sm={4} md={4} key={this.state.id}>
+     <Col xs={4} sm={4} md={9} key={this.state.id}>
        <Well>
           <p align='center'><b>{this.state.name}</b></p>
           <BarChart
             className="timeline"
-            width={350}
-            axisLabels={{x: 'My x Axis', y: 'My y Axis'}}
+            width={850}
+            axisLabels={{x: 'My x Axis', y: 'Number of Crimes'}}
             axes
             colorBars
             xTickNumber={5}

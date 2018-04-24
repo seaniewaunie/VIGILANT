@@ -5,7 +5,10 @@ import { Button, Col, Grid, FormGroup, ControlLabel, FormControl, HelpBlock, Too
 import barchart from './images/barchart icon.png';
 import linegraph from './images/line graph icon.png';
 import piechart from './images/pie chart icon.png';
-import {LineGraph, PieChart, BarChart} from './Visualizations'
+import {LineGraph, PieChart} from './Visualizations'
+import BarChartFS from './visuals/BarChart';
+import DataTypeSelector from './DataTypeSelector.js';
+import {RingLoader} from 'react-spinners';
 
 var NAME_LENGTH = 40;
 
@@ -66,6 +69,7 @@ class AddVisualization extends Component {
     this.handleTimeLine = this.handleTimeLine.bind(this);
     this.handleTableChart = this.handleTableChart.bind(this);
     this.handleAdd = this.handleAdd.bind(this);
+    this.updateRequest = this.updateRequest.bind(this);
 
     this.addOne = this.props.addOne.bind(this);
     this.hideOne= this.props.hideOne.bind(this);
@@ -73,9 +77,23 @@ class AddVisualization extends Component {
     this.state = {
       show: false,
       selected: false,
+      selectedData: 'days',
       type: '',
       id: props.counter,
       name : '',
+      crimesInfo : this.props.data,
+      dataTypeSelections: [
+        {label: 'Days', value: 'days',},
+        //{label: 'Neighborhoods', value: 'neighborhoods'},
+        //{label: 'Descriptions', value: 'descriptions'},
+        {label: 'Times', value: 'times'},
+        {label: 'Codes', value: 'codes'},
+        {label: 'Weapons', value: 'weapons'},
+        {label: 'Districts',  value: 'districts'},
+        {label: 'Indoor/Outdoor', value: 'doors'},
+        {label: 'Addresses', value: 'addresses'},
+        {label: 'Premises', value: 'premises'},
+      ],
     };
   }
 
@@ -88,11 +106,12 @@ class AddVisualization extends Component {
   }
 
   handleAdd(){
+    console.log(this.props.data);
     if(this.state.name.length < NAME_LENGTH){
       var element;
       switch(this.state.type){
           case 'Bar Chart':
-              element = <BarChart data={this.props.data} id={this.state.id} name={this.state.name} key={this.state.id} />;
+              element = <BarChartFS name={this.state.name} key={this.state.id} id={this.state.id} currentData={this.props.data[this.state.selectedData]}/>;
               break;
           case 'Line Graph':
               element = <LineGraph data={this.props.data}  id={this.state.id} name={this.state.name} key={this.state.id}/>;
@@ -145,77 +164,38 @@ class AddVisualization extends Component {
     this.setState({ selected: true, type: 'Table Chart' });
   }
 
+  updateRequest(selectedData){
+    this.setState({selectedData})
+  }
+
   render() {
-/*    var show = this.state.selected ? (
-      <ShowFilter
-            handleAdd={this.handleAdd}
-            handleClose={this.handleClose}
-            type={this.state.type}
-            id={this.state.id}
-      />
-    ) : (
-      <ShowOptions
-            handleHeatMap={this.handleHeatMap}
-            handleBarChart={this.handleBarChart}
-            handleLineGraph={this.handleLineGraph}
-            handlePieChart={this.handlePieChart}
-            handleTimeLine={this.handleTimeLine}
-            handleTableChart={this.handleTableChart}
-            handleClose={this.handleClose}
+    const bartip = <Tooltip id="tooltip-modal">Bar Chart</Tooltip>;
+    const linetip = <Tooltip id="tooltip-modal">Line Graph</Tooltip>;
+    const pitip = <Tooltip id="tooltip-modal">Pie Chart</Tooltip>;
 
-      />
-
-    );
-*/
-    var show = (
-      <Modal show={this.state.show} onHide={this.handleClose}>
-        <ShowOptions
-              handleHeatMap={this.handleHeatMap}
-              handleBarChart={this.handleBarChart}
-              handleLineGraph={this.handleLineGraph}
-              handlePieChart={this.handlePieChart}
-              handleTimeLine={this.handleTimeLine}
-              handleTableChart={this.handleTableChart}
-              handleClose={this.handleClose}
-              getValidationState={this.getValidationState}
-              handleChange={this.handleChange}
-        />
-      </Modal>
-    );
+    if(this.props.data === undefined){
+      return null;
+    }
 
     return (
     <Nav>
       <NavItem eventKey={0} onClick={this.handleShow}>
         Add Visualization
       </NavItem>
-      {show}
-    </Nav>
-    );
-  }
-}
-
-function ShowOptions(props){
-
-    const bartip = <Tooltip id="tooltip-modal">Bar Chart</Tooltip>;
-    const linetip = <Tooltip id="tooltip-modal">Line Graph</Tooltip>;
-    const pitip = <Tooltip id="tooltip-modal">Pie Chart</Tooltip>;
-
-    var options = [];
-    options.push(
-        <div>
+      <Modal show={this.state.show} onHide={this.handleClose}>
         <Modal.Header closeButton>
             <Modal.Title>
                 {/*<form>*/}
                     <FormGroup
                       controlId="formBasicText"
-                      validationState={props.getValidationState()}
+                      validationState={this.getValidationState()}
                     >
                       <ControlLabel>Add Visualization</ControlLabel>
                       <FormControl
                         type="text"
-                        value={props.name}
+                        value={this.state.name}
                         placeholder="Visualization Name"
-                        onChange={props.handleChange}
+                        onChange={this.handleChange}
                       />
                       <FormControl.Feedback />
                       <HelpBlock>After entering a name, click on which visualization you would like</HelpBlock>
@@ -224,55 +204,42 @@ function ShowOptions(props){
             </Modal.Title>
           </Modal.Header>
           <Modal.Body>
+            <DataTypeSelector
+              multi={false}
+              updateRequest={this.updateRequest}
+              key={305}
+              selections={this.state.dataTypeSelections}
+              default={'Days'}
+              title='Select Data to for Visual'
+            />
             <Grid>
               <Row className="show-grid">
-{/*                <Col xs={4} sm={3} md={2}>
-                    <OverlayTrigger placement="top" overlay={heattip}>
-                    <Thumbnail src={heatmap} responsive onClick={props.handleHeatMap} />
-                    </OverlayTrigger>
-                </Col>
-*/}
                 <Col xs={4} sm={3} md={2}>
                     <OverlayTrigger placement="top" overlay={pitip}>
-                    <Thumbnail src={piechart} responsive  onClick={props.handlePieChart} />
+                    <Thumbnail src={piechart} onClick={this.handlePieChart} />
                     </OverlayTrigger>
                 </Col>
                 <Col xs={4} sm={3} md={2}>
                     <OverlayTrigger placement="top" overlay={bartip}>
-                    <Thumbnail src={barchart} responsive onClick={props.handleBarChart} />
+                    <Thumbnail src={barchart} onClick={this.handleBarChart} />
                     </OverlayTrigger>
                 </Col>
                 <Col xs={4} sm={3} md={2}>
                     <OverlayTrigger placement="top" overlay={linetip}>
-                    <Thumbnail placement="top"src={linegraph} responsive  onClick={props.handleLineGraph} />
+                    <Thumbnail placement="top"src={linegraph} onClick={this.handleLineGraph} />
                     </OverlayTrigger>
                 </Col>
               </Row>
- {/*
-              <Row className="show-grid">
-                <Col xs={4} sm={3} md={2}>
-                    <OverlayTrigger placement="top" overlay={timetip}>
-                    <Thumbnail src={timeline} responsive  onClick={props.handleTimeLine} />
-                    </OverlayTrigger>
-                </Col>
-                <Col xs={4} sm={3} md={2}>
-                    <OverlayTrigger placement="top" overlay={tabletip}>
-                    <Thumbnail src={tablechart} responsive onClick={props.handleTableChart}  />
-                    </OverlayTrigger>
-                </Col>
-              </Row>
-*/}
-
             </Grid>
           </Modal.Body>
 
           <Modal.Footer>
-            <Button bsStyle="danger" onClick={props.handleClose}>Close</Button>
+            <Button bsStyle="danger" onClick={this.handleClose}>Close</Button>
           </Modal.Footer>
-
-        </div>
+      </Modal>
+    </Nav>
     );
-    return options;
+  }
 }
 
 export default Header;
