@@ -9,8 +9,10 @@ import {LineGraph, PieChart} from './Visualizations'
 import BarChartFS from './visuals/BarChart';
 import DataTypeSelector from './DataTypeSelector.js';
 import {RingLoader} from 'react-spinners';
+import axios from 'axios';
 
 var NAME_LENGTH = 40;
+var ID_num = 0;
 
 class Header extends Component {
     constructor(props){
@@ -69,6 +71,7 @@ class AddVisualization extends Component {
     this.handleTimeLine = this.handleTimeLine.bind(this);
     this.handleTableChart = this.handleTableChart.bind(this);
     this.handleAdd = this.handleAdd.bind(this);
+	this.makeRequest = this.makeRequest.bind(this);
     this.updateRequest = this.updateRequest.bind(this);
 
     this.addOne = this.props.addOne.bind(this);
@@ -111,13 +114,22 @@ class AddVisualization extends Component {
       var element;
       switch(this.state.type){
           case 'Bar Chart':
-              element = <BarChartFS name={this.state.name} key={this.state.id} id={this.state.id} currentData={this.props.data[this.state.selectedData]}/>;
+			  this.makeRequest(this.state.name, "bar");
+			  console.log(this.state.id);
+			  element = <BarChartFS name={this.state.name} key={this.state.id} id={this.state.id} currentData={this.props.data[this.state.selectedData]}/>;
+			  console.log(this.state.id);
               break;
           case 'Line Graph':
-              element = <LineGraph data={this.props.data}  id={this.state.id} name={this.state.name} key={this.state.id}/>;
+			  this.makeRequest(this.state.name, "line");
+			  console.log(this.state.id);
+              element = <LineGraph data={this.props.data[this.state.selectedData]}  id={this.state.id} name={this.state.name} key={this.state.id}/>;
+			  console.log(this.state.id);
               break;
           case 'Pie Chart':
-              element = <PieChart data={this.props.data}  id={this.state.id} name={this.state.name} key={this.state.id} />;
+			  this.makeRequest(this.state.name, "line");
+			  console.log(this.state.id);
+              element = <PieChart data={this.props.data[this.state.selectedData]}  id={this.state.id} name={this.state.name} key={this.state.id} />;
+			   console.log(this.state.id);
               break;
           default:
               console.log("error, unhandled element selected in Add visualization: ", this.state.type);
@@ -125,6 +137,19 @@ class AddVisualization extends Component {
       this.handleClose();
       this.setState({ selected: false, type: '' }, () => { this.addOne(element); });
     }
+  }
+  
+  makeRequest(name, type) {
+	var visual_id;
+	var req = ('http://127.0.0.1:8000/api/add/name='+
+				name + '&type=' + type
+	);
+	console.log(req);
+	axios.get(req, {responseType: 'json'})
+		.then(response => {
+		this.setState({id: response.data.visual_id});
+		});
+	//console.log(this.state.id);
   }
 
   getValidationState() {

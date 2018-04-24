@@ -27,19 +27,19 @@ class PieChartFS extends Component {
 
 	getData() {
 		//console.log(this.props.data.dates);
-		var dates = this.props.data.dates;
+		var all_data = this.props.data;
 		//console.log(dates);
 		//var times = this.props.data.map(times => times.time);
 		var data_array = [];
 		var count_array = [];
-		for (var i = 0; i < dates.length; i++) {
-			if (!data_array.includes(dates[i])) {
-				data_array.push(dates[i]);
+		for (var i = 0; i < all_data.length; i++) {
+			if (!data_array.includes(all_data[i])) {
+				data_array.push(all_data[i]);
 				count_array.push(1);
 				//console.log(dates[i]);
 			}
 			else {
-				var index = data_array.indexOf(dates[i]);
+				var index = data_array.indexOf(all_data[i]);
 				count_array[index] = count_array[index] + 1;
 			}
 		}
@@ -77,12 +77,6 @@ class PieChartFS extends Component {
 			datasets : [{
 				data: count_array,
 				backgroundColor: colors,
-				/* backgroundColor: [
-					pattern.draw('square', '#ff6384'),
-					pattern.draw('circle', '#36a2eb'),
-					pattern.draw('diamond', '#cc65fe'),
-					pattern.draw('triangle', '#ffce56'),
-				] */
 			}]
 		};
 		return data;
