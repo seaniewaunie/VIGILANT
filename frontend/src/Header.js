@@ -5,14 +5,14 @@ import { Button, Col, Grid, FormGroup, ControlLabel, FormControl, HelpBlock, Too
 import barchart from './images/barchart icon.png';
 import linegraph from './images/line graph icon.png';
 import piechart from './images/pie chart icon.png';
-import {LineGraph, PieChart} from './Visualizations'
+import LineGraph, {PieChart} from './Visualizations'
 import BarChartFS from './visuals/BarChart';
+import LineGraphFS from './visuals/LineGraph';
 import DataTypeSelector from './DataTypeSelector.js';
 import {RingLoader} from 'react-spinners';
 import axios from 'axios';
 
 var NAME_LENGTH = 40;
-var ID_num = 0;
 
 class Header extends Component {
     constructor(props){
@@ -122,11 +122,11 @@ class AddVisualization extends Component {
           case 'Line Graph':
 			  this.makeRequest(this.state.name, "line");
 			  console.log(this.state.id);
-              element = <LineGraph data={this.props.data[this.state.selectedData]}  id={this.state.id} name={this.state.name} key={this.state.id}/>;
+              element = <LineGraphFS data={this.props.data[this.state.selectedData]}  id={this.state.id} name={this.state.name} key={this.state.id}/>;
 			  console.log(this.state.id);
               break;
           case 'Pie Chart':
-			  this.makeRequest(this.state.name, "line");
+			  this.makeRequest(this.state.name, "pie");
 			  console.log(this.state.id);
               element = <PieChart data={this.props.data[this.state.selectedData]}  id={this.state.id} name={this.state.name} key={this.state.id} />;
 			   console.log(this.state.id);
