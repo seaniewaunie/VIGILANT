@@ -8,8 +8,10 @@ import TimeLine from './Timeline.js';
 import Header from './Header';
 import TableFS from './visuals/Table.js';
 import Filter from './Filters.js';
-import {LineGraph, PieChart} from './Visualizations'
+import { PieChart} from './Visualizations';
 import BarChartFS from './visuals/BarChart';
+import LineGraphFS from './visuals/LineGraph';
+import PieChartFS from './visuals/PieChart';
 
 var VIS_PER_ROW = 3;
 var VIS_SIZE = 6;
@@ -21,6 +23,7 @@ class App extends Component {
         this.state = {
             counter: 0,
             visuals: [],
+			visual_info: [],
             hiddenVisuals: [],
             sidebarOpen: false,
             hideMode: false,
@@ -47,6 +50,7 @@ class App extends Component {
 
             visualsData: [],
             crimesInfo: {
+              days: [],
               dates : [],
               times: [],
               codes: [],
@@ -59,10 +63,10 @@ class App extends Component {
               addresses: [],
               neighborhoods: [],
               premises: [],
-            }
-
+            },
         };
 
+		this.defaultVisuals = this.defaultVisuals.bind(this);
         this.addOne = this.addOne.bind(this);
         this.getFilterCodes = this.getFilterCodes.bind(this);
         this.hideOne = this.hideOne.bind(this);
@@ -76,13 +80,26 @@ class App extends Component {
 
     // on page load, default data must be set
     componentDidMount() {
+	  this.defaultVisuals();
+	  console.log(this.state.visual_info);
       this.getFilterCodes();
       this.makeRequest();
     }
 
-    addOne(vis){
+	defaultVisuals() {
+		this.state.visual_info.push({type: 'bar', name: 'Distribution of Crimes by Day', key: 10, id: 10, field: 'days'});
+		this.state.visual_info.push({type: 'bar', name: 'Indoor/Outdoor Distribution', key: 0, id: 0, field: 'doors'});
+		this.state.visual_info.push({type: 'bar', name: 'Weapon Distribution', key: 1, id: 1, field: 'weapons'});
+		this.state.visual_info.push({type: 'bar', name: 'Number of Crimes Each Day', key: 2, id: 2, field: 'dates'});
+		this.state.visual_info.push({type: 'bar', name: 'Distribution of Crimes by Code', key: 4, id: 4, field: 'codes'});
+		this.state.visual_info.push({type: 'bar', name: 'Distribution of Crimes by District', key: 5, id: 5, field: 'districts'});
+	}
+	
+    addOne(vis, info){
         var newVisual = vis;
+		this.state.visual_info.push(info);
         this.state.visuals.push(newVisual)
+		console.log(this.state.visuals.length);
         this.setState({
             counter: this.state.visuals.length,
         })
@@ -133,6 +150,7 @@ class App extends Component {
           {
             visualsData,
             crimesInfo: {
+              days: visualsData.map(days => days.day),
               dates: visualsData.map(dates => dates.date),
               times: visualsData.map(times => times.time),
               codes: visualsData.map(codes => codes.code),
@@ -149,25 +167,112 @@ class App extends Component {
           },
           () => {
           console.log("response: ", this.state.visualsData)
+		  this.setState({visuals: []});
+		  console.log(this.state.visuals);
+		  var visuals_to_add = [];
+		  for (var i = 0; i < this.state.visual_info.length; i++) {
+			  //console.log(this.state.visuals[i]);
+			  //this.state.visuals[i].props.currentData = this.state.crimesInfo.days;
+			  if (this.state.visual_info[i].type === "bar") {
+				switch(this.state.visual_info[i].field) {
+					case 'days':
+						visuals_to_add.push(<BarChartFS name={this.state.visual_info[i].name} key={this.state.visual_info[i].key} id={this.state.visual_info[i].id} currentData={this.state.crimesInfo.days}/>);
+						break;
+					case 'doors':
+						visuals_to_add.push(<BarChartFS name={this.state.visual_info[i].name} key={this.state.visual_info[i].key} id={this.state.visual_info[i].id} currentData={this.state.crimesInfo.doors}/>);
+						break;
+					case 'weapons':
+						visuals_to_add.push(<BarChartFS name={this.state.visual_info[i].name} key={this.state.visual_info[i].key} id={this.state.visual_info[i].id} currentData={this.state.crimesInfo.weapons}/>);
+						break;
+					case 'dates':
+						visuals_to_add.push(<BarChartFS name={this.state.visual_info[i].name} key={this.state.visual_info[i].key} id={this.state.visual_info[i].id} currentData={this.state.crimesInfo.dates}/>);
+						break;
+					case 'codes':
+						visuals_to_add.push(<BarChartFS name={this.state.visual_info[i].name} key={this.state.visual_info[i].key} id={this.state.visual_info[i].id} currentData={this.state.crimesInfo.codes}/>);
+						break;
+					case 'districts':
+						visuals_to_add.push(<BarChartFS name={this.state.visual_info[i].name} key={this.state.visual_info[i].key} id={this.state.visual_info[i].id} currentData={this.state.crimesInfo.districts}/>);
+						break;
+					case 'times':
+						visuals_to_add.push(<BarChartFS name={this.state.visual_info[i].name} key={this.state.visual_info[i].key} id={this.state.visual_info[i].id} currentData={this.state.crimesInfo.times}/>);
+						break;
+				}					
+			  }
+			  
+			  else if (this.state.visual_info[i].type === "line") {
+				switch(this.state.visual_info[i].field) {
+					case 'days':
+						visuals_to_add.push(<LineGraphFS name={this.state.visual_info[i].name} key={this.state.visual_info[i].key} id={this.state.visual_info[i].id} data={this.state.crimesInfo.days}/>);
+						break;
+					case 'doors':
+						visuals_to_add.push(<LineGraphFS name={this.state.visual_info[i].name} key={this.state.visual_info[i].key} id={this.state.visual_info[i].id} data={this.state.crimesInfo.doors}/>);
+						break;
+					case 'weapons':
+						visuals_to_add.push(<LineGraphFS name={this.state.visual_info[i].name} key={this.state.visual_info[i].key} id={this.state.visual_info[i].id} data={this.state.crimesInfo.weapons}/>);
+						break;
+					case 'dates':
+						visuals_to_add.push(<LineGraphFS name={this.state.visual_info[i].name} key={this.state.visual_info[i].key} id={this.state.visual_info[i].id} data={this.state.crimesInfo.dates}/>);
+						break;
+					case 'codes':
+						visuals_to_add.push(<LineGraphFS name={this.state.visual_info[i].name} key={this.state.visual_info[i].key} id={this.state.visual_info[i].id} data={this.state.crimesInfo.codes}/>);
+						break;
+					case 'districts':
+						visuals_to_add.push(<LineGraphFS name={this.state.visual_info[i].name} key={this.state.visual_info[i].key} id={this.state.visual_info[i].id} data={this.state.crimesInfo.districts}/>);
+						break;
+					case 'times':
+						visuals_to_add.push(<LineGraphFS name={this.state.visual_info[i].name} key={this.state.visual_info[i].key} id={this.state.visual_info[i].id} data={this.state.crimesInfo.times}/>);
+						break;
+				}					
+			  }
+			  
+			  else if (this.state.visual_info[i].type === "pie") {
+				switch(this.state.visual_info[i].field) {
+					case 'days':
+						visuals_to_add.push(<PieChartFS name={this.state.visual_info[i].name} key={this.state.visual_info[i].key} id={this.state.visual_info[i].id} data={this.state.crimesInfo.days}/>);
+						break;
+					case 'doors':
+						visuals_to_add.push(<PieChartFS name={this.state.visual_info[i].name} key={this.state.visual_info[i].key} id={this.state.visual_info[i].id} data={this.state.crimesInfo.doors}/>);
+						break;
+					case 'weapons':
+						visuals_to_add.push(<PieChartFS name={this.state.visual_info[i].name} key={this.state.visual_info[i].key} id={this.state.visual_info[i].id} data={this.state.crimesInfo.weapons}/>);
+						break;
+					case 'dates':
+						visuals_to_add.push(<PieChartFS name={this.state.visual_info[i].name} key={this.state.visual_info[i].key} id={this.state.visual_info[i].id} data={this.state.crimesInfo.dates}/>);
+						break;
+					case 'codes':
+						visuals_to_add.push(<PieChartFS name={this.state.visual_info[i].name} key={this.state.visual_info[i].key} id={this.state.visual_info[i].id} data={this.state.crimesInfo.codes}/>);
+						break;
+					case 'districts':
+						visuals_to_add.push(<PieChartFS name={this.state.visual_info[i].name} key={this.state.visual_info[i].key} id={this.state.visual_info[i].id} data={this.state.crimesInfo.districts}/>);
+						break;
+					case 'times':
+						visuals_to_add.push(<PieChartFS name={this.state.visual_info[i].name} key={this.state.visual_info[i].key} id={this.state.visual_info[i].id} data={this.state.crimesInfo.times}/>);
+						break;
+				}					
+			  }
+		  }
+		  console.log(visuals_to_add);
+		  this.setState({visuals: visuals_to_add});
+		  console.log(this.state.visuals);
+          //this.setState({
+            //visuals: [
+              //<LineGraph data={this.state.crimesInfo.dates} id={0} name={'Trend of Crime'} key={0} />,
+              //<PieChart data={this.state.crimesInfo.weapons} id={1} name={'Weapon Distribution'} key={1} />,
+              //<BarChartFS name={"Distribution of Crimes by Day"} key={10} id={10} currentData={this.state.crimesInfo.days}/>,
+              //<BarChartFS name={"Indoor/Outdoor Distribution"} key={0} id={0} currentData={this.state.crimesInfo.doors}/>,
+              //<BarChartFS name={"Weapon Distribution"} key={1} id={1} currentData={this.state.crimesInfo.weapons}/>,
+              //<BarChartFS name={"Number of Crimes Each Day"} key={2} id={2} currentData={this.state.crimesInfo.dates}/>,
+              //<BarChartFS name={"Number of Crimes Between Time Range"} key={3} id={3} currentData={this.state.crimesInfo.times}/>,
+              //<BarChartFS name={"Distribution of Crimes by Code"} key={4} id={4} currentData={this.state.crimesInfo.codes}/>,
+              //<BarChartFS name={"Distribution of Crimes by District"} key={5} id={5} currentData={this.state.crimesInfo.districts}/>,
+              //<BarChartFS name={"Distribution of Crimes by Address"} key={6} id={6} currentData={this.state.crimesInfo.addresses}/>,
+              //<BarChartFS name={"Distribution of Crimes by Neighborhood"} key={7} id={7} currentData={this.state.crimesInfo.neighborhoods}/>,
+              //<BarChartFS name={"Distribution of Crimes by Premise"} key={8} id={8} currentData={this.state.crimesInfo.premises}/>,
+              //<BarChartFS name={"Distribution of Crimes by Description"} key={9} id={9} currentData={this.state.crimesInfo.descriptions}/>,
+            //],
+          //})
           //console.log("lat: ", this.state.crimesInfo.lats)
         });
-
-        this.setState({
-          visuals: [
-            //<LineGraph data={this.state.crimesInfo.dates} id={0} name={'Trend of Crime'} key={0} />,
-            //<PieChart data={this.state.crimesInfo.weapons} id={1} name={'Weapon Distribution'} key={1} />,
-            <BarChartFS name={"Indoor/Outdoor Distribution"} key={0} id={0} currentData={this.state.crimesInfo.doors}/>,
-            <BarChartFS name={"Weapon Distribution"} key={1} id={1} currentData={this.state.crimesInfo.weapons}/>,
-            <BarChartFS name={"Number of Crimes Each Day"} key={2} id={2} currentData={this.state.crimesInfo.dates}/>,
-            //<BarChartFS name={"Number of Crimes Between Time Range"} key={3} id={3} currentData={this.state.crimesInfo.times}/>,
-            <BarChartFS name={"Distribution of Crimes by Code"} key={4} id={4} currentData={this.state.crimesInfo.codes}/>,
-            <BarChartFS name={"Distribution of Crimes by District"} key={5} id={5} currentData={this.state.crimesInfo.districts}/>,
-            <BarChartFS name={"Distribution of Crimes by Address"} key={6} id={6} currentData={this.state.crimesInfo.addresses}/>,
-            <BarChartFS name={"Distribution of Crimes by Neighborhood"} key={7} id={7} currentData={this.state.crimesInfo.neighborhoods}/>,
-            <BarChartFS name={"Distribution of Crimes by Premise"} key={8} id={8} currentData={this.state.crimesInfo.premises}/>,
-            <BarChartFS name={"Distribution of Crimes by Description"} key={9} id={9} currentData={this.state.crimesInfo.descriptions}/>,
-          ],
-        })
       });
     }
 
