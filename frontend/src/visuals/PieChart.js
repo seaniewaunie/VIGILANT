@@ -23,6 +23,7 @@ class PieChartFS extends Component {
         width: 200,
         name : props.name,
         data : this.getData(),
+		background_colors: ["rgb(" + 0 + "," + 0 + "," + 0 + ")"],
 		};
 	}
 
@@ -53,7 +54,7 @@ class PieChartFS extends Component {
             var b = Math.floor(Math.random() * 255);
             colors.push("rgb(" + r + "," + g + "," + b + ")");
 		}
-		
+		//this.setState({background_colors: colors});
 		
 		//sort data_array and count_array simultaneously
 		for (var k = 0; k < data_array.length; k++) {
@@ -148,7 +149,7 @@ class PieChartFS extends Component {
 					//colorBars
 					//xTickNumber={5}
 					//yTickNumber={5}
-					data={this.state.data}
+					data={this.getData()}
 					/>
 				</Well>
 			</Col> 

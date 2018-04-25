@@ -132,7 +132,8 @@ export default class LineGraphFS extends Component {
   } */
 
   render() {
-
+	const {data} = this.state;
+  
     if(this.props.data === undefined){
       return(<RingLoader color={'#123abc'} />);
     }
@@ -159,7 +160,7 @@ export default class LineGraphFS extends Component {
             //colorBars
             //xTickNumber={5}
             //yTickNumber={5}
-            data={this.state.data}
+            data={this.getData()}
           />
       </Well>
     </Col> 
