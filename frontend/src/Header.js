@@ -8,6 +8,7 @@ import piechart from './images/pie chart icon.png';
 import LineGraph, {PieChart} from './Visualizations'
 import BarChartFS from './visuals/BarChart';
 import LineGraphFS from './visuals/LineGraph';
+import PieChartFS from './visuals/PieChart';
 import DataTypeSelector from './DataTypeSelector.js';
 import {RingLoader} from 'react-spinners';
 import axios from 'axios';
@@ -109,33 +110,52 @@ class AddVisualization extends Component {
   }
 
   handleAdd(){
-    console.log(this.props.data);
+    //console.log(this.props.data);
     if(this.state.name.length < NAME_LENGTH){
       var element;
+	  var info = {
+		  type: "",
+		  name: "",
+		  key: 0,
+		  id: 0,
+		  field: "",
+	  };
       switch(this.state.type){
           case 'Bar Chart':
 			  this.makeRequest(this.state.name, "bar");
-			  console.log(this.state.id);
+			  info.type = "bar";
+			  info.name = this.state.name;
+			  info.key = this.state.id;
+			  info.id = this.state.id;
+			  info.field = this.state.selectedData;
+			  console.log(info);
 			  element = <BarChartFS name={this.state.name} key={this.state.id} id={this.state.id} currentData={this.props.data[this.state.selectedData]}/>;
-			  console.log(this.state.id);
               break;
           case 'Line Graph':
 			  this.makeRequest(this.state.name, "line");
-			  console.log(this.state.id);
+			  info.type = "line";
+			  info.name = this.state.name;
+			  info.key = this.state.id;
+			  info.id = this.state.id;
+			  info.field = this.state.selectedData;
+			  console.log(info);
               element = <LineGraphFS data={this.props.data[this.state.selectedData]}  id={this.state.id} name={this.state.name} key={this.state.id}/>;
-			  console.log(this.state.id);
               break;
           case 'Pie Chart':
 			  this.makeRequest(this.state.name, "pie");
-			  console.log(this.state.id);
-              element = <PieChart data={this.props.data[this.state.selectedData]}  id={this.state.id} name={this.state.name} key={this.state.id} />;
-			   console.log(this.state.id);
+			  info.type = "pie";
+			  info.name = this.state.name;
+			  info.key = this.state.id;
+			  info.id = this.state.id;
+			  info.field = this.state.selectedData;
+			  console.log(info);
+              element = <PieChartFS data={this.props.data[this.state.selectedData]}  id={this.state.id} name={this.state.name} key={this.state.id} />;
               break;
           default:
               console.log("error, unhandled element selected in Add visualization: ", this.state.type);
       }
       this.handleClose();
-      this.setState({ selected: false, type: '' }, () => { this.addOne(element); });
+      this.setState({ selected: false, type: '' }, () => { this.addOne(element, info); });
     }
   }
   

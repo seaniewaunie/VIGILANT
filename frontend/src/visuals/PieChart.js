@@ -3,6 +3,7 @@
 import React, { Component } from 'react';
 import { Pie as PieChart} from 'react-chartjs-2';
 import pattern from 'patternomaly';
+import {Well, Col} from 'react-bootstrap';
 
 
 class PieChartFS extends Component {
@@ -28,6 +29,7 @@ class PieChartFS extends Component {
 	getData() {
 		//console.log(this.props.data.dates);
 		var all_data = this.props.data;
+		console.log(all_data);
 		//console.log(dates);
 		//var times = this.props.data.map(times => times.time);
 		var data_array = [];
@@ -99,6 +101,10 @@ class PieChartFS extends Component {
     });
 
   }
+  
+  shouldComponentUpdate(nextProps, nextState) {
+    return true;
+  }
 
   compress() {
     //this.setState({height:"200", width:"200"});
@@ -113,11 +119,41 @@ class PieChartFS extends Component {
 
 
  render() {
-    return (
-        <div className="PieChartFS" onClick={this.handleClick}>
+	 
+	if(this.props.data.length === 0) {
+		console.log("empty data pie chart");
+      return(
+		<Col xs={4} sm={4} md={4} key={this.state.id}>
+		   <Well>
+			  <p width={this.state.width} height={this.state.height} align='center' style={{textAlign:'center'}}><b>No Crimes to Display</b></p>
+		  </Well>
+		</Col> );
+	}
+	
+	/* <div className="PieChartFS" onClick={this.handleClick}>
 			<PieChart legend={false} data={this.state.data} height={this.state.height} width={this.state.width}/>
-        </div>
-    );
+        </div> */
+	else {
+		return (
+			<Col xs={4} sm={4} md={4} key={this.state.id}>
+				<Well>
+				  <p align='center'><b>{this.state.name}</b></p>
+				  <PieChart
+					className="PieChartFS"
+					legend={false}
+					width={this.state.width}
+					height={this.state.height}
+					//axisLabels={{x: 'My x Axis', y: 'My y Axis'}}
+					//axes
+					//colorBars
+					//xTickNumber={5}
+					//yTickNumber={5}
+					data={this.state.data}
+					/>
+				</Well>
+			</Col> 
+		);
+	}
   }
 }
 export default PieChartFS;

@@ -56,7 +56,12 @@ export default class BarChartFS extends Component {
       return(<RingLoader color={'#123abc'} />);
     }
     else if(this.props.currentData.length === 0)
-      return(<p style={{textAlign:'center'}}>No Crimes to Display</p>);
+      return(
+		<Col xs={4} sm={4} md={9} key={this.state.id}>
+		   <Well>
+			  <p width={850} align='center' style={{textAlign:'center'}}><b>No Crimes to Display</b></p>
+		  </Well>
+		</Col> );
 
     return (
      <Col xs={4} sm={4} md={9} key={this.state.id}>

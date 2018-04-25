@@ -90,13 +90,13 @@ export default class LineGraphFS extends Component {
 	return data;
   }
 
-/*   componentWillMount() {
+   componentWillMount() {
     this.setState({
       name: this.props.name,
-      dates: this.props.currentData,
-      data: this.mapToDataArray(this.getCounts(this.props.currentData)),
-    })
-  } */
+      data: this.getData(),
+      //data: this.mapToDataArray(this.getCounts(this.props.currentData)),
+    });
+  } 
   // counts the number of similar values in an array
   // and returns an array of the counts
   getCounts(arr){
@@ -133,17 +133,19 @@ export default class LineGraphFS extends Component {
 
   render() {
 
- /*    if(this.state.data === undefined){
+    if(this.props.data === undefined){
       return(<RingLoader color={'#123abc'} />);
     }
-    else if(this.state.data.length === 0) {
-      return(<p style={{textAlign:'center'}}>No Crimes to Display</p>);
-	} */
-	console.log(this.state.height);
+    else if(this.props.data.length === 0) {
+      return(
+		<Col xs={4} sm={4} md={4} key={this.state.id}>
+		   <Well>
+			  <p width={this.state.width} height={this.state.height} align='center' style={{textAlign:'center'}}><b>No Crimes to Display</b></p>
+		  </Well>
+		</Col> );
+	} 
+	//console.log(this.state.height);
     return (
-		/* <div className="LineGraphFS" onClick={this.handleClick}>
-			<LineChart legend={false} data={this.state.data} height={this.state.height} width={this.state.width}/>
-        </div> */
      <Col xs={4} sm={4} md={4} key={this.state.id}>
        <Well>
           <p align='center'><b>{this.state.name}</b></p>
