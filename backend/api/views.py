@@ -389,17 +389,33 @@ class GlobalFilterStructured(APIView):
 		queryset = self.get_queryset()
 		#filter based on provided start_date / end_date and start time/end time
 		if start_date == '' and end_date == '':
-			queryset = queryset.filter(time__range=[start_time, end_time]).order_by('date')
+			if start_t > end_t:
+				print("hello world")
+				queryset = queryset.filter(Q(time__range=[start_time, "00:00:00"]) | Q(time__range=["00:00:00", end_time])).order_by('date')
+			else:
+				queryset = queryset.filter(time__range=[start_time, end_time]).order_by('date')
 		elif start_date == '':
-			queryset = queryset.filter(date__lte=end_date, time__range=[start_time,
-				end_time]).order_by('date')
+			if start_t > end_t:
+				print("hello world")
+				queryset = queryset.filter(date__lte=end_date).filter(Q(time__range=[start_time, "00:00:00"]) | Q(time__range=["00:00:00", end_time])).order_by('date')
+			else:
+				queryset = queryset.filter(date__lte=end_date, time__range=[start_time,
+					end_time]).order_by('date')
 			new_filter.end_date = end_date
 		elif end_date == '':
-			queryset = queryset.filter(date__gte=start_date, time__range=[start_time,
-				end_time]).order_by('date')
+			if start_t > end_t:
+				print("hello world")
+				queryset = queryset.filter(date__gte=start_date).filter(Q(time__range=[start_time, "00:00:00"]) | Q(time__range=["00:00:00", end_time])).order_by('date')
+			else:
+				queryset = queryset.filter(date__gte=start_date, time__range=[start_time,
+					end_time]).order_by('date')
 			new_filter.start_date = start_date
 		else:
-			queryset = queryset.filter(date__range=[start_date, end_date],
+			if start_t > end_t:
+				print("hello world")
+				queryset = queryset.filter(date__range=[start_date, end_date]).filter(Q(time__range=[start_time, "00:00:00"]) | Q(time__range=["00:00:00", end_time])).order_by('date')
+			else:
+				queryset = queryset.filter(date__range=[start_date, end_date],
 					time__range=[start_time, end_time]).order_by('date')
 			new_filter.start_date = start_date
 			new_filter.end_date = end_date
@@ -573,7 +589,7 @@ class GlobalFilterRawData(APIView):
 			else:
 				queryset = queryset.filter(date__lte=end_date, time__range=[start_time,
 					end_time]).order_by('date')
-			new_filter.start_date = start_date
+			new_filter.end_date = end_date
 		elif end_date == '':
 			if start_t > end_t:
 				print("hello world")
@@ -581,7 +597,7 @@ class GlobalFilterRawData(APIView):
 			else:
 				queryset = queryset.filter(date__gte=start_date, time__range=[start_time,
 					end_time]).order_by('date')
-			new_filter.end_date = end_date
+			new_filter.start_date = start_date
 		else:
 			if start_t > end_t:
 				print("hello world")
