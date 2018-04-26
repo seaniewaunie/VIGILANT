@@ -197,7 +197,7 @@ class App extends Component {
         }
 
         else if (this.state.visual_info[i].type === "line") {
-          visuals_to_add.push(<LineGraphFS name={this.state.visual_info[i].name} key={this.state.visual_info[i].key} id={this.state.visual_info[i].id} data={this.state.crimesInfo[this.state.visual_info[i].field]}/>);
+          visuals_to_add.push(<LineGraphFS name={this.state.visual_info[i].name} key={this.state.visual_info[i].key} id={this.state.visual_info[i].id} data={this.state.crimesInfo[this.state.visual_info[i].field]} field={this.state.visual_info[i].field}/>);
         }
 
         else if (this.state.visual_info[i].type === "pie") {

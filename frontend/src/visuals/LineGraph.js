@@ -10,7 +10,7 @@ export default class LineGraphFS extends Component {
     //this.compress = this.compress.bind(this);
     //this.expand = this.expand.bind(this);
     this.getData = this.getData.bind(this);
-	this.getCounts = this.getCounts.bind(this);
+	//this.getCounts = this.getCounts.bind(this);
     this.handleClick = this.handleClick.bind(this);
 
     this.state = {
@@ -19,6 +19,7 @@ export default class LineGraphFS extends Component {
         width: 40,
         name : props.name,
         data : this.getData(),
+		field: props.field,
 		id: props.id,
 		};
 	}
@@ -26,6 +27,7 @@ export default class LineGraphFS extends Component {
 	
   getData() {
 	var all_data = this.props.data;
+	var field = this.props.field;
 	//console.log(dates);
 	//var times = this.props.data.map(times => times.time);
 	var data_array = [];
@@ -48,7 +50,32 @@ export default class LineGraphFS extends Component {
 	var b = Math.floor(Math.random() * 255);
 	color = ("rgb(" + r + "," + g + "," + b + ")");
 	
-	
+	var label_array = data_array;
+	if (field === "times") {
+		label_array = []
+		count_array = []
+		for (var i = 0; i < 24; i++) {
+			if (i < 10) {
+				label_array.push("0" + i + ":00:00");
+			}
+			else {
+				label_array.push( i + ":00:00");
+			}
+			count_array.push(0);
+		}
+		console.log(all_data);
+		
+		console.log(all_data[0].slice(0, 2));
+		for (var j = 0; j < all_data.length; j++) {
+			for (var k = 0; k < 24; k++) {
+				if (all_data[j].slice(0, 2) === label_array[k].slice(0, 2)) {
+					count_array[k] = count_array[k] + 1;
+				}
+			}
+		}
+		console.log(count_array);
+		
+	}
 	//sort data_array and count_array simultaneously
 	/* for (var k = 0; k < data_array.length; k++) {
 		var min = k;
@@ -69,7 +96,7 @@ export default class LineGraphFS extends Component {
 	
 	
 	var data = {
-		labels: data_array,
+		labels: label_array,
 		datasets : [{
 			data: count_array,
 			//backgroundColor: colors,
@@ -94,32 +121,9 @@ export default class LineGraphFS extends Component {
     this.setState({
       name: this.props.name,
       data: this.getData(),
-      //data: this.mapToDataArray(this.getCounts(this.props.currentData)),
     });
   } 
-  // counts the number of similar values in an array
-  // and returns an array of the counts
-  getCounts(arr){
-    var counts = {};
-    /* for (var i = 0; i < arr.length; i++) {
-        counts[arr[i]] = 1 + (counts[arr[i]] || 0);
-    } */
-    //console.log("counts returns", counts);
-    return counts;
-  } 
 
-/*   mapToDataArray(arr){
-    var data = [];
-    console.log(arr);
-    let xName;
-    for(var i in arr){
-      xName = i;
-      if(i === 'null') xName='unspecified';
-      data.push({x: xName, y: arr[i]});
-    }
-    console.log('map to data returns: ', data)
-    return data;
-  } */
 
   handleClick() {
     this.setState({fullscreen: !this.state.fullscreen}, () => {
@@ -127,9 +131,6 @@ export default class LineGraphFS extends Component {
     });
 
   }
-/*   shouldComponentUpdate(nextProps, nextState) {
-    return true;
-  } */
 
   render() {
 	const {data} = this.state;
