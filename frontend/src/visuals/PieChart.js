@@ -24,12 +24,14 @@ class PieChartFS extends Component {
         name : props.name,
         data : this.getData(),
 		background_colors: ["rgb(" + 0 + "," + 0 + "," + 0 + ")"],
+		field : this.props.field,
 		};
 	}
 
 	getData() {
 		//console.log(this.props.data.dates);
 		var all_data = this.props.data;
+		var field = this.props.field;
 		console.log(all_data);
 		//console.log(dates);
 		//var times = this.props.data.map(times => times.time);
@@ -55,6 +57,30 @@ class PieChartFS extends Component {
             colors.push("rgb(" + r + "," + g + "," + b + ")");
 		}
 		//this.setState({background_colors: colors});
+		
+		var label_array = data_array;
+		if (field === "times") {
+			label_array = []
+			count_array = []
+			for (var i = 0; i < 24; i++) {
+				if (i < 10) {
+					label_array.push("0" + i + ":00:00");
+				}
+				else {
+					label_array.push( i + ":00:00");
+				}
+				count_array.push(0);
+			}
+			
+			for (var j = 0; j < all_data.length; j++) {
+				for (var k = 0; k < 24; k++) {
+					if (all_data[j].slice(0, 2) === label_array[k].slice(0, 2)) {
+						count_array[k] = count_array[k] + 1;
+					}
+				}
+			}
+			data_array = label_array
+		}
 		
 		//sort data_array and count_array simultaneously
 		for (var k = 0; k < data_array.length; k++) {

@@ -76,23 +76,6 @@ export default class LineGraphFS extends Component {
 		console.log(count_array);
 		
 	}
-	//sort data_array and count_array simultaneously
-	/* for (var k = 0; k < data_array.length; k++) {
-		var min = k;
-		for (var l = k + 1; l < data_array.length; l++){
-			if (count_array[l] < count_array[min]) {
-				min = l;
-			}
-		}
-		if (min != k) {
-			var tmp = count_array[k];
-			count_array[k] = count_array[min];
-			count_array[min] = tmp;
-			tmp = data_array[k];
-			data_array[k] = data_array[min];
-			data_array[min] = tmp;
-		}
-	} */
 	
 	
 	var data = {
