@@ -1,80 +1,115 @@
 import React, {Component} from 'react';
-import {BarChart} from 'react-easy-chart';
+import {HorizontalBar} from 'react-chartjs-2';
 import {RingLoader} from 'react-spinners';
 import {Well, Col} from 'react-bootstrap';
-import '../css/Barchart.css';
 
 export default class BarChartFS extends Component {
-  constructor(props){
+  constructor(props) {
     super(props);
 
-    this.state = {
-      data: {},
-      hidden: false,
-    }
-    this.getCounts = this.getCounts.bind(this);
+    //this.compress = this.compress.bind(this);
+    //this.expand = this.expand.bind(this);
+    this.getData = this.getData.bind(this);
+	//this.getCounts = this.getCounts.bind(this);
+    this.handleClick = this.handleClick.bind(this);
     this.handleHide = this.handleHide.bind(this);
     this.handleLocalFilter = this.handleLocalFilter.bind(this);
-    this.mapToDataArray = this.mapToDataArray.bind(this);
-    this.mouseOverHandler = this.mouseOverHandler.bind(this);
-    this.mouseMoveHandler = this.mouseMoveHandler.bind(this);
-    this.mouseOutHandler = this.mouseOutHandler.bind(this);
+
+    this.state = {
+        fullscreen: false,
+        name : props.name,
+        data : this.getData(),
+		    field: props.field,
+		    id: props.id,
+        height: this.props.data.length > 20 ? 120 : 50,
+		};
+	}
+
+
+  getData() {
+	var all_data = this.props.data;
+	var field = this.props.field;
+	//console.log(dates);
+	//var times = this.props.data.map(times => times.time);
+	var data_array = [];
+	var count_array = [];
+	for (var i = 0; i < all_data.length; i++) {
+		if (!data_array.includes(all_data[i])) {
+			data_array.push(all_data[i]);
+			count_array.push(1);
+			//console.log(dates[i]);
+		}
+		else {
+			var index = data_array.indexOf(all_data[i]);
+			count_array[index] = count_array[index] + 1;
+		}
+	}
+
+	var color = "";
+	var r = Math.floor(Math.random() * 255);
+	var g = Math.floor(Math.random() * 255);
+	var b = Math.floor(Math.random() * 255);
+	color = ("rgb(" + r + "," + g + "," + b + ")");
+
+	var label_array = data_array;
+	if (field === "times") {
+		label_array = []
+		count_array = []
+		for (var i = 0; i < 24; i++) {
+			if (i < 10) {
+				label_array.push("0" + i + ":00:00");
+			}
+			else {
+				label_array.push( i + ":00:00");
+			}
+			count_array.push(0);
+		}
+		console.log(all_data);
+
+		console.log(all_data[0].slice(0, 2));
+		for (var j = 0; j < all_data.length; j++) {
+			for (var k = 0; k < 24; k++) {
+				if (all_data[j].slice(0, 2) === label_array[k].slice(0, 2)) {
+					count_array[k] = count_array[k] + 1;
+				}
+			}
+		}
+		console.log(count_array);
+
+	}
+
+
+	var data = {
+		labels: label_array,
+		datasets : [{
+			data: count_array,
+
+      backgroundColor: color,
+      borderColor: color,
+      borderWidth: 1,
+      hoverBackgroundColor: color,
+      hoverBorderColor: color,
+		}]
+	};
+
+	return data;
   }
 
-  componentWillMount() {
+   componentWillMount() {
     this.setState({
       name: this.props.name,
-      showToolTip: false,
-      hidden: false,
-    })
-  }
-
-  mouseOverHandler(d, e) {
-    this.setState({
-      showToolTip: true,
-      top: `${e.screenY - 10}px`,
-      left: `${e.screenX + 10}px`,
-      y: d.y,
-      x: d.x
+      data: this.getData(),
+      height: this.props.data.length > 20 ? 120 : 50
     });
+
   }
 
-  mouseMoveHandler(e) {
-    if (this.state.showToolTip) {
-      this.setState({top: `${e.y - 10}px`, left: `${e.x + 10}px`});
-    }
-  }
 
-  mouseOutHandler() {
-    this.setState({showToolTip: false});
-  }
+  handleClick() {
+    this.setState({fullscreen: !this.state.fullscreen}, () => {
+        this.state.fullscreen ? this.expand() : this.compress();
+    });
 
-  // counts the number of similar values in an array
-  // and returns an array of the counts
-  getCounts(arr){
-    var counts = {};
-    for (var i = 0; i < arr.length; i++) {
-        counts[arr[i]] = 1 + (counts[arr[i]] || 0);
-    }
-    //console.log("counts returns", counts);
-    return counts;
-  }
-
-  mapToDataArray(arr){
-    var data = [];
-    console.log(arr);
-    let xName;
-    for(var i in arr){
-      xName = i;
-      if(i === 'null') xName='unspecified';
-      data.push({x: xName, y: arr[i]});
-    }
-    console.log('map to data returns: ', data)
-    return data;
-  }
-
-  shouldComponentUpdate(nextProps, nextState) {
-    return true;
   }
 
   handleHide(){
@@ -87,55 +122,43 @@ export default class BarChartFS extends Component {
 
   }
 
-  render() {
 
-    if(this.props.currentData === undefined){
+  render() {
+	const data = this.getData();
+  var height = data.labels.length > 20 ? (data.labels.length > 40 ? 600 : 500) : 200;
+    if(this.props.data === undefined){
       return(<RingLoader color={'#123abc'} />);
     }
-    else if(this.props.currentData.length === 0)
+    else if(this.props.data.length === 0) {
       return(
-    		<Col xs={4} sm={4} md={9} key={this.state.id}>
-    		   <Well>
-    			  <p width={850} align='center' style={{textAlign:'center'}}><b>No Crimes to Display</b></p>
-    		  </Well>
-    		</Col>
-    );
-
-    var toolTip = [];
-    if(this.state.showToolTip){
-      toolTip.push(
-        <div>
-          <p className='row'>{this.state.x}</p>
-          <p>{this.state.y} of {this.props.currentData.length} crimes ({Math.ceil((this.state.y/this.props.currentData.length)*100)}%)</p>
-        </div>
-      );
-    }
+		<Col xs={4} sm={4} md={4} key={this.state.id}>
+		   <Well>
+			  <p width={this.state.width} height={this.state.height} align='center' style={{textAlign:'center'}}><b>No Crimes to Display</b></p>
+		  </Well>
+		</Col> );
+	}
 
     if(this.state.hidden){
       return null;
     }
-
+	//console.log(this.state.height);
     return (
+      <Col xs={4} sm={4} md={4} key={this.state.id}>
        <Well>
-          <div className='VisualName'><b>{this.state.name}</b></div>
-          <div className='VisualButtons'>
-            <button onClick={this.handleHide}>hide</button>
-            <button onClick={this.handleLocalFilter}>local</button>
-          </div>
-          <BarChart
-            className="rd3-barchart-xaxis"
-            width={window.innerWidth*parseFloat(this.props.width)/100-40}
-            axisLabels={{x: 'My x Axis', y: 'Number of Crimes'}}
-            axes
-            colorBars
-            xTickNumber={5}
-            yTickNumber={5}
-            mouseOverHandler={this.mouseOverHandler}
-            mouseOutHandler={this.mouseOutHandler}
-            data={this.mapToDataArray(this.getCounts(this.props.currentData))}
+         <div className='VisualName'><b>{this.state.name}</b></div>
+         <div className='VisualButtons'>
+           <button onClick={this.handleHide}>hide</button>
+           <button onClick={this.handleLocalFilter}>local</button>
+         </div>
+          <p align='center'><b>{this.state.name}</b></p>
+          <HorizontalBar
+            height={height}
+            className="LineGraphFS"
+			      legend={false}
+            data={data}
           />
-        {toolTip}
       </Well>
+    </Col>
     );
   }
 }
