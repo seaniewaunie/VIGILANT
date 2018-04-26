@@ -98,7 +98,6 @@ export default class Filter extends Component {
         }
 
         return(
-          <AutoAffix viewportOffsetTop={70}>
             <Well bsSize="small" className="filterOptions">
               <b>{element}</b>
 
@@ -155,7 +154,6 @@ export default class Filter extends Component {
                 title='Indoor/Outdoor'
               />
             </Well>
-          </AutoAffix>
         );
     }
 }

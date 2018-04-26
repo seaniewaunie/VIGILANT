@@ -59,7 +59,7 @@ export default class Timeline extends Component {
       <div>
         <BarChart
           className="timeline"
-          width={1300}
+          width={window.innerWidth*parseFloat(this.props.width)/100-40}
           barWidth={5}
           height={30}
           xTickNumber={5}

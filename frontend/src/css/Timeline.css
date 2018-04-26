@@ -1,5 +1,6 @@
 .timeline{
   height: 7vh;
+  top: 0;
   width: 100%;
   background-color: black;
   border-color: 5px solid black;

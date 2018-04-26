@@ -66,16 +66,25 @@ class App extends Component {
             },
         };
 
-		this.defaultVisuals = this.defaultVisuals.bind(this);
+	      this.defaultVisuals = this.defaultVisuals.bind(this);
         this.addOne = this.addOne.bind(this);
         this.getFilterCodes = this.getFilterCodes.bind(this);
         this.hideOne = this.hideOne.bind(this);
         this.makeRequest = this.makeRequest.bind(this);
+        this.renderUserVisuals = this.renderUserVisuals.bind(this);
         this.toggleGlobalFilter = this.toggleGlobalFilter.bind(this);
         this.updateGlobalFilterRequest = this.updateGlobalFilterRequest.bind(this);
     }
 
     componentWillMount() {
+      this.setState({
+        contentStyle : {
+          width: '100%',
+          height: '100%',
+          overflowY: 'scroll',
+        },
+        sidebarOpen: false,
+      })
     }
 
     // on page load, default data must be set
@@ -94,15 +103,19 @@ class App extends Component {
 		this.state.visual_info.push({type: 'bar', name: 'Distribution of Crimes by Code', key: 4, id: 4, field: 'codes'});
 		this.state.visual_info.push({type: 'bar', name: 'Distribution of Crimes by District', key: 5, id: 5, field: 'districts'});
 	}
-	
+
     addOne(vis, info){
         var newVisual = vis;
-		this.state.visual_info.push(info);
+        if(info.name === ''){
+          info.name = info.field
+        }
+        this.state.visual_info.push(info);
         this.state.visuals.push(newVisual)
-		console.log(this.state.visuals.length);
+		    console.log(this.state.visuals.length);
         this.setState({
             counter: this.state.visuals.length,
         })
+        this.renderUserVisuals();
     }
 
     hideOne(vis){
@@ -116,17 +129,17 @@ class App extends Component {
     }
 
     toggleGlobalFilter(open) {
-        this.setState({sidebarOpen: !this.state.sidebarOpen, filterType: 'global'});
-        if(this.state.sidebarOpen){
-          VIS_PER_ROW=3;
-          VIS_SIZE=6;
-          TABLE_SIZE = 12;
-        }
-        else{
-          VIS_PER_ROW=2;
-          VIS_SIZE=5;
-          TABLE_SIZE = 9;
-        }
+        this.setState({
+          sidebarOpen: !this.state.sidebarOpen,
+          filterType: 'global',
+          contentStyle: {
+            width: this.state.sidebarOpen ? '100%':'80%',
+            height: '100%',
+            overflowY: 'scroll',
+          }
+        }, () => {
+          this.renderUserVisuals();
+        });
         //console.log(VIS_PER_ROW);
     }
 
@@ -167,113 +180,33 @@ class App extends Component {
           },
           () => {
           console.log("response: ", this.state.visualsData)
-		  this.setState({visuals: []});
-		  console.log(this.state.visuals);
-		  var visuals_to_add = [];
-		  for (var i = 0; i < this.state.visual_info.length; i++) {
-			  //console.log(this.state.visuals[i]);
-			  //this.state.visuals[i].props.currentData = this.state.crimesInfo.days;
-			  if (this.state.visual_info[i].type === "bar") {
-				switch(this.state.visual_info[i].field) {
-					case 'days':
-						visuals_to_add.push(<BarChartFS name={this.state.visual_info[i].name} key={this.state.visual_info[i].key} id={this.state.visual_info[i].id} currentData={this.state.crimesInfo.days}/>);
-						break;
-					case 'doors':
-						visuals_to_add.push(<BarChartFS name={this.state.visual_info[i].name} key={this.state.visual_info[i].key} id={this.state.visual_info[i].id} currentData={this.state.crimesInfo.doors}/>);
-						break;
-					case 'weapons':
-						visuals_to_add.push(<BarChartFS name={this.state.visual_info[i].name} key={this.state.visual_info[i].key} id={this.state.visual_info[i].id} currentData={this.state.crimesInfo.weapons}/>);
-						break;
-					case 'dates':
-						visuals_to_add.push(<BarChartFS name={this.state.visual_info[i].name} key={this.state.visual_info[i].key} id={this.state.visual_info[i].id} currentData={this.state.crimesInfo.dates}/>);
-						break;
-					case 'codes':
-						visuals_to_add.push(<BarChartFS name={this.state.visual_info[i].name} key={this.state.visual_info[i].key} id={this.state.visual_info[i].id} currentData={this.state.crimesInfo.codes}/>);
-						break;
-					case 'districts':
-						visuals_to_add.push(<BarChartFS name={this.state.visual_info[i].name} key={this.state.visual_info[i].key} id={this.state.visual_info[i].id} currentData={this.state.crimesInfo.districts}/>);
-						break;
-					case 'times':
-						visuals_to_add.push(<BarChartFS name={this.state.visual_info[i].name} key={this.state.visual_info[i].key} id={this.state.visual_info[i].id} currentData={this.state.crimesInfo.times}/>);
-						break;
-				}					
-			  }
-			  
-			  else if (this.state.visual_info[i].type === "line") {
-				switch(this.state.visual_info[i].field) {
-					case 'days':
-						visuals_to_add.push(<LineGraphFS name={this.state.visual_info[i].name} key={this.state.visual_info[i].key} id={this.state.visual_info[i].id} data={this.state.crimesInfo.days}/>);
-						break;
-					case 'doors':
-						visuals_to_add.push(<LineGraphFS name={this.state.visual_info[i].name} key={this.state.visual_info[i].key} id={this.state.visual_info[i].id} data={this.state.crimesInfo.doors}/>);
-						break;
-					case 'weapons':
-						visuals_to_add.push(<LineGraphFS name={this.state.visual_info[i].name} key={this.state.visual_info[i].key} id={this.state.visual_info[i].id} data={this.state.crimesInfo.weapons}/>);
-						break;
-					case 'dates':
-						visuals_to_add.push(<LineGraphFS name={this.state.visual_info[i].name} key={this.state.visual_info[i].key} id={this.state.visual_info[i].id} data={this.state.crimesInfo.dates}/>);
-						break;
-					case 'codes':
-						visuals_to_add.push(<LineGraphFS name={this.state.visual_info[i].name} key={this.state.visual_info[i].key} id={this.state.visual_info[i].id} data={this.state.crimesInfo.codes}/>);
-						break;
-					case 'districts':
-						visuals_to_add.push(<LineGraphFS name={this.state.visual_info[i].name} key={this.state.visual_info[i].key} id={this.state.visual_info[i].id} data={this.state.crimesInfo.districts}/>);
-						break;
-					case 'times':
-						visuals_to_add.push(<LineGraphFS name={this.state.visual_info[i].name} key={this.state.visual_info[i].key} id={this.state.visual_info[i].id} data={this.state.crimesInfo.times}/>);
-						break;
-				}					
-			  }
-			  
-			  else if (this.state.visual_info[i].type === "pie") {
-				switch(this.state.visual_info[i].field) {
-					case 'days':
-						visuals_to_add.push(<PieChartFS name={this.state.visual_info[i].name} key={this.state.visual_info[i].key} id={this.state.visual_info[i].id} data={this.state.crimesInfo.days}/>);
-						break;
-					case 'doors':
-						visuals_to_add.push(<PieChartFS name={this.state.visual_info[i].name} key={this.state.visual_info[i].key} id={this.state.visual_info[i].id} data={this.state.crimesInfo.doors}/>);
-						break;
-					case 'weapons':
-						visuals_to_add.push(<PieChartFS name={this.state.visual_info[i].name} key={this.state.visual_info[i].key} id={this.state.visual_info[i].id} data={this.state.crimesInfo.weapons}/>);
-						break;
-					case 'dates':
-						visuals_to_add.push(<PieChartFS name={this.state.visual_info[i].name} key={this.state.visual_info[i].key} id={this.state.visual_info[i].id} data={this.state.crimesInfo.dates}/>);
-						break;
-					case 'codes':
-						visuals_to_add.push(<PieChartFS name={this.state.visual_info[i].name} key={this.state.visual_info[i].key} id={this.state.visual_info[i].id} data={this.state.crimesInfo.codes}/>);
-						break;
-					case 'districts':
-						visuals_to_add.push(<PieChartFS name={this.state.visual_info[i].name} key={this.state.visual_info[i].key} id={this.state.visual_info[i].id} data={this.state.crimesInfo.districts}/>);
-						break;
-					case 'times':
-						visuals_to_add.push(<PieChartFS name={this.state.visual_info[i].name} key={this.state.visual_info[i].key} id={this.state.visual_info[i].id} data={this.state.crimesInfo.times}/>);
-						break;
-				}					
-			  }
-		  }
-		  console.log(visuals_to_add);
-		  this.setState({visuals: visuals_to_add});
-		  console.log(this.state.visuals);
-          //this.setState({
-            //visuals: [
-              //<LineGraph data={this.state.crimesInfo.dates} id={0} name={'Trend of Crime'} key={0} />,
-              //<PieChart data={this.state.crimesInfo.weapons} id={1} name={'Weapon Distribution'} key={1} />,
-              //<BarChartFS name={"Distribution of Crimes by Day"} key={10} id={10} currentData={this.state.crimesInfo.days}/>,
-              //<BarChartFS name={"Indoor/Outdoor Distribution"} key={0} id={0} currentData={this.state.crimesInfo.doors}/>,
-              //<BarChartFS name={"Weapon Distribution"} key={1} id={1} currentData={this.state.crimesInfo.weapons}/>,
-              //<BarChartFS name={"Number of Crimes Each Day"} key={2} id={2} currentData={this.state.crimesInfo.dates}/>,
-              //<BarChartFS name={"Number of Crimes Between Time Range"} key={3} id={3} currentData={this.state.crimesInfo.times}/>,
-              //<BarChartFS name={"Distribution of Crimes by Code"} key={4} id={4} currentData={this.state.crimesInfo.codes}/>,
-              //<BarChartFS name={"Distribution of Crimes by District"} key={5} id={5} currentData={this.state.crimesInfo.districts}/>,
-              //<BarChartFS name={"Distribution of Crimes by Address"} key={6} id={6} currentData={this.state.crimesInfo.addresses}/>,
-              //<BarChartFS name={"Distribution of Crimes by Neighborhood"} key={7} id={7} currentData={this.state.crimesInfo.neighborhoods}/>,
-              //<BarChartFS name={"Distribution of Crimes by Premise"} key={8} id={8} currentData={this.state.crimesInfo.premises}/>,
-              //<BarChartFS name={"Distribution of Crimes by Description"} key={9} id={9} currentData={this.state.crimesInfo.descriptions}/>,
-            //],
-          //})
-          //console.log("lat: ", this.state.crimesInfo.lats)
+    		  this.setState({visuals: []});
+    		  console.log(this.state.visuals);
+          this.renderUserVisuals();
         });
       });
+    }
+
+    renderUserVisuals() {
+      var visuals_to_add = [];
+      for (var i = 0; i < this.state.visual_info.length; i++) {
+        //console.log(this.state.visuals[i]);
+        //this.state.visuals[i].props.currentData = this.state.crimesInfo.days;
+        if (this.state.visual_info[i].type === "bar") {
+          visuals_to_add.push(<BarChartFS width={this.state.contentStyle.width} name={this.state.visual_info[i].name} key={this.state.visual_info[i].key} id={this.state.visual_info[i].id} currentData={this.state.crimesInfo[this.state.visual_info[i].field]}/>);
+        }
+
+        else if (this.state.visual_info[i].type === "line") {
+          visuals_to_add.push(<LineGraphFS name={this.state.visual_info[i].name} key={this.state.visual_info[i].key} id={this.state.visual_info[i].id} data={this.state.crimesInfo[this.state.visual_info[i].field]}/>);
+        }
+
+        else if (this.state.visual_info[i].type === "pie") {
+          visuals_to_add.push(<PieChartFS name={this.state.visual_info[i].name} key={this.state.visual_info[i].key} id={this.state.visual_info[i].id} data={this.state.crimesInfo[this.state.visual_info[i].field]}/>);
+        }
+      }
+      console.log(visuals_to_add);
+      this.setState({visuals: visuals_to_add});
+      console.log(this.state.visuals);
     }
 
     getFilterCodes() {
@@ -348,67 +281,57 @@ class App extends Component {
 
     render() {
         this.state.counter = this.state.visuals.length;
+        var filter = [];
+        if(this.state.sidebarOpen){
+          filter.push(
+            <div className='sidebar'>
+              <Filter
+                  id="rightSide"
+                  filterCodes = {this.state.filterCodes}
+                  scope = {this.state.filterType}
+                  key = {499}
+                  updateRequest = {this.updateGlobalFilterRequest}
+                  settings = {this.state.GF_settings}
+                  show={!this.state.sidebarOpen}
+              />
+            </div>
+          );
+        }
+
         return (
             <div className="App">
-                <Grid fluid>
+                <div className="header">
                   <a name="home"></a>
-                  <Row>
-                    <AutoAffix>
-                      <div className="header">
-                          <Header
-                              data ={this.state.crimesInfo}
-                              addOne={this.addOne}
-                              hideOne={this.hideOne}
-                              counter={this.state.counter}
-                              toggleGlobalFilter={this.toggleGlobalFilter}
-                          >
-                          </Header>
-                      </div>
-                    </AutoAffix>
-                    <TimeLine key={500} dates={this.state.crimesInfo.dates}/>
-                  </Row>
-                  <Row className="topRow">
-                    <Col xs={4} sm={TABLE_SIZE} md={TABLE_SIZE}>
-                        <HeatMapFS
-                            data ={this.state.visualsData}
+                  <Header
+                      data ={this.state.crimesInfo}
+                      addOne={this.addOne}
+                      hideOne={this.hideOne}
+                      counter={this.state.counter}
+                      toggleGlobalFilter={this.toggleGlobalFilter}
+                  />
+                </div>
+
+                <div className='content'>
+                  <div className='content-visuals' style={this.state.contentStyle}>
+                    <TimeLine key={500} dates={this.state.crimesInfo.dates} width={this.state.contentStyle.width}/>
+                    <HeatMapFS
+                        data ={this.state.visualsData}
+                    />
+                    <Grid fluid id="grid">
+                        <FormatGrid
+                            counter={this.state.counter}
+                            visuals={this.state.visuals}
                         />
-                    </Col>
-                    <Col xs={2} sm={2} md={3} className="filterHolder">
-                      <div className="filter">
-                        <Filter
-                            id="rightSide"
-                            filterCodes = {this.state.filterCodes}
-                            scope = {this.state.filterType}
-                            key = {499}
-                            updateRequest = {this.updateGlobalFilterRequest}
-                            settings = {this.state.GF_settings}
-                            show={!this.state.sidebarOpen}
-                        />
-                      </div>
-                    </Col>
-                  </Row>
-                  <Row className="userVisuals">
-                    <div>
-                        <Grid fluid id="grid">
-                            <FormatGrid
-                                counter={this.state.counter}
-                                visuals={this.state.visuals}
-                            />
-                        </Grid>
-                    </div>
-                  </Row>
-                  <Row className="table-reference" >
-                    <div><a name="Table"></a></div>
-                  </Row>
-                  <Row className="table">
-                    <Col xs={TABLE_SIZE} sm={TABLE_SIZE} md={TABLE_SIZE}>
+                    </Grid>
+                    <div id='table-reference'>
+                      <a name="Table"></a>
                       <TableFS
                         data = {this.state.visualsData}
                       />
-                    </Col>
-                  </Row>
-                </Grid>
-
+                    </div>
+                  </div>
+                  {filter}
+                </div>
 
             </div>
         );

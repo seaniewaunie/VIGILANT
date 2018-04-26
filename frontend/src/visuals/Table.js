@@ -17,42 +17,46 @@ class TableFS extends Component {
         {
             accessor: 'date',
             Header: 'Date',
-            width: 103
+            width: 84
         }, {
             accessor: 'time',
             Header: 'Time',
         }, {
             accessor: 'code',
-            Header: 'Crime Code',
-            width: 90
+            Header: 'Code',
+            width: 62
         }, {
             accessor: 'description',
             Header: 'Description',
-            width: 300
+            width: 180
         }, {
             accessor: 'weapon',
             Header: 'Weapon'
         }, {
             accessor: 'district',
-            Header: 'District'
+            Header: 'District',
+            width: 118
         }, {
             accessor: 'inside_outside',
-            Header: 'Indoor/Outdoor',
+            Header: 'I/O',
+            width: 55
+        }, {
+            accessor: 'address',
+            Header: 'Address',
+            width: 184
+        }, {
+            accessor: 'neighborhood',
+            Header: 'Neighborhood',
+            width: 220
+        }, {
+            accessor: 'premise',
+            Header: 'Premise'
         }, {
             accessor: 'latitude',
             Header: 'Latitude'
         }, {
             accessor: 'longitude',
             Header: 'Longitude'
-        }, {
-            accessor: 'address',
-            Header: 'Address'
-        }, {
-            accessor: 'neighborhood',
-            Header: 'Neighborhood'
-        }, {
-            accessor: 'premise',
-            Header: 'Premise'
         },
     ];
 

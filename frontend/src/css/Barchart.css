@@ -1,0 +1,12 @@
+.VisualName {
+  float:left;
+  width:80%;
+}
+
+.VisualButtons{
+  margin-left: 85%;
+}
+
+.VisualButtons button{
+  display: inline-block;
+}

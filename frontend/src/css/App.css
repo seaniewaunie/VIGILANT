@@ -1,43 +1,52 @@
 .App {
+  position: fixed;
+  left:0;
+  right:0;
   margin: 0px 0px 0px 0px;
   width: 100%;
 }
 
 .header{
-  position:'relative';
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 0;
   z-index: 2000;
-  margin: 0;
 }
 
-.topRow{
-    margin: 0 0px 55px 0px;
-    width: 100%;
+.content{
+  position: fixed;
+  height:93%;
+  top: 50px;
+  width:100%;
+  left: 0px;
+  right: 0px;
 }
 
-.filter{
-  position:'relative';
+.content-visuals{
+  position: fixed;
+  height:100%;
+  width:100%;
+  top: 50px;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  overflow-y: scroll;
+}
+
+.sidebar{
+  position: fixed;
+  top: 50px;
+  right: 0;
+  left: 0;
+  bottom: 0;
+  margin-left: 80%;
+  overflow-y: auto;
   z-index: 1999;
-  margin: 0;
 }
 
-.filterHolder {
-}
-
-.userVisuals{
-    margin: 0px 0px 55px 0px;
-}
-
-.userVisuals div{
-}
-
-#grid{
-}
 
 .table-reference{
     margin: 0px 0px 55px 0px;
     //border: 5px solid black;
-}
-
-.table{
-    margin: 125px 0px 55px 0px;
 }
