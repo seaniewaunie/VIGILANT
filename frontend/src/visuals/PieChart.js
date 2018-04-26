@@ -58,19 +58,19 @@ class PieChartFS extends Component {
 		
 		//sort data_array and count_array simultaneously
 		for (var k = 0; k < data_array.length; k++) {
-			var min = k;
+			var max = k;
 			for (var l = k + 1; l < data_array.length; l++){
-				if (count_array[l] < count_array[min]) {
-					min = l;
+				if (count_array[l] > count_array[max]) {
+					max = l;
 				}
 			}
-			if (min != k) {
+			if (max != k) {
 				var tmp = count_array[k];
-				count_array[k] = count_array[min];
-				count_array[min] = tmp;
+				count_array[k] = count_array[max];
+				count_array[max] = tmp;
 				tmp = data_array[k];
-				data_array[k] = data_array[min];
-				data_array[min] = tmp;
+				data_array[k] = data_array[max];
+				data_array[max] = tmp;
 			}
 		}
 		
