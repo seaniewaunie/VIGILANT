@@ -88,6 +88,7 @@ class AddVisualization extends Component {
       crimesInfo : this.props.data,
       dataTypeSelections: [
         {label: 'Days', value: 'days',},
+        {label: 'Dates', value: 'dates'},
         //{label: 'Neighborhoods', value: 'neighborhoods'},
         //{label: 'Descriptions', value: 'descriptions'},
         {label: 'Times', value: 'times'},
@@ -158,7 +159,7 @@ class AddVisualization extends Component {
       this.setState({ selected: false, type: '' }, () => { this.addOne(element, info); });
     }
   }
-  
+
   makeRequest(name, type) {
 	var visual_id;
 	var req = ('http://127.0.0.1:8000/api/add/name='+
