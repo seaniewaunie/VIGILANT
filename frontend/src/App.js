@@ -66,7 +66,7 @@ class App extends Component {
             },
         };
 
-	      this.defaultVisuals = this.defaultVisuals.bind(this);
+	    this.defaultVisuals = this.defaultVisuals.bind(this);
         this.addOne = this.addOne.bind(this);
         this.getFilterCodes = this.getFilterCodes.bind(this);
         this.hideOne = this.hideOne.bind(this);
