@@ -74,6 +74,7 @@ export default class BarChartFS extends Component {
 				}
 			}
 		}
+		console.log(label_array);
 		console.log(count_array);
 
 	}
