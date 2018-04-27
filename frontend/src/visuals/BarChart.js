@@ -79,6 +79,23 @@ export default class BarChartFS extends Component {
 
 	}
 
+	//sort from greatest to least on count 
+	for (var k = 0; k < label_array.length; k++) {
+			var max = k;
+		for (var l = k + 1; l < label_array.length; l++){
+			if (count_array[l] > count_array[max]) {
+				max = l;
+			}
+		}
+		if (max != k) {
+			var tmp = count_array[k];
+			count_array[k] = count_array[max];
+			count_array[max] = tmp;
+			tmp = label_array[k];
+			label_array[k] = label_array[max];
+			label_array[max] = tmp;
+		}
+	}
 
 	var data = {
 		labels: label_array,
@@ -151,10 +168,9 @@ export default class BarChartFS extends Component {
            <button onClick={this.handleHide}>hide</button>
            <button onClick={this.handleLocalFilter}>local</button>
          </div>
-          <p align='center'><b>{this.state.name}</b></p>
           <HorizontalBar
             height={height}
-            className="LineGraphFS"
+            className="BarGraphFS"
 			      legend={false}
             data={data}
           />
