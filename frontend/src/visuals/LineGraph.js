@@ -7,13 +7,7 @@ export default class LineGraphFS extends Component {
   constructor(props) {
     super(props);
 
-    //this.compress = this.compress.bind(this);
-    //this.expand = this.expand.bind(this);
-    this.getData = this.getData.bind(this);
-	//this.getCounts = this.getCounts.bind(this);
-    this.handleClick = this.handleClick.bind(this);
-
-    this.state = {
+	this.state = {
         fullscreen: false,
         height: 40,
         width: 40,
@@ -21,15 +15,20 @@ export default class LineGraphFS extends Component {
         data : this.getData(),
 		field: props.field,
 		id: props.id,
-		};
-	}
+		color: [],
+	};
+    //this.compress = this.compress.bind(this);
+    //this.expand = this.expand.bind(this);
+    this.getData = this.getData.bind(this);
+	//this.getCounts = this.getCounts.bind(this);
+    this.handleClick = this.handleClick.bind(this);
+
+  }
 
 	
   getData() {
 	var all_data = this.props.data;
 	var field = this.props.field;
-	//console.log(dates);
-	//var times = this.props.data.map(times => times.time);
 	var data_array = [];
 	var count_array = [];
 	for (var i = 0; i < all_data.length; i++) {
@@ -44,11 +43,13 @@ export default class LineGraphFS extends Component {
 		}
 	}
 	
-	var color = "";
-	var r = Math.floor(Math.random() * 255);
-	var g = Math.floor(Math.random() * 255);
-	var b = Math.floor(Math.random() * 255);
-	color = ("rgb(" + r + "," + g + "," + b + ")");
+	//var color = "";
+	if (this.state && this.state.color.length < 1) {
+		var r = Math.floor(Math.random() * 255);
+		var g = Math.floor(Math.random() * 255);
+		var b = Math.floor(Math.random() * 255);
+		this.state.color.push(("rgb(" + r + "," + g + "," + b + ")"));
+	}
 	
 	var label_array = data_array;
 	if (field === "times") {
@@ -63,9 +64,7 @@ export default class LineGraphFS extends Component {
 			}
 			count_array.push(0);
 		}
-		console.log(all_data);
 		
-		console.log(all_data[0].slice(0, 2));
 		for (var j = 0; j < all_data.length; j++) {
 			for (var k = 0; k < 24; k++) {
 				if (all_data[j].slice(0, 2) === label_array[k].slice(0, 2)) {
@@ -73,11 +72,15 @@ export default class LineGraphFS extends Component {
 				}
 			}
 		}
-		console.log(count_array);
-		
 	}
-	
-	
+	//console.log(this.state);
+	var color = "";
+	if (this.state) {
+		color = this.state.color[0];
+	}
+	else {
+		color = ("rgb(" + 0 + "," + 0 + "," + 0 + ")");
+	}
 	var data = {
 		labels: label_array,
 		datasets : [{
@@ -104,6 +107,7 @@ export default class LineGraphFS extends Component {
     this.setState({
       name: this.props.name,
       data: this.getData(),
+	  color: [],
     });
   } 
 

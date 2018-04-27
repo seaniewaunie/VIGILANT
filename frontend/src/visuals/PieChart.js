@@ -25,16 +25,14 @@ class PieChartFS extends Component {
         data : this.getData(),
 		background_colors: ["rgb(" + 0 + "," + 0 + "," + 0 + ")"],
 		field : this.props.field,
+		colors: [],
 		};
 	}
 
 	getData() {
-		//console.log(this.props.data.dates);
 		var all_data = this.props.data;
 		var field = this.props.field;
-		console.log(all_data);
-		//console.log(dates);
-		//var times = this.props.data.map(times => times.time);
+
 		var data_array = [];
 		var count_array = [];
 		for (var i = 0; i < all_data.length; i++) {
@@ -49,15 +47,8 @@ class PieChartFS extends Component {
 			}
 		}
 		
-		var colors = [];
-		for (var j = 0; j < data_array.length; j++) {
-			var r = Math.floor(Math.random() * 255);
-            var g = Math.floor(Math.random() * 255);
-            var b = Math.floor(Math.random() * 255);
-            colors.push("rgb(" + r + "," + g + "," + b + ")");
-		}
-		//this.setState({background_colors: colors});
 		
+		//if data is times, group it by hours
 		var label_array = data_array;
 		if (field === "times") {
 			label_array = []
@@ -82,6 +73,16 @@ class PieChartFS extends Component {
 			data_array = label_array
 		}
 		
+		//generate random colors for pie chart
+		if (this.state && this.state.colors.length <= data_array.length) {
+			for (var j = 0; j < data_array.length; j++) {
+				var r = Math.floor(Math.random() * 255);
+				var g = Math.floor(Math.random() * 255);
+				var b = Math.floor(Math.random() * 255);
+				this.state.colors.push("rgb(" + r + "," + g + "," + b + ")");
+			}
+		}
+		
 		//sort data_array and count_array simultaneously
 		for (var k = 0; k < data_array.length; k++) {
 			var max = k;
@@ -100,7 +101,14 @@ class PieChartFS extends Component {
 			}
 		}
 		
-		
+		var colors = [];
+		if (this.state) {
+			colors = this.state.colors;
+		}
+		else {
+			colors = [("rgb(" + 0 + "," + 0 + "," + 0 + ")")];
+		}
+			
 		var data = {
 			labels: data_array,
 			datasets : [{
