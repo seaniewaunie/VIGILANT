@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {BarChart} from 'react-easy-chart';
+import {Bar as BarChart} from 'react-chartjs-2';
 import './css/Timeline.css';
 import {RingLoader} from 'react-spinners';
 
@@ -7,41 +7,87 @@ export default class Timeline extends Component {
   constructor(props){
     super(props);
 
-    this.state = {
-      dates: this.props.dates,
-      data: this.mapToDataArray(this.getCounts(this.props.dates)),
-    }
-    this.getCounts = this.getCounts.bind(this);
-    this.mapToDataArray = this.mapToDataArray.bind(this);
+	this.state = {
+        data : this.getData(),
+		color: ("rgb(" + 0 + "," + 0 + "," + 255 + ")"),
+	};
+	
+    this.getData = this.getData.bind(this);
+	this.getOptions = this.getOptions.bind(this);
   }
 
 
+  
+  getData() {
+	var all_data = this.props.data;
+	var data_array = [];
+	var count_array = [];
+	for (var i = 0; i < all_data.length; i++) {
+		if (!data_array.includes(all_data[i])) {
+			data_array.push(all_data[i]);
+			count_array.push(1);
+			//console.log(dates[i]);
+		}
+		else {
+			var index = data_array.indexOf(all_data[i]);
+			count_array[index] = count_array[index] + 1;
+		}
+	}  
+	
+	
+	var color = "";
+	if (this.state) {
+		color = this.state.color;
+	}
+	else {
+		color = ("rgb(" + 0 + "," + 0 + "," + 255 + ")");
+	}
+	var data = {
+		labels: data_array,
+		datasets : [{
+			data: count_array,
+			backgroundColor: color,
+			borderColor: color,
+			borderWidth: 1,
+			hoverBackgroundColor: color,
+			hoverBorderColor: color,
+		}]
+	};
+
+	return data;
+  }
+  
+  getOptions() {
+	var options = {
+		scales: {
+			xAxes: [{
+				type: 'time',
+				unit: 'day',
+				distribution: 'linear',
+				gridLines: {
+					display: false,
+				 },
+			}],
+			yAxes: [{
+				//display: false,
+				gridLines : {
+					display : false,
+					drawBorder: false,
+				},
+			}]
+
+		}
+	}
+	return options;
+  }
+  
   componentWillMount() {
     this.setState({
-      dates: this.props.dates,
-      data: this.mapToDataArray(this.getCounts(this.props.dates)),
+      data: this.getData(),
+	  color: ("rgb(" + 0 + "," + 0 + "," + 255 + ")"),
     })
   }
-  // counts the number of similar values in an array
-  // and returns an array of the counts
-  getCounts(arr){
-    var counts = {};
-    for (var i = 0; i < arr.length; i++) {
-        counts[arr[i]] = 1 + (counts[arr[i]] || 0);
-    }
-    //console.log("counts returns", counts);
-    return counts;
-  }
 
-  mapToDataArray(arr){
-    var data = [];
-    console.log(arr);
-    for(var i in arr){
-      data.push({x: i, y: arr[i]});
-    }
-    console.log('map to data returns: ', data)
-    return data;
-  }
 
   shouldComponentUpdate(nextProps, nextState) {
     return true;
@@ -49,22 +95,24 @@ export default class Timeline extends Component {
 
   render() {
 
-    if(this.props.dates === undefined){
+    if(this.props.data === undefined){
       return(<RingLoader color={'#123abc'} />);
     }
-    else if(this.props.dates.length === 0)
+    else if(this.props.data.length === 0)
       return(<p style={{textAlign:'center'}}>No Crimes to Display</p>);
 
     return (
       <div>
         <BarChart
           className="timeline"
+		  legend={false}
           width={window.innerWidth*parseFloat(this.props.width)/100-30}
           barWidth={5}
-          height={30}
+          height={100}
           xTickNumber={5}
           yTickNumber={5}
-          data={this.mapToDataArray(this.getCounts(this.props.dates))}
+          data={this.getData()}
+		  options={this.getOptions()}
         />
       </div>
     );
