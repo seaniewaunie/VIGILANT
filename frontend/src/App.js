@@ -313,7 +313,7 @@ class App extends Component {
 
                 <div className='content'>
                   <div className='content-visuals' style={this.state.contentStyle}>
-                    <TimeLine key={500} dates={this.state.crimesInfo.dates} width={this.state.contentStyle.width}/>
+                    <TimeLine key={500} data={this.state.crimesInfo.dates} width={this.state.contentStyle.width}/>
                     <HeatMapFS
                         data ={this.state.visualsData}
                     />

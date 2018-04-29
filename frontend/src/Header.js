@@ -331,7 +331,15 @@ class RestoreVisualization extends Component {
 	}
 	
 	handleShow() {
-		this.state.visuals.push(<LineGraphFS name={"test"} key={0} id={0} data={this.props.data['times']} field={'times'}/>);
+		var info = {
+			  type: "line",
+			  name: "test",
+			  key: 0,
+			  id: 0,
+			  field: "times",
+		 };
+		var element = <LineGraphFS onClick={this.addOne(element, info)} name={"test"} key={0} id={0} data={this.props.data['times']} field={'times'}/>;
+		this.state.visuals.push(element);
 		console.log(this.props.data);
 		this.setState({show: true});
 	}
