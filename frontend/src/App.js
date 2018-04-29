@@ -315,7 +315,7 @@ class App extends Component {
                   <div className='content-visuals' style={this.state.contentStyle}>
                     <TimeLine key={500} dates={this.state.crimesInfo.dates} width={this.state.contentStyle.width}/>
                     <HeatMapFS
-                        data ={this.state.visualsData}
+                        data ={this.state.crimesInfo}
                     />
                     <Grid fluid id="grid">
                         <FormatGrid
