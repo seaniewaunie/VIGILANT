@@ -96,6 +96,8 @@ CREATE TABLE IF NOT EXISTS `VigilantDB`.`LocalVisualization` (
   `name` VARCHAR(100) NOT NULL,
   `type` VARCHAR(20) NULL,
   `visible` TINYINT NULL,
+  `field` VARCHAR(15) NULL,
+  `use_global` TINYINT NULL,
   `date_hidden` DATE NULL,
   `start_date` DATE NULL,
   `end_date` DATE NULL,
