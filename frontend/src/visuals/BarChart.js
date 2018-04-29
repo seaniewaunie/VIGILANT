@@ -12,6 +12,7 @@ export default class BarChartFS extends Component {
     this.getData = this.getData.bind(this);
 	//this.getCounts = this.getCounts.bind(this);
     this.handleClick = this.handleClick.bind(this);
+    this.handleFullScreen = this.handleFullScreen.bind(this);
     this.handleHide = this.handleHide.bind(this);
     this.handleLocalFilter = this.handleLocalFilter.bind(this);
 
@@ -74,7 +75,7 @@ export default class BarChartFS extends Component {
 		}
 	}
 
-	//sort from greatest to least on count 
+	//sort from greatest to least on count
 	for (var k = 0; k < label_array.length; k++) {
 			var max = k;
 		for (var l = k + 1; l < label_array.length; l++){
@@ -126,9 +127,6 @@ export default class BarChartFS extends Component {
 
 
   handleClick() {
-    this.setState({fullscreen: !this.state.fullscreen}, () => {
-        this.state.fullscreen ? this.expand() : this.compress();
-    });
 
   }
 
@@ -142,10 +140,17 @@ export default class BarChartFS extends Component {
 
   }
 
+  handleFullScreen(){
+    this.setState({fullscreen: !this.state.fullscreen});
+  }
+
 
   render() {
 	const data = this.getData();
-  var height = data.labels.length > 20 ? (data.labels.length > 40 ? 600 : 500) : 200;
+  var height = data.labels.length > 20 ? 500 : 200;
+  var width = this.state.fullscreen ? 12 : 4;
+  var buttonText = this.state.fullscreen ? 'minimize' : 'fullscreen';
+  console.log('height: ', height);
     if(this.props.data === undefined){
       return(<RingLoader color={'#123abc'} />);
     }
@@ -163,12 +168,13 @@ export default class BarChartFS extends Component {
     }
 	//console.log(this.state.height);
     return (
-      <Col xs={4} sm={4} md={4} key={this.state.id}>
+      <Col xs={width} sm={width} md={width} key={this.state.id}>
        <Well>
          <div className='VisualName'><b>{this.state.name}</b></div>
          <div className='VisualButtons'>
            <button onClick={this.handleHide}>hide</button>
            <button onClick={this.handleLocalFilter}>local</button>
+           <button onClick={this.handleFullScreen}>{buttonText}</button>
          </div>
           <HorizontalBar
             height={height}
