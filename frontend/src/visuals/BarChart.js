@@ -15,6 +15,8 @@ export default class BarChartFS extends Component {
     this.handleFullScreen = this.handleFullScreen.bind(this);
     this.handleHide = this.handleHide.bind(this);
     this.handleLocalFilter = this.handleLocalFilter.bind(this);
+	this.add = this.add.bind(this);
+	this.getOptions = this.getOptions.bind(this);
 
     this.state = {
         fullscreen: false,
@@ -24,6 +26,7 @@ export default class BarChartFS extends Component {
 		id: props.id,
         height: this.props.data.length > 20 ? 120 : 50,
 		color: [],
+		restore: props.restore,
 	};
   }
 
@@ -121,10 +124,21 @@ export default class BarChartFS extends Component {
       data: this.getData(),
       height: this.props.data.length > 20 ? 120 : 50,
 	  color: [],
+	  restore: this.props.restore,
     });
 
   }
 
+  getOptions() {
+	  if(this.props.restore === true) {
+		  return { onClick: this.add, };
+	  }
+  }
+  
+  add() {
+	  console.log("restore visual to screen");
+	  this.props.restore_function(this.props.name, this.props.id, "bar", this.props.field);
+  }
 
   handleClick() {
 
@@ -180,7 +194,8 @@ export default class BarChartFS extends Component {
             height={height}
             className="BarGraphFS"
 			      legend={false}
-            data={data}
+            data={this.getData()}
+			options={this.getOptions()}
           />
       </Well>
     </Col>

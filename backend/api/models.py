@@ -188,6 +188,8 @@ class Localvisualization(models.Model):
     name = models.CharField(max_length=100)
     type = models.CharField(max_length=20, blank=True, null=True)
     visible = models.IntegerField(blank=True, null=True)
+    field = models.CharField(max_length=15, blank=True, null=True)
+    use_global = models.IntegerField(blank=True, null=True)
     date_hidden = models.DateField(blank=True, null=True)
     start_date = models.DateField(blank=True, null=True)
     end_date = models.DateField(blank=True, null=True)

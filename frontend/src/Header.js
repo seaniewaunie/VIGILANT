@@ -129,7 +129,7 @@ class AddVisualization extends Component {
 	  };
       switch(this.state.type){
           case 'Bar Chart':
-			  this.makeRequest(this.state.name, "bar");
+			  this.makeRequest(this.state.name, "bar", this.state.selectedData);
 			  info.type = "bar";
 			  info.name = this.state.name;
 			  info.key = this.state.id;
@@ -139,7 +139,7 @@ class AddVisualization extends Component {
 			  element = <BarChartFS name={this.state.name} key={this.state.id} id={this.state.id} currentData={this.props.data[this.state.selectedData]}/>;
               break;
           case 'Line Graph':
-			  this.makeRequest(this.state.name, "line");
+			  this.makeRequest(this.state.name, "line", this.state.selectedData);
 			  info.type = "line";
 			  info.name = this.state.name;
 			  info.key = this.state.id;
@@ -149,7 +149,7 @@ class AddVisualization extends Component {
               element = <LineGraphFS data={this.props.data[this.state.selectedData]}  id={this.state.id} name={this.state.name} key={this.state.id}/>;
               break;
           case 'Pie Chart':
-			  this.makeRequest(this.state.name, "pie");
+			  this.makeRequest(this.state.name, "pie", this.state.selectedData);
 			  info.type = "pie";
 			  info.name = this.state.name;
 			  info.key = this.state.id;
@@ -166,10 +166,10 @@ class AddVisualization extends Component {
     }
   }
 
-  makeRequest(name, type) {
+  makeRequest(name, type, field) {
 	var visual_id;
 	var req = ('http://127.0.0.1:8000/api/add/name='+
-				name + '&type=' + type
+				name + '&type=' + type + '&field=' + field
 	);
 	console.log(req);
 	axios.get(req, {responseType: 'json'})
@@ -299,21 +299,11 @@ class RestoreVisualization extends Component {
 	constructor(props, context) {
 		super(props, context);
 
-		this.getValidationState = this.getValidationState.bind(this);
-		this.handleChange = this.handleChange.bind(this);
-
 		this.handleShow = this.handleShow.bind(this);
 		this.handleClose = this.handleClose.bind(this);
 
-		this.handleHeatMap = this.handleHeatMap.bind(this);
-		this.handleBarChart = this.handleBarChart.bind(this);
-		this.handleLineGraph = this.handleLineGraph.bind(this);
-		this.handlePieChart = this.handlePieChart.bind(this);
-		this.handleTimeLine = this.handleTimeLine.bind(this);
-		this.handleTableChart = this.handleTableChart.bind(this);
-		this.handleAdd = this.handleAdd.bind(this);
-		this.makeRequest = this.makeRequest.bind(this);
-		this.updateRequest = this.updateRequest.bind(this);
+		this.getRestorables = this.getRestorables.bind(this);
+		this.restore = this.restore.bind(this);
 
 		this.addOne = this.props.addOne.bind(this);
 		this.hideOne= this.props.hideOne.bind(this);
@@ -326,131 +316,81 @@ class RestoreVisualization extends Component {
 		  id: props.counter,
 		  name : '',
 		  crimesInfo : this.props.data,
-		  visuals: [],
+		  past_day: [],
+		  past_week: [],
+		  past_month: [],
 		};
 	}
 	
 	handleShow() {
-		var info = {
-			  type: "line",
-			  name: "test",
-			  key: 0,
-			  id: 0,
-			  field: "times",
-		 };
-		var element = <LineGraphFS onClick={this.addOne(element, info)} name={"test"} key={0} id={0} data={this.props.data['times']} field={'times'}/>;
-		this.state.visuals.push(element);
-		console.log(this.props.data);
+		this.getRestorables();
 		this.setState({show: true});
 	}
 	
 	handleClose() {
 		this.setState({ show: false, selected: false});
 	}
-	
-	handleAdd(){
-		//console.log(this.props.data);
-		if(this.state.name.length < NAME_LENGTH){
-		  var element;
-		  var info = {
-			  type: "",
-			  name: "",
-			  key: 0,
-			  id: 0,
-			  field: "",
-		  };
-		  switch(this.state.type){
-			  case 'Bar Chart':
-				  this.makeRequest(this.state.name, "bar");
-				  info.type = "bar";
-				  info.name = this.state.name;
-				  info.key = this.state.id;
-				  info.id = this.state.id;
-				  info.field = this.state.selectedData;
-				  console.log(info);
-				  element = <BarChartFS name={this.state.name} key={this.state.id} id={this.state.id} currentData={this.props.data[this.state.selectedData]}/>;
-				  break;
-			  case 'Line Graph':
-				  this.makeRequest(this.state.name, "line");
-				  info.type = "line";
-				  info.name = this.state.name;
-				  info.key = this.state.id;
-				  info.id = this.state.id;
-				  info.field = this.state.selectedData;
-				  console.log(info);
-				  element = <LineGraphFS data={this.props.data[this.state.selectedData]}  id={this.state.id} name={this.state.name} key={this.state.id}/>;
-				  break;
-			  case 'Pie Chart':
-				  this.makeRequest(this.state.name, "pie");
-				  info.type = "pie";
-				  info.name = this.state.name;
-				  info.key = this.state.id;
-				  info.id = this.state.id;
-				  info.field = this.state.selectedData;
-				  console.log(info);
-				  element = <PieChartFS data={this.props.data[this.state.selectedData]}  id={this.state.id} name={this.state.name} key={this.state.id} />;
-				  break;
-			  default:
-				  console.log("error, unhandled element selected in Add visualization: ", this.state.type);
-		  }
-		  this.handleClose();
-		  this.setState({ selected: false, type: '' }, () => { this.addOne(element, info); });
-		}
+
+  getRestorables() {
+	console.log(this.props.data);
+	var visual_id;
+	var req = ('http://127.0.0.1:8000/api/getrestorable/');
+	axios.get(req, {responseType: 'json'})
+		.then(response => {
+			console.log(response);
+			var days = response.data.day;
+			var visuals_to_add = [];
+			for (var i = 0; i < days.length; i++) {
+				console.log(days[i].field);
+				if (days[i].type === "bar") {
+				  visuals_to_add.push(<BarChartFS name={days[i].name} key={days[i].id} id={days[i].id} data={this.props.data[days[i].field]} field={days[i].field} restore={true} restore_function={this.restore}/>);
+				}
+
+				else if (days[i].type === "line") {
+				  visuals_to_add.push(<LineGraphFS name={days[i].name} key={days[i].id} id={days[i].id} data={this.props.data[days[i].field]} field={days[i].field} restore={true} restore_function={this.restore}/>);
+				}
+
+				else if (days[i].type === "pie") {
+				  visuals_to_add.push(<PieChartFS name={days[i].name} key={days[i].id} id={days[i].id} data={this.props.data[days[i].field]} field={days[i].field} restore={true} restore_function={this.restore}/>);
+				}
+			}
+			console.log(visuals_to_add);
+			this.setState({past_day: visuals_to_add});
+			console.log(this.state.past_day);
+		//this.setState({id: response.data.visual_id});
+		});
+	//console.log(this.state.id);
+  }
+
+	  
+  restore(name, id, type, field) {
+	  var info = {
+		  type: type,
+		  name: name,
+		  key: id,
+		  id: id,
+		  field: field,
+	  };
+	  var element; 
+	  if (type === "line") {
+		  element = <LineGraphFS data={this.props.data[field]}  id={id} name={name} key={id} restore={false}/>;
 	  }
-
-	  makeRequest(name, type) {
-		var visual_id;
-		var req = ('http://127.0.0.1:8000/api/add/name='+
-					name + '&type=' + type
-		);
-		console.log(req);
-		axios.get(req, {responseType: 'json'})
-			.then(response => {
-			this.setState({id: response.data.visual_id});
-			});
-		//console.log(this.state.id);
+	  else if (type === "bar") {
+		  element = <BarChartFS data={this.props.data[field]}  id={id} name={name} key={id} restore={false}/>;
 	  }
-
-	  getValidationState() {
-		const length = this.state.name.length;
-		if(length === 0) return 'warning';
-		else if (length > 0 && length < NAME_LENGTH) return 'success';
-		else return 'error';
+	  else if (type === "pie") {
+		  element = <PieChartFS data={this.props.data[field]}  id={id} name={name} key={id} restore={false}/>;
 	  }
-
-	  handleChange(e) {
-		this.setState({ name: e.target.value });
-	  }
-
-	  handleHeatMap() {
-		this.setState({ selected: true, type: 'Heat Map' });
-	  }
-
-	  handleBarChart() {
-		this.setState({ selected: true, type: 'Bar Chart', id: this.state.id+1}, this.handleAdd);
-	  }
-
-	  handleLineGraph() {
-		this.setState({ selected: true, type: 'Line Graph', id: this.state.id+1}, this.handleAdd);
-	  }
-
-	  handlePieChart() {
-		this.setState({ selected: true, type: 'Pie Chart', id: this.state.id+1}, this.handleAdd);
-	  }
-
-
-	  handleTimeLine() {
-		this.setState({ selected: true, type: 'Timeline' });
-	  }
-
-
-	  handleTableChart() {
-		this.setState({ selected: true, type: 'Table Chart' });
-	  }
-
-	  updateRequest(selectedData){
-		this.setState({selectedData})
-	  }
+	  this.addOne(element, info);
+	  
+	  var req = ('http://127.0.0.1:8000/api/restore/id=' + id);
+	  axios.get(req, {responseType: 'json'})
+		.then(response => {
+			console.log(response);
+		});
+		
+	  this.handleShow();
+  }
 	
 	render() {
 
@@ -476,12 +416,24 @@ class RestoreVisualization extends Component {
 			    <div><p><b>Hidden in the past day:</b></p></div>
 				<Grid fluid id="grid">
 					<FormatGrid
-						counter={this.state.visuals.length}
-						visuals={this.state.visuals}
+						counter={this.state.past_day.length}
+						visuals={this.state.past_day}
 					/>
                  </Grid>
 				<div><p><b>Hidden in the past week:</b></p></div>
+				<Grid fluid id="grid">
+					<FormatGrid
+						counter={this.state.past_week.length}
+						visuals={this.state.past_week}
+					/>
+                 </Grid>
 				<div><p><b>Hidden in the past month:</b></p></div>
+				<Grid fluid id="grid">
+					<FormatGrid
+						counter={this.state.past_month.length}
+						visuals={this.state.past_month}
+					/>
+                 </Grid>
 			  </Modal.Body>
 
 			  <Modal.Footer>

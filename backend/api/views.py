@@ -59,12 +59,14 @@ class AddVisualization(APIView):
 		queryset = models.Localvisualization.objects.all()
 		return queryset
 	
-	def get(self, request, name='', type=''):
+	def get(self, request, name='', type='', field=''):
 		new_visual = models.Localvisualization()
 		
 		new_visual.name = name
 		new_visual.type = type
+		new_visual.field = field
 		new_visual.visible = 1
+		new_visual.use_global = 1
 		new_visual.fk_user = models.Users(pk=1)
 		
 		new_visual.save()
@@ -142,7 +144,7 @@ class GetRestorableVisualizations(APIView):
 			if row.district != None:
 				districts = row.district.split(',')
 				districts = districts[:-1]
-			return_json['day'].append({'id': row.pk, 'name': row.name, 'type': row.type, 'start_date': row.start_date, 'end_date': row.end_date, 'start_time': row.start_time, 'end_time': row.end_time, 'days': days, 'codes': codes, 'i_o': row.inside_outside, 'weapons': weapons, 'districts': districts, 'start_lat': row.start_lat, 'start_lon': row.start_lon})
+			return_json['day'].append({'id': row.pk, 'name': row.name, 'type': row.type, 'field': row.field, 'use_global': row.use_global,'start_date': row.start_date, 'end_date': row.end_date, 'start_time': row.start_time, 'end_time': row.end_time, 'days': days, 'codes': codes, 'i_o': row.inside_outside, 'weapons': weapons, 'districts': districts, 'start_lat': row.start_lat, 'start_lon': row.start_lon})
 			already_added.append(row.pk)
 			
 		queryset = models.Localvisualization.objects.all().filter(date_hidden__range=[date - datetime.timedelta(days=7), date]).order_by('date_hidden')
@@ -164,7 +166,7 @@ class GetRestorableVisualizations(APIView):
 				if row.district != None:
 					districts = row.district.split(',')
 					districts = districts[:-1]
-				return_json['week'].append({'id': row.pk, 'name': row.name, 'type': row.type, 'start_date': row.start_date, 'end_date': row.end_date, 'start_time': row.start_time, 'end_time': row.end_time, 'days': days, 'codes': codes, 'i_o': row.inside_outside, 'weapons': weapons, 'districts': districts, 'start_lat': row.start_lat, 'start_lon': row.start_lon})
+				return_json['week'].append({'id': row.pk, 'name': row.name, 'type': row.type, 'field': row.field, 'use_global': row.use_global, 'start_date': row.start_date, 'end_date': row.end_date, 'start_time': row.start_time, 'end_time': row.end_time, 'days': days, 'codes': codes, 'i_o': row.inside_outside, 'weapons': weapons, 'districts': districts, 'start_lat': row.start_lat, 'start_lon': row.start_lon})
 				already_added.append(row.pk)
 			
 		queryset = models.Localvisualization.objects.all().filter(date_hidden__range=[date - datetime.timedelta(days=30), date]).order_by('date_hidden')
@@ -186,7 +188,7 @@ class GetRestorableVisualizations(APIView):
 				if row.district != None:
 					districts = row.district.split(',')
 					districts = districts[:-1]
-				return_json['month'].append({'id': row.pk, 'name': row.name, 'type': row.type, 'start_date': row.start_date, 'end_date': row.end_date, 'start_time': row.start_time, 'end_time': row.end_time, 'days': days, 'codes': codes, 'i_o': row.inside_outside, 'weapons': weapons, 'districts': districts, 'start_lat': row.start_lat, 'start_lon': row.start_lon})
+				return_json['month'].append({'id': row.pk, 'name': row.name, 'type': row.type, 'field': row.field, 'use_global': row.use_global, 'start_date': row.start_date, 'end_date': row.end_date, 'start_time': row.start_time, 'end_time': row.end_time, 'days': days, 'codes': codes, 'i_o': row.inside_outside, 'weapons': weapons, 'districts': districts, 'start_lat': row.start_lat, 'start_lon': row.start_lon})
 				already_added.append(row.pk)
 			
 		#print(date - datetime.timedelta(days=1))
@@ -207,6 +209,7 @@ class SetLocalFilter(APIView):
 		if id != '':
 			id = int(id)
 			visual = models.Localvisualization.objects.get(pk=id)
+			visual.use_global = 0
 			days_words = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
 	
 			#put codes in a list for easy filtering

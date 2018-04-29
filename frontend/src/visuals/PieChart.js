@@ -16,6 +16,9 @@ class PieChartFS extends Component {
     this.getData = this.getData.bind(this);
 	this.getCounts = this.getCounts.bind(this);
     this.handleClick = this.handleClick.bind(this);
+	this.add = this.add.bind(this);
+	this.getOptions = this.getOptions.bind(this);
+
 
     this.state = {
         fullscreen: false,
@@ -26,6 +29,7 @@ class PieChartFS extends Component {
 		background_colors: ["rgb(" + 0 + "," + 0 + "," + 0 + ")"],
 		field : this.props.field,
 		colors: [],
+		restore: this.props.restore,
 		};
 	}
 
@@ -130,6 +134,17 @@ class PieChartFS extends Component {
     return Object.values(counts);
   }
 
+  getOptions() {
+	  if(this.props.restore === true) {
+		  return { onClick: this.add, };
+	  }
+  }
+  
+  add() {
+	  console.log("restore visual to screen");
+	  this.props.restore_function(this.props.name, this.props.id, "pie", this.props.field);
+  }
+  
   handleClick() {
     this.setState({fullscreen: !this.state.fullscreen}, () => {
         this.state.fullscreen ? this.expand() : this.compress();
@@ -184,6 +199,7 @@ class PieChartFS extends Component {
 					//xTickNumber={5}
 					//yTickNumber={5}
 					data={this.getData()}
+					options={this.getOptions()}
 					/>
 				</Well>
 			</Col> 

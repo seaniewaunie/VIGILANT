@@ -16,12 +16,15 @@ export default class LineGraphFS extends Component {
 		field: props.field,
 		id: props.id,
 		color: [],
+		restore: props.restore,
 	};
     //this.compress = this.compress.bind(this);
     //this.expand = this.expand.bind(this);
     this.getData = this.getData.bind(this);
 	//this.getCounts = this.getCounts.bind(this);
     this.handleClick = this.handleClick.bind(this);
+	this.add = this.add.bind(this);
+	this.getOptions = this.getOptions.bind(this);
 
   }
 
@@ -103,11 +106,23 @@ export default class LineGraphFS extends Component {
 	return data;
   }
 
+  getOptions() {
+	  if(this.props.restore === true) {
+		  return { onClick: this.add, };
+	  }
+  }
+  
+  add() {
+	  console.log("restore visual to screen");
+	  this.props.restore_function(this.props.name, this.props.id, "line", this.props.field);
+  }
+  
    componentWillMount() {
     this.setState({
       name: this.props.name,
       data: this.getData(),
 	  color: [],
+	  restore: this.props.restore,
     });
   } 
 
@@ -149,6 +164,7 @@ export default class LineGraphFS extends Component {
             //xTickNumber={5}
             //yTickNumber={5}
             data={this.getData()}
+			options={this.getOptions()}
           />
       </Well>
     </Col> 
