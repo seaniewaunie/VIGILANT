@@ -1,0 +1,20 @@
+2 - TODOS
+    - Buttons for fullscreen/filter on hover for visuals
+    - Full Screen View of Visuals
+    - Local Filters
+    - Hide/Restore
+    - Responsive Grid
+    - Interpretations
+
+3 - Decided on upcoming tasks
+    - Sean:
+        - full screen
+        - Interpretations
+    - Sarah:
+        - Buttons on hover
+        - Hide/Restore
+    - Randy:
+        - Responsive Grid
+    - Lindsay:
+        - Restore
+
