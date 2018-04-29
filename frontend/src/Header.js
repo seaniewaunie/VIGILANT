@@ -357,9 +357,7 @@ class RestoreVisualization extends Component {
 			console.log(visuals_to_add);
 			this.setState({past_day: visuals_to_add});
 			console.log(this.state.past_day);
-		//this.setState({id: response.data.visual_id});
 		});
-	//console.log(this.state.id);
   }
 
 	  
