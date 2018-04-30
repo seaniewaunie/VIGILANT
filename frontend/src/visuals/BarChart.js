@@ -4,6 +4,8 @@ import {RingLoader} from 'react-spinners';
 import {Well, Col} from 'react-bootstrap';
 import axios from 'axios';
 import '../css/Barchart.css';
+import FullscreenImg from '../images/fullscreen_opt.png';
+import ShrinkImg from '../images/shrink_image_opt.png';
 
 export default class BarChartFS extends Component {
   constructor(props) {
@@ -19,7 +21,8 @@ export default class BarChartFS extends Component {
     this.handleLocalFilter = this.handleLocalFilter.bind(this);
   	this.add = this.add.bind(this);
   	this.getOptions = this.getOptions.bind(this);
-
+	this.isMouseInside = false;
+		
     this.state = {
         fullscreen: false,
         showLocalFilter: false,
@@ -182,14 +185,26 @@ export default class BarChartFS extends Component {
     this.setState({fullscreen: !this.state.fullscreen});
   }
 
+  getInitialState() {
+	  return {
+		isMouseInside: false
+	  };
+	}
+	mouseEnter = () => {
+	  this.setState({ isMouseInside: true });
+	}
+	mouseLeave = () => {
+	  this.setState({ isMouseInside: false });
+	}
+	
 
   render() {
 	const data = this.getData();
   var height = data.labels.length > 20 ? 600 : data.labels.length > 10 ? 300:250;
   var width = this.state.fullscreen ? 12 : 4;
-  var buttonText = this.state.fullscreen ? 'Minimize' : 'Fullscreen';
+  //var buttonText = this.state.fullscreen ? 'Minimize' : 'Fullscreen';
   var localFilterShowing = this.state.showLocalFilter;
-
+  var imagePic = this.state.fullscreen ?  ShrinkImg : FullscreenImg
 
   console.log('height: ', height);
 
@@ -218,11 +233,13 @@ export default class BarChartFS extends Component {
 			<button type="button" class="close" aria-label="Close" onClick={this.handleHide}>
 				<span aria-hidden="true">&times;</span>
 			</button>
-			 <div className='VisualName'><b>{this.state.name}</b></div>
-			 <div className='VisualButtons'>
-         <button onClick={this.handleFullScreen}>{buttonText}</button>
-			   <button style={{display: this.state.fullscreen ? 'inline-block':'none'}} onClick={this.handleLocalFilter}>Filter</button>
-			 </div>
+			
+			<div className='VisualName'><b>{this.state.name}</b></div>
+			
+			 <div onMouseEnter={this.mouseEnter} onMouseLeave={this.mouseLeave} className='HiddenButtons'>
+			  {this.state.isMouseInside ? <button onClick={this.handleFullScreen}> <img src={imagePic}/> </button> : null}
+			 <button style={{display: this.state.fullscreen ? 'inline-block':'none'}} onClick={this.handleLocalFilter}>Filter</button>
+		
         <div className='Chart' style={{
             width: localFilterShowing ? '80%':'100%'
           }}>
@@ -234,6 +251,7 @@ export default class BarChartFS extends Component {
     				options={this.getOptions()}
   			  />
         </div>
+		 </div>
 		  </Well>
 		</Col>
 		);
