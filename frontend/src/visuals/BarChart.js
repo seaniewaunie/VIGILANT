@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import {HorizontalBar} from 'react-chartjs-2';
 import {RingLoader} from 'react-spinners';
 import {Well, Col} from 'react-bootstrap';
+import axios from 'axios';
 
 export default class BarChartFS extends Component {
   constructor(props) {
@@ -145,9 +146,16 @@ export default class BarChartFS extends Component {
   }
 
   handleHide(){
+	console.log(this.props.id);
     this.setState({
       hidden: !this.state.hidden,
     })
+	var req = ('http://127.0.0.1:8000/api/hide/id=' + this.props.id);
+	axios.get(req, {responseType: 'json'})
+		.then(response => {
+			console.log(response);
+		});
+	
   }
 
   handleLocalFilter(){
@@ -163,7 +171,7 @@ export default class BarChartFS extends Component {
 	const data = this.getData();
   var height = data.labels.length > 20 ? 500 : 200;
   var width = this.state.fullscreen ? 12 : 4;
-  var buttonText = this.state.fullscreen ? 'minimize' : 'fullscreen';
+  var buttonText = this.state.fullscreen ? 'Minimize' : 'Fullscreen';
   console.log('height: ', height);
     if(this.props.data === undefined){
       return(<RingLoader color={'#123abc'} />);
@@ -181,24 +189,44 @@ export default class BarChartFS extends Component {
       return null;
     }
 	//console.log(this.state.height);
-    return (
-      <Col xs={width} sm={width} md={width} key={this.state.id}>
-       <Well>
-         <div className='VisualName'><b>{this.state.name}</b></div>
-         <div className='VisualButtons'>
-           <button onClick={this.handleHide}>hide</button>
-           <button onClick={this.handleLocalFilter}>local</button>
-           <button onClick={this.handleFullScreen}>{buttonText}</button>
-         </div>
-          <HorizontalBar
-            height={height}
-            className="BarGraphFS"
-			      legend={false}
-            data={this.getData()}
-			options={this.getOptions()}
-          />
-      </Well>
-    </Col>
-    );
+	if (this.props.restore === false) {
+		return (
+		  <Col xs={width} sm={width} md={width} key={this.state.id}>
+		   <Well>
+			<button type="button" class="close" aria-label="Close" onClick={this.handleHide}>
+				<span aria-hidden="true">&times;</span>
+			</button>
+			 <div className='VisualName'><b>{this.state.name}</b></div>
+			 <div className='VisualButtons'>
+			   <button onClick={this.handleLocalFilter}>Filter</button>
+			   <button onClick={this.handleFullScreen}>{buttonText}</button>
+			 </div>
+			  <HorizontalBar
+				height={height}
+				className="BarGraphFS"
+					  legend={false}
+				data={this.getData()}
+				options={this.getOptions()}
+			  />
+		  </Well>
+		</Col>
+		);
+	}
+	else {
+		return (
+		  <Col xs={width} sm={width} md={width} key={this.state.id}>
+		   <Well>
+			 <div className='VisualName'><b>{this.state.name}</b></div>
+			  <HorizontalBar
+				height={height}
+				className="BarGraphFS"
+					  legend={false}
+				data={this.getData()}
+				options={this.getOptions()}
+			  />
+		  </Well>
+		</Col>
+		);
+	}
   }
 }

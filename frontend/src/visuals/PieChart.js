@@ -4,6 +4,7 @@ import React, { Component } from 'react';
 import { Pie as PieChart} from 'react-chartjs-2';
 import pattern from 'patternomaly';
 import {Well, Col} from 'react-bootstrap';
+import axios from 'axios';
 
 
 class PieChartFS extends Component {
@@ -18,6 +19,7 @@ class PieChartFS extends Component {
     this.handleClick = this.handleClick.bind(this);
 	this.add = this.add.bind(this);
 	this.getOptions = this.getOptions.bind(this);
+	this.handleHide = this.handleHide.bind(this);
 
 
     this.state = {
@@ -166,10 +168,25 @@ class PieChartFS extends Component {
     console.log("Expanding Visual to full screen");
   }
 
+  handleHide(){
+	console.log(this.props.id);
+    this.setState({
+      hidden: !this.state.hidden,
+    })
+	var req = ('http://127.0.0.1:8000/api/hide/id=' + this.props.id);
+	axios.get(req, {responseType: 'json'})
+		.then(response => {
+			console.log(response);
+		});
+	
+  }
 
 
  render() {
 	 
+	if(this.state.hidden){
+      return null;
+    }
 	if(this.props.data.length === 0) {
 		console.log("empty data pie chart");
       return(
@@ -179,31 +196,54 @@ class PieChartFS extends Component {
 		  </Well>
 		</Col> );
 	}
-	
-	/* <div className="PieChartFS" onClick={this.handleClick}>
-			<PieChart legend={false} data={this.state.data} height={this.state.height} width={this.state.width}/>
-        </div> */
 	else {
-		return (
-			<Col xs={4} sm={4} md={4} key={this.state.id}>
-				<Well>
-				  <p align='center'><b>{this.state.name}</b></p>
-				  <PieChart
-					className="PieChartFS"
-					legend={false}
-					width={this.state.width}
-					height={this.state.height}
-					//axisLabels={{x: 'My x Axis', y: 'My y Axis'}}
-					//axes
-					//colorBars
-					//xTickNumber={5}
-					//yTickNumber={5}
-					data={this.getData()}
-					options={this.getOptions()}
-					/>
-				</Well>
-			</Col> 
-		);
+		if (this.props.restore === false) {
+			return (
+				<Col xs={4} sm={4} md={4} key={this.state.id}>
+					<Well>
+					  <button type="button" class="close" aria-label="Close" onClick={this.handleHide}>
+						<span aria-hidden="true">&times;</span>
+					  </button>
+					  <p align='center'><b>{this.state.name}</b></p>
+					  <PieChart
+						className="PieChartFS"
+						legend={false}
+						width={this.state.width}
+						height={this.state.height}
+						//axisLabels={{x: 'My x Axis', y: 'My y Axis'}}
+						//axes
+						//colorBars
+						//xTickNumber={5}
+						//yTickNumber={5}
+						data={this.getData()}
+						options={this.getOptions()}
+						/>
+					</Well>
+				</Col> 
+			);
+	  }
+	  else {
+		  return (
+				<Col xs={4} sm={4} md={4} key={this.state.id}>
+					<Well>
+					  <p align='center'><b>{this.state.name}</b></p>
+					  <PieChart
+						className="PieChartFS"
+						legend={false}
+						width={this.state.width}
+						height={this.state.height}
+						//axisLabels={{x: 'My x Axis', y: 'My y Axis'}}
+						//axes
+						//colorBars
+						//xTickNumber={5}
+						//yTickNumber={5}
+						data={this.getData()}
+						options={this.getOptions()}
+						/>
+					</Well>
+				</Col> 
+			);
+	  }
 	}
   }
 }

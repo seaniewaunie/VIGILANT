@@ -193,15 +193,15 @@ class App extends Component {
         //console.log(this.state.visuals[i]);
         //this.state.visuals[i].props.currentData = this.state.crimesInfo.days;
         if (this.state.visual_info[i].type === "bar") {
-          visuals_to_add.push(<BarChartFS name={this.state.visual_info[i].name} key={this.state.visual_info[i].key} id={this.state.visual_info[i].id} data={this.state.crimesInfo[this.state.visual_info[i].field]} field={this.state.visual_info[i].field}/>);
+          visuals_to_add.push(<BarChartFS name={this.state.visual_info[i].name} key={this.state.visual_info[i].key} id={this.state.visual_info[i].id} data={this.state.crimesInfo[this.state.visual_info[i].field]} field={this.state.visual_info[i].field} restore={false}/>);
         }
 
         else if (this.state.visual_info[i].type === "line") {
-          visuals_to_add.push(<LineGraphFS name={this.state.visual_info[i].name} key={this.state.visual_info[i].key} id={this.state.visual_info[i].id} data={this.state.crimesInfo[this.state.visual_info[i].field]} field={this.state.visual_info[i].field}/>);
+          visuals_to_add.push(<LineGraphFS name={this.state.visual_info[i].name} key={this.state.visual_info[i].key} id={this.state.visual_info[i].id} data={this.state.crimesInfo[this.state.visual_info[i].field]} field={this.state.visual_info[i].field} restore={false}/>);
         }
 
         else if (this.state.visual_info[i].type === "pie") {
-          visuals_to_add.push(<PieChartFS name={this.state.visual_info[i].name} key={this.state.visual_info[i].key} id={this.state.visual_info[i].id} data={this.state.crimesInfo[this.state.visual_info[i].field]} field={this.state.visual_info[i].field}/>);
+          visuals_to_add.push(<PieChartFS name={this.state.visual_info[i].name} key={this.state.visual_info[i].key} id={this.state.visual_info[i].id} data={this.state.crimesInfo[this.state.visual_info[i].field]} field={this.state.visual_info[i].field} restore={false}/>);
         }
       }
       console.log(visuals_to_add);
