@@ -32,6 +32,10 @@
   overflow-y: scroll;
 }
 
+#grid{
+  margin-top: 15px;
+}
+
 .sidebar{
   position: fixed;
   top: 50px;

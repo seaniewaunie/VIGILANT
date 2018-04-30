@@ -300,8 +300,9 @@ class App extends Component {
 
         return (
             <div className="App">
+
+                <a name="home"></a>
                 <div className="header">
-                  <a name="home"></a>
                   <Header
                       data ={this.state.crimesInfo}
                       addOne={this.addOne}

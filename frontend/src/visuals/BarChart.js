@@ -3,6 +3,7 @@ import {HorizontalBar} from 'react-chartjs-2';
 import {RingLoader} from 'react-spinners';
 import {Well, Col} from 'react-bootstrap';
 import axios from 'axios';
+import '../css/Barchart.css';
 
 export default class BarChartFS extends Component {
   constructor(props) {
@@ -16,18 +17,19 @@ export default class BarChartFS extends Component {
     this.handleFullScreen = this.handleFullScreen.bind(this);
     this.handleHide = this.handleHide.bind(this);
     this.handleLocalFilter = this.handleLocalFilter.bind(this);
-	this.add = this.add.bind(this);
-	this.getOptions = this.getOptions.bind(this);
+  	this.add = this.add.bind(this);
+  	this.getOptions = this.getOptions.bind(this);
 
     this.state = {
         fullscreen: false,
+        showLocalFilter: false,
         name : props.name,
         data : this.getData(),
-		field: props.field,
-		id: props.id,
+    		field: props.field,
+    		id: props.id,
         height: this.props.data.length > 20 ? 120 : 50,
-		color: [],
-		restore: props.restore,
+    		color: [],
+    		restore: props.restore,
 	};
   }
 
@@ -124,16 +126,16 @@ export default class BarChartFS extends Component {
       name: this.props.name,
       data: this.getData(),
       height: this.props.data.length > 20 ? 120 : 50,
-	  color: [],
-	  restore: this.props.restore,
+  	  color: [],
+  	  restore: this.props.restore,
     });
 
   }
 
   getOptions() {
 	  if(this.props.restore === true) {
-		  return { 
-			onClick: this.add, 
+		  return {
+			onClick: this.add,
 			scales: {
 				yAxes: [{
 					ticks: {
@@ -149,7 +151,7 @@ export default class BarChartFS extends Component {
 		};
 	  }
   }
-  
+
   add() {
 	  console.log("restore visual to screen");
 	  this.props.restore_function(this.props.name, this.props.id, "bar", this.props.field);
@@ -169,11 +171,11 @@ export default class BarChartFS extends Component {
 		.then(response => {
 			console.log(response);
 		});
-	
+
   }
 
   handleLocalFilter(){
-
+    this.setState({showLocalFilter: !this.state.showLocalFilter})
   }
 
   handleFullScreen(){
@@ -183,10 +185,14 @@ export default class BarChartFS extends Component {
 
   render() {
 	const data = this.getData();
-  var height = data.labels.length > 20 ? 500 : 200;
+  var height = data.labels.length > 20 ? 600 : data.labels.length > 10 ? 300:250;
   var width = this.state.fullscreen ? 12 : 4;
   var buttonText = this.state.fullscreen ? 'Minimize' : 'Fullscreen';
+  var localFilterShowing = this.state.showLocalFilter;
+
+
   console.log('height: ', height);
+
     if(this.props.data === undefined){
       return(<RingLoader color={'#123abc'} />);
     }
@@ -206,22 +212,28 @@ export default class BarChartFS extends Component {
 	if (this.props.restore === false) {
 		return (
 		  <Col xs={width} sm={width} md={width} key={this.state.id}>
-		   <Well>
+		   <Well className='Visual' style={{
+           height: this.state.fullscreen ? '85vh': '50vh'
+         }}>
 			<button type="button" class="close" aria-label="Close" onClick={this.handleHide}>
 				<span aria-hidden="true">&times;</span>
 			</button>
 			 <div className='VisualName'><b>{this.state.name}</b></div>
 			 <div className='VisualButtons'>
-			   <button onClick={this.handleLocalFilter}>Filter</button>
-			   <button onClick={this.handleFullScreen}>{buttonText}</button>
+         <button onClick={this.handleFullScreen}>{buttonText}</button>
+			   <button style={{display: this.state.fullscreen ? 'inline-block':'none'}} onClick={this.handleLocalFilter}>Filter</button>
 			 </div>
-			  <HorizontalBar
-				height={height}
-				className="BarGraphFS"
-					  legend={false}
-				data={this.getData()}
-				options={this.getOptions()}
-			  />
+        <div className='Chart' style={{
+            width: localFilterShowing ? '80%':'100%'
+          }}>
+  			  <HorizontalBar
+    				height={height}
+    				className="BarGraphFS"
+    			  legend={false}
+    				data={this.getData()}
+    				options={this.getOptions()}
+  			  />
+        </div>
 		  </Well>
 		</Col>
 		);
