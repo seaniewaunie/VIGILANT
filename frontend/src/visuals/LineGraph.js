@@ -110,7 +110,21 @@ export default class LineGraphFS extends Component {
 
   getOptions() {
 	  if(this.props.restore === true) {
-		  return { onClick: this.add, };
+		  return { 
+			onClick: this.add, 
+			scales: {
+				yAxes: [{
+					ticks: {
+					fontSize: 6
+					}
+				}],
+				xAxes: [{
+					ticks: {
+					fontSize: 6
+					}
+				}],
+			}
+		};
 	  }
   }
   

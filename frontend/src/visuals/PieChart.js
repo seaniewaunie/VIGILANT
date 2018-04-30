@@ -208,13 +208,7 @@ class PieChartFS extends Component {
 					  <PieChart
 						className="PieChartFS"
 						legend={false}
-						width={this.state.width}
 						height={this.state.height}
-						//axisLabels={{x: 'My x Axis', y: 'My y Axis'}}
-						//axes
-						//colorBars
-						//xTickNumber={5}
-						//yTickNumber={5}
 						data={this.getData()}
 						options={this.getOptions()}
 						/>

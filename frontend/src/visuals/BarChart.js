@@ -132,7 +132,21 @@ export default class BarChartFS extends Component {
 
   getOptions() {
 	  if(this.props.restore === true) {
-		  return { onClick: this.add, };
+		  return { 
+			onClick: this.add, 
+			scales: {
+				yAxes: [{
+					ticks: {
+					fontSize: 6
+					}
+				}],
+				xAxes: [{
+					ticks: {
+					fontSize: 6
+					}
+				}],
+			}
+		};
 	  }
   }
   
@@ -213,6 +227,9 @@ export default class BarChartFS extends Component {
 		);
 	}
 	else {
+		if (this.state.name === '') {
+			this.setState({name: this.state.field });
+		}
 		return (
 		  <Col xs={width} sm={width} md={width} key={this.state.id}>
 		   <Well>

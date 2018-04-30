@@ -324,6 +324,7 @@ class RestoreVisualization extends Component {
 	
 	handleShow() {
 		this.getRestorables();
+		//this.handleClose();
 		this.setState({show: true});
 	}
 	
@@ -357,6 +358,8 @@ class RestoreVisualization extends Component {
 			console.log(visuals_to_add);
 			this.setState({past_day: visuals_to_add});
 			console.log(this.state.past_day);
+			//this.handleClose();
+			this.setState({show: true});
 		});
   }
 
@@ -371,14 +374,15 @@ class RestoreVisualization extends Component {
 	  };
 	  var element; 
 	  if (type === "line") {
-		  element = <LineGraphFS data={this.props.data[field]}  id={id} name={name} key={id} restore={false}/>;
+		  element = (name === '') ? <LineGraphFS data={this.props.data[field]}  id={id} name={field} key={id} field={field} restore={false}/> : <LineGraphFS data={this.props.data[field]}  id={id} name={name} key={id} field={field} restore={false}/>;
 	  }
 	  else if (type === "bar") {
-		  element = <BarChartFS data={this.props.data[field]}  id={id} name={name} key={id} restore={false}/>;
+		  element = (name === '') ? <BarChartFS data={this.props.data[field]}  id={id} name={field} key={id} field={field} restore={false}/> : <BarChartFS data={this.props.data[field]}  id={id} name={name} key={id} field={field} restore={false}/>;
 	  }
 	  else if (type === "pie") {
-		  element = <PieChartFS data={this.props.data[field]}  id={id} name={name} key={id} restore={false}/>;
+		  element = name === '' ? <PieChartFS data={this.props.data[field]}  id={id} name={field} key={id} field={field} restore={false}/> : <PieChartFS data={this.props.data[field]}  id={id} name={name} key={id} field={field} restore={false}/>;
 	  }
+	  
 	  this.addOne(element, info);
 	  
 	  var req = ('http://127.0.0.1:8000/api/restore/id=' + id);
@@ -386,8 +390,9 @@ class RestoreVisualization extends Component {
 		.then(response => {
 			console.log(response);
 		});
-		
-	  this.handleShow();
+	
+	  //this.handleShow();
+	  this.getRestorables();
   }
 	
 	render() {
