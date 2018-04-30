@@ -217,6 +217,9 @@ class PieChartFS extends Component {
 			);
 	  }
 	  else {
+		  if (this.state.name === '') {
+			this.setState({name: this.state.field });
+		  }
 		  return (
 				<Col xs={4} sm={4} md={4} key={this.state.id}>
 					<Well>
