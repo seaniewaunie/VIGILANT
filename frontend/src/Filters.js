@@ -93,6 +93,10 @@ export default class Filter extends Component {
               current_days: this.props.settings.days,
               current_codes: this.props.settings.codes,
             },
+            count_percentage: [
+              {label: 'Count', value: 'count'},
+              {label: 'Percentage', value: 'percentage'},
+            ],
         };
 
         this.onSetSidebarOpen = this.onSetSidebarOpen.bind(this);
@@ -110,75 +114,89 @@ export default class Filter extends Component {
         var element;
         if(this.state.scope === 'global'){
             element = <p>Global Filter settings</p>;
+
+            if(this.props.show){
+              return null;
+            }
+            else if(this.props.filterCodes === undefined){
+              return(<RingLoader color={'#123abc'} size={200}/>);
+            }
+            return(
+                <Well bsSize="small" className="filterOptions">
+                  <b>{element}</b>
+
+                  <Selector
+                    updateRequest = {this.props.updateRequest}
+                    key={300}
+                    selections={this.state.times}
+                    default={this.state.settings.current_times}
+                    title='Time Frame'
+                  />
+                  <MultiSelector
+                    multi={true}
+                    stayOpen = {true}
+                    updateRequest = {this.props.updateRequest}
+                    key={301}
+                    selections={this.props.filterCodes}
+                    default={this.state.settings.current_codes}
+                    title='Codes'
+                  />
+                  <MultiSelector
+                    multi={true}
+                    stayOpen = {true}
+                    updateRequest = {this.props.updateRequest}
+                    key={302}
+                    selections = {this.state.regions}
+                    default={this.state.settings.current_region}
+                    title='Districts'
+                  />
+                  <MultiSelector
+                    multi={true}
+                    stayOpen = {true}
+                    updateRequest = {this.props.updateRequest}
+                    key={303}
+                    selections = {this.state.days}
+                    default={this.state.settings.current_days}
+                    title='Days'
+                  />
+                  <MultiSelector
+                    multi={true}
+                    stayOpen = {true}
+                    updateRequest = {this.props.updateRequest}
+                    key={304}
+                    selections={this.state.weapons}
+                    default={this.state.settings.current_weapons}
+                    title='Weapons'
+                  />
+                  <MultiSelector
+                    className="open-up"
+                    multi={true}
+                    updateRequest = {this.props.updateRequest}
+                    key={305}
+                    selections={this.state.inside_outsides}
+                    default={this.state.settings.current_io}
+                    title='Indoor/Outdoor'
+                  />
+                </Well>
+            );
         }
         else{
-            element = <p>Local Filter settings for a {this.state.type}</p>;
+            element = <p>Local Settings</p>;
+          return(
+              <Well bsSize="small" className="filterOptions">
+                <b>{element}</b>
+
+                  <MultiSelector
+                    multi={false}
+                    updateRequest = {this.props.changeXAxis}
+                    key={306}
+                    selections={this.state.count_percentage}
+                    title='Count/Percentage'
+                  />
+              </Well>
+          );
         }
 
-        if(this.props.show){
-          return null;
-        }
-        else if(this.props.filterCodes === undefined){
-          return(<RingLoader color={'#123abc'} size={300}/>);
-        }
-
-        return(
-            <Well bsSize="small" className="filterOptions">
-              <b>{element}</b>
-
-              <Selector
-                updateRequest = {this.props.updateRequest}
-                key={300}
-                selections={this.state.times}
-                default={this.state.settings.current_times}
-                title='Time Frame'
-              />
-              <MultiSelector
-                multi={true}
-                stayOpen = {true}
-                updateRequest = {this.props.updateRequest}
-                key={301}
-                selections={this.state.descriptions}
-                default={this.state.settings.current_codes}
-                title='Descriptions'
-              />
-              <MultiSelector
-                multi={true}
-                stayOpen = {true}
-                updateRequest = {this.props.updateRequest}
-                key={302}
-                selections = {this.state.regions}
-                default={this.state.settings.current_region}
-                title='Districts'
-              />
-              <MultiSelector
-                multi={true}
-                stayOpen = {true}
-                updateRequest = {this.props.updateRequest}
-                key={303}
-                selections = {this.state.days}
-                default={this.state.settings.current_days}
-                title='Days'
-              />
-              <MultiSelector
-                multi={true}
-                stayOpen = {true}
-                updateRequest = {this.props.updateRequest}
-                key={304}
-                selections={this.state.weapons}
-                default={this.state.settings.current_weapons}
-                title='Weapons'
-              />
-              <MultiSelector
-                className="open-up"
-                multi={true}
-                updateRequest = {this.props.updateRequest}
-                key={305}
-                selections={this.state.inside_outsides}
-                default={this.state.settings.current_io}
-                title='Indoor/Outdoor'
-              />
-            </Well>
-        );
+        return null;
     }
 }

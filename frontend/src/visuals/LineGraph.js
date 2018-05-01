@@ -33,7 +33,7 @@ export default class LineGraphFS extends Component {
 	this.isMouseInside = false;
   }
 
-	
+
   getData() {
 	var all_data = this.props.data;
 	var field = this.props.field;
@@ -50,7 +50,7 @@ export default class LineGraphFS extends Component {
 			count_array[index] = count_array[index] + 1;
 		}
 	}
-	
+
 	//var color = "";
 	if (this.state && this.state.color.length < 1) {
 		var r = Math.floor(Math.random() * 255);
@@ -58,7 +58,7 @@ export default class LineGraphFS extends Component {
 		var b = Math.floor(Math.random() * 255);
 		this.state.color.push(("rgb(" + r + "," + g + "," + b + ")"));
 	}
-	
+
 	var label_array = data_array;
 	if (field === "times") {
 		label_array = []
@@ -72,7 +72,7 @@ export default class LineGraphFS extends Component {
 			}
 			count_array.push(0);
 		}
-		
+
 		for (var j = 0; j < all_data.length; j++) {
 			for (var k = 0; k < 24; k++) {
 				if (all_data[j].slice(0, 2) === label_array[k].slice(0, 2)) {
@@ -113,8 +113,8 @@ export default class LineGraphFS extends Component {
 
   getOptions() {
 	  if(this.props.restore === true) {
-		  return { 
-			onClick: this.add, 
+		  return {
+			onClick: this.add,
 			scales: {
 				yAxes: [{
 					ticks: {
@@ -130,12 +130,12 @@ export default class LineGraphFS extends Component {
 		};
 	  }
   }
-  
+
   add() {
 	  console.log("restore visual to screen");
 	  this.props.restore_function(this.props.name, this.props.id, "line", this.props.field);
   }
-  
+
    componentWillMount() {
     this.setState({
       name: this.props.name,
@@ -144,8 +144,8 @@ export default class LineGraphFS extends Component {
 	  color: [],
 	  restore: this.props.restore,
     });
-  } 
-  
+  }
+
   handleHide(){
 	console.log(this.props.id);
     this.setState({
@@ -156,7 +156,7 @@ export default class LineGraphFS extends Component {
 		.then(response => {
 			console.log(response);
 		});
-	
+
   }
 
 
@@ -165,11 +165,11 @@ export default class LineGraphFS extends Component {
         this.state.fullscreen ? this.expand() : this.compress();
     });
   }
-  
+
    handleFullScreen(){
     this.setState({fullscreen: !this.state.fullscreen});
   }
-  
+
   getInitialState() {
 	  return {
 		isMouseInside: false
@@ -181,16 +181,16 @@ export default class LineGraphFS extends Component {
 	mouseLeave = () => {
 	  this.setState({ isMouseInside: false });
 	}
-	
+
 
   render() {
-	
+
 	const {data} = this.state;
 	var imagePic = this.state.fullscreen ?  ShrinkImg : FullscreenImg;
 	var height = data.labels.length > 20 ? 600 : data.labels.length > 10 ? 300:250;
 	var width = this.state.fullscreen ? 12 : 4;
 	var localFilterShowing = this.state.showLocalFilter;
-	 
+
 	if(this.state.hidden){
       return null;
     }
@@ -204,7 +204,7 @@ export default class LineGraphFS extends Component {
 			  <p width={this.state.width} height={this.state.height} align='center' style={{textAlign:'center'}}><b>No Crimes to Display</b></p>
 		  </Well>
 		</Col> );
-	} 
+	}
 	//console.log(this.state.height);
 	if (this.props.restore === false) {
 		return (
@@ -216,11 +216,11 @@ export default class LineGraphFS extends Component {
 				<span aria-hidden="true">&times;</span>
 			  </button>
 			  <p align='center'><b>{this.state.name}</b></p>
-			  
+
 			  <div onMouseEnter={this.mouseEnter} onMouseLeave={this.mouseLeave} className='HiddenButtons'>
 			  {this.state.isMouseInside ? <button onClick={this.handleFullScreen}> <img src={imagePic}/> </button> : null}
 			 <button style={{display: this.state.fullscreen ? 'inline-block':'none'}} onClick={this.handleLocalFilter}>Filter</button>
-		
+
 			  <LineChart
 				className="LineGraphFS"
 				legend={false}
@@ -228,15 +228,12 @@ export default class LineGraphFS extends Component {
 				data={this.getData()}
 				options={this.getOptions()}
 			  />
-			</div>  
+			</div>
 		  </Well>
-		</Col> 
+		</Col>
 		);
 	}
 	else {
-		if (this.state.name === '') {
-			this.setState({name: this.state.field });
-		}
 		return (
 		 <Col xs={width} sm={width} md={width} key={this.state.id}>
 		   <Well>
@@ -249,7 +246,7 @@ export default class LineGraphFS extends Component {
 				options={this.getOptions()}
 			  />
 		  </Well>
-		</Col> 
+		</Col>
 		);
 	}
   }

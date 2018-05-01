@@ -6,6 +6,8 @@ import axios from 'axios';
 import '../css/Barchart.css';
 import FullscreenImg from '../images/fullscreen_opt.png';
 import ShrinkImg from '../images/shrink_image_opt.png';
+import Filter from '../Filters.js';
+import Interpretor from '../Interpretor.js';
 
 export default class BarChartFS extends Component {
   constructor(props) {
@@ -13,6 +15,7 @@ export default class BarChartFS extends Component {
 
     //this.compress = this.compress.bind(this);
     //this.expand = this.expand.bind(this);
+    this.changeXAxis = this.changeXAxis.bind(this);
     this.getData = this.getData.bind(this);
 	//this.getCounts = this.getCounts.bind(this);
     this.handleClick = this.handleClick.bind(this);
@@ -22,20 +25,38 @@ export default class BarChartFS extends Component {
   	this.add = this.add.bind(this);
   	this.getOptions = this.getOptions.bind(this);
 	this.isMouseInside = false;
-		
+
     this.state = {
         fullscreen: false,
+        percentage: 'count',
         showLocalFilter: false,
         name : props.name,
-        data : this.getData(),
     		field: props.field,
     		id: props.id,
         height: this.props.data.length > 20 ? 120 : 50,
     		color: [],
     		restore: props.restore,
-	};
+        LF_settings:{
+
+        },
+        total_num_crimes: 0,
+        //data : this.getData(),
+
+	     };
+
+       console.log(this.props.data);
   }
 
+  componentWillMount() {
+   this.setState({
+     name: this.props.name,
+     height: this.props.data.length > 20 ? 120 : 50,
+     color: [],
+     restore: this.props.restore,
+     percentage: 'count',
+     //data: this.getData(),
+   });
+  }
 
   getData() {
 	var all_data = this.props.data;
@@ -75,6 +96,7 @@ export default class BarChartFS extends Component {
 			count_array.push(0);
 		}
 
+    // count up the number of crimes based on category
 		for (var j = 0; j < all_data.length; j++) {
 			for (var k = 0; k < 24; k++) {
 				if (all_data[j].slice(0, 2) === label_array[k].slice(0, 2)) {
@@ -83,6 +105,7 @@ export default class BarChartFS extends Component {
 			}
 		}
 	}
+
 
 	//sort from greatest to least on count
 	for (var k = 0; k < label_array.length; k++) {
@@ -105,10 +128,20 @@ export default class BarChartFS extends Component {
 	var color = "";
 	if (this.state) {
 		color = this.state.color[0];
+    // if they chose to graph by percentage
+    if(this.state.percentage === 'percentage'){
+      // first get the total number of crimes
+      // go through and change to percentage
+      for(var i =0; i< count_array.length; i++){
+        count_array[i] = Math.ceil(count_array[i]/this.props.data.length* 100);
+      }
+    }
 	}
 	else {
 		color = ("rgb(" + 0 + "," + 0 + "," + 0 + ")");
 	}
+
+
 	var data = {
 		labels: label_array,
 		datasets : [{
@@ -124,15 +157,12 @@ export default class BarChartFS extends Component {
 	return data;
   }
 
-   componentWillMount() {
-    this.setState({
-      name: this.props.name,
-      data: this.getData(),
-      height: this.props.data.length > 20 ? 120 : 50,
-  	  color: [],
-  	  restore: this.props.restore,
-    });
 
+
+  changeXAxis(uri, selection, value) {
+    this.setState({
+      percentage: value,
+    })
   }
 
   getOptions() {
@@ -196,7 +226,7 @@ export default class BarChartFS extends Component {
 	mouseLeave = () => {
 	  this.setState({ isMouseInside: false });
 	}
-	
+
 
   render() {
 	const data = this.getData();
@@ -204,7 +234,7 @@ export default class BarChartFS extends Component {
   var width = this.state.fullscreen ? 12 : 4;
   //var buttonText = this.state.fullscreen ? 'Minimize' : 'Fullscreen';
   var localFilterShowing = this.state.showLocalFilter;
-  var imagePic = this.state.fullscreen ?  ShrinkImg : FullscreenImg;
+  var imagePic = this.state.fullscreen ?  ShrinkImg : FullscreenImg
 
   console.log('height: ', height);
 
@@ -226,33 +256,56 @@ export default class BarChartFS extends Component {
 	//console.log(this.state.height);
 	if (this.props.restore === false) {
 		return (
-		  <Col xs={width} sm={width} md={width} key={this.state.id}>
+	  <Col xs={width} sm={width} md={width} key={this.state.id}>
+
+		 <div onMouseEnter={this.mouseEnter} onMouseLeave={this.mouseLeave} className='HiddenButtons'>
 		   <Well className='Visual' style={{
-           height: this.state.fullscreen ? '85vh': '50vh'
+           height: this.state.fullscreen ? '85vh': '45vh'
          }}>
 			<button type="button" class="close" aria-label="Close" onClick={this.handleHide}>
 				<span aria-hidden="true">&times;</span>
 			</button>
-			
+
 			<div className='VisualName'><b>{this.state.name}</b></div>
-			
-			 <div onMouseEnter={this.mouseEnter} onMouseLeave={this.mouseLeave} className='HiddenButtons'>
-			  {this.state.isMouseInside ? <button onClick={this.handleFullScreen}> <img src={imagePic}/> </button> : null}
-			 <button style={{display: this.state.fullscreen ? 'inline-block':'none'}} onClick={this.handleLocalFilter}>Filter</button>
-		
+
+			  <button style={{visibility: this.state.isMouseInside ? 'visible' :'hidden'}} onClick={this.handleFullScreen}> <img src={imagePic}/> </button>
+
         <div className='Chart' style={{
-            width: localFilterShowing ? '80%':'100%'
+            width: this.state.fullscreen ? '60%':'100%',
           }}>
   			  <HorizontalBar
-    				height={height}
+            height={height}
     				className="BarGraphFS"
     			  legend={false}
     				data={this.getData()}
     				options={this.getOptions()}
   			  />
         </div>
-		 </div>
+        {
+          this.state.fullscreen ?
+            <div className='FullScreenShower'>
+              <div className='Interpretor'>
+                <Interpretor
+                  data = {this.props.data}
+                  visData = {data}
+                  category = {this.props.field}
+                />
+              </div>
+              <div className='VisualFilter'>
+                <Filter
+                  scope = 'local'
+                  filterCodes = {this.state.filterCodes}
+                  key = {this.state.id+400}
+                  updateRequest = {this.updateLocalFilterRequest}
+                  changeXAxis = {this.changeXAxis}
+                  settings = {this.state.LF_settings}
+                />
+              </div>
+            </div>
+            : null
+        }
 		  </Well>
+      </div>
 		</Col>
 		);
 	}
