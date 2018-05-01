@@ -1,0 +1,28 @@
+
+.Visual{
+  overflow: auto;
+  //height: 80vh;
+  //width: 80%;
+}
+
+.Chart{
+  //width:80%;
+}
+
+.LocalFilter{
+  //margin-left:20%;
+}
+
+.VisualName {
+  float:left;
+  width:70%;
+}
+
+.VisualButtons{
+  margin-left: 70%;
+}
+
+.VisualButtons button{
+  display: inline-block;
+}
+

@@ -41,7 +41,7 @@ class App extends Component {
             requestURL: {
               timeframe: 'start_date=2018-03-18&end_date=2018-04-18&start_time=&end_time=',
               days: '&days=[]',
-              codes: '&codes=[]',
+              codes: '&descriptions=[]',
               regions: '&districts=[]',
               weapons: '&weapons=[]',
               geography: '&start_lat=&end_lat=&start_long=&end_long=',
@@ -260,9 +260,11 @@ class App extends Component {
             this.makeRequest();
           });
           break;
-        case 'Codes':
+        case 'Descriptions':
           newRequest.codes = uriString;
           newSettings.codes = value;
+		  console.log(uriString);
+		  console.log(value);
           this.setState({requestURL: newRequest, GF_settings: newSettings} , ()=>{
             this.makeRequest();
           });

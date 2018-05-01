@@ -3,6 +3,9 @@ import {Line as LineChart} from 'react-chartjs-2';
 import {RingLoader} from 'react-spinners';
 import {Well, Col} from 'react-bootstrap';
 import axios from 'axios';
+import FullscreenImg from '../images/fullscreen_opt.png';
+import ShrinkImg from '../images/shrink_image_opt.png';
+import '../css/Linegraph.css';
 
 export default class LineGraphFS extends Component {
   constructor(props) {
@@ -10,8 +13,7 @@ export default class LineGraphFS extends Component {
 
 	this.state = {
         fullscreen: false,
-        height: 40,
-        width: 40,
+        height: this.props.data.length > 20 ? 120 : 50,
         name : props.name,
         data : this.getData(),
 		field: props.field,
@@ -27,7 +29,8 @@ export default class LineGraphFS extends Component {
 	this.add = this.add.bind(this);
 	this.getOptions = this.getOptions.bind(this);
 	this.handleHide = this.handleHide.bind(this);
-
+	this.handleFullScreen = this.handleFullScreen.bind(this);
+	this.isMouseInside = false;
   }
 
 
@@ -137,6 +140,7 @@ export default class LineGraphFS extends Component {
     this.setState({
       name: this.props.name,
       data: this.getData(),
+	  height: this.props.data.length > 20 ? 120 : 50,
 	  color: [],
 	  restore: this.props.restore,
     });
@@ -160,11 +164,32 @@ export default class LineGraphFS extends Component {
     this.setState({fullscreen: !this.state.fullscreen}, () => {
         this.state.fullscreen ? this.expand() : this.compress();
     });
-
   }
 
+   handleFullScreen(){
+    this.setState({fullscreen: !this.state.fullscreen});
+  }
+
+  getInitialState() {
+	  return {
+		isMouseInside: false
+	  };
+	}
+	mouseEnter = () => {
+	  this.setState({ isMouseInside: true });
+	}
+	mouseLeave = () => {
+	  this.setState({ isMouseInside: false });
+	}
+
+
   render() {
+
 	const {data} = this.state;
+	var imagePic = this.state.fullscreen ?  ShrinkImg : FullscreenImg;
+	var height = data.labels.length > 20 ? 600 : data.labels.length > 10 ? 300:250;
+	var width = this.state.fullscreen ? 12 : 4;
+	var localFilterShowing = this.state.showLocalFilter;
 
 	if(this.state.hidden){
       return null;
@@ -174,7 +199,7 @@ export default class LineGraphFS extends Component {
     }
     else if(this.props.data.length === 0) {
       return(
-		<Col xs={4} sm={4} md={4} key={this.state.id}>
+		<Col xs={width} sm={width} md={width} key={this.state.id}>
 		   <Well>
 			  <p width={this.state.width} height={this.state.height} align='center' style={{textAlign:'center'}}><b>No Crimes to Display</b></p>
 		  </Well>
@@ -183,34 +208,40 @@ export default class LineGraphFS extends Component {
 	//console.log(this.state.height);
 	if (this.props.restore === false) {
 		return (
-		 <Col xs={4} sm={4} md={4} key={this.state.id}>
-		   <Well>
+		 <Col xs={width} sm={width} md={width} key={this.state.id}>
+		   <Well className='Visual' style={{
+           height: this.state.fullscreen ? '85vh': '50vh'
+         }}>
 			  <button type="button" class="close" aria-label="Close" onClick={this.handleHide}>
 				<span aria-hidden="true">&times;</span>
 			  </button>
 			  <p align='center'><b>{this.state.name}</b></p>
+
+			  <div onMouseEnter={this.mouseEnter} onMouseLeave={this.mouseLeave} className='HiddenButtons'>
+			  {this.state.isMouseInside ? <button onClick={this.handleFullScreen}> <img src={imagePic}/> </button> : null}
+			 <button style={{display: this.state.fullscreen ? 'inline-block':'none'}} onClick={this.handleLocalFilter}>Filter</button>
+
 			  <LineChart
 				className="LineGraphFS"
 				legend={false}
-				width={this.state.width}
-				height={this.state.height}
+				height={height}
 				data={this.getData()}
 				options={this.getOptions()}
 			  />
+			</div>
 		  </Well>
 		</Col>
 		);
 	}
 	else {
 		return (
-		 <Col xs={4} sm={4} md={4} key={this.state.id}>
+		 <Col xs={width} sm={width} md={width} key={this.state.id}>
 		   <Well>
 			  <p align='center'><b>{this.state.name}</b></p>
 			  <LineChart
 				className="LineGraphFS"
 				legend={false}
-				width={this.state.width}
-				height={this.state.height}
+				height={height}
 				data={this.getData()}
 				options={this.getOptions()}
 			  />

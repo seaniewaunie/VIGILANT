@@ -216,6 +216,8 @@ class SetLocalFilter(APIView):
 			codes = codes.replace('[', '')
 			codes = codes.replace(']', '')
 			codes = re.split(',\s*', codes)
+			for i in range(len(codes)):
+				codes[i] = codes[i].upper()
 			
 			#put districts in a list for easy filtering
 			districts = districts.replace('[', '')
@@ -261,9 +263,9 @@ class SetLocalFilter(APIView):
 			queryset = self.get_queryset()
 			#filter based on provided start_date / end_date and start time/end time
 			if start_date == '' and end_date != '':
-				visual.start_date = start_date
-			elif end_date == '':
 				visual.end_date = end_date
+			elif end_date == '':
+				visual.start_date = start_date
 			else:
 				visual.start_date = start_date
 				visual.end_date = end_date
@@ -340,6 +342,8 @@ class GlobalFilterStructured(APIView):
 		codes = codes.replace('[', '')
 		codes = codes.replace(']', '')
 		codes = re.split(',\s*', codes)
+		for i in range(len(codes)):
+			codes[i] = codes[i].upper()
 		
 		#put districts in a list for easy filtering
 		districts = districts.replace('[', '')
@@ -436,7 +440,7 @@ class GlobalFilterStructured(APIView):
 			
 		#filter on list of crime codes
 		if codes[0] != '':
-			queryset = queryset.filter(code__in=codes)
+			queryset = queryset.filter(description__in=codes)
 			code_string = ''
 			for code in codes:
 				code_string = code_string + code + ','
@@ -526,9 +530,13 @@ class GlobalFilterRawData(APIView):
 		days_words = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
 	
 		#put codes in a list for easy filtering
+		print(codes)
 		codes = codes.replace('[', '')
 		codes = codes.replace(']', '')
 		codes = re.split(',\s*', codes)
+		for i in range(len(codes)):
+			codes[i] = codes[i].upper()
+		print(codes)
 		
 		#put districts in a list for easy filtering
 		districts = districts.replace('[', '')
@@ -624,7 +632,7 @@ class GlobalFilterRawData(APIView):
 			
 		#filter on list of crime codes
 		if codes[0] != '':
-			queryset = queryset.filter(code__in=codes)
+			queryset = queryset.filter(description__in=codes)
 			code_string = ''
 			for code in codes:
 				code_string = code_string + code + ','

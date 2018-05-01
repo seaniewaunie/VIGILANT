@@ -10,9 +10,9 @@ class Interpretor extends Component {
     let avg = Math.ceil(total/this.props.visData.labels.length);
 
     return(<Well>
-
-      <p>Total Number of Crimes: <b>{total}</b></p>
-      <p>Average Crimes over {this.props.category}: <b>{avg}</b></p>
+      <b>Interpretations</b>
+      <p>Total Num Crimes: <b>{total}</b></p>
+      <p>Average Num Crimes over categories: <b>{avg}</b></p>
     </Well>);
   }
 }

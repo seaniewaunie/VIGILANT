@@ -44,7 +44,32 @@ export default class Filter extends Component {
             ],
             crime_codes: this.props.filterCodes,
             locations: '',
-            descriptions: '',
+            descriptions: [
+			  {label: 'AGG. ASSAULT', value: 'agg. assault'},
+			  {label: 'ARSON', value: 'arson'},
+			  {label: 'ASSAULT BY THREAT', value: 'assault by threat'},
+			  {label: 'AUTO THEFT', value: 'auto theft'},
+			  {label: 'BURGLARY', value: 'burglary'},
+			  {label: 'COMMON ASSAULT', value: 'common assault'},
+			  {label: 'HOMICIDE', value: 'homicide'},
+			  {label: 'LARCENY', value: 'larceny'},
+			  {label: 'LARCENY FROM AUTO', value: 'larceny from auto'},
+			  {label: 'LARCENY- AUTO ACC', value: 'larceny- auto acc'},
+			  {label: 'LARCENY- BICYCLE', value: 'larceny- bicycle'},
+			  {label: 'LARCENY- FROM AUTO', value: 'larceny- from auto'},
+			  {label: 'LARCENY- FROM BLDG.', value: 'larceny- from bldg.'},
+			  {label: 'LARCENY- FROM LOCKER', value: 'larceny- from locker'},
+			  {label: 'LARCENY- FROM MACHIN', value: 'larceny- from machin'},
+			  {label: 'LARCENY- OTHER', value: 'larceny- other'},
+			  {label: 'LARCENY- PICKPOCKE', value: 'larceny- pickpocke'},
+			  {label: 'LARCENY- SHOPLIFTING', value: 'larceny- shoplifting'},
+			  {label: 'RAPE', value: 'rape'},
+			  {label: 'ROBBERY - CARJACKING', value: 'robbery - carjacking'},
+			  {label: 'ROBBERY - COMMERCIAL', value: 'robbery - commercial'},
+			  {label: 'ROBBERY - RESIDENCE', value: 'robbery - residence'},
+			  {label: 'ROBBERY - STREET', value: 'robbery - street'},
+			  {label: 'SHOOTING', value: 'shooting'},
+			],
             inside_outsides: [
               {label: 'Indoor', value: 'i'},
               {label: 'Outdoor', value: 'o'},
@@ -173,8 +198,5 @@ export default class Filter extends Component {
         }
 
         return null;
-
-
-
     }
 }
