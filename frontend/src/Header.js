@@ -355,9 +355,43 @@ class RestoreVisualization extends Component {
 				  visuals_to_add.push(<PieChartFS name={days[i].name} key={days[i].id} id={days[i].id} data={this.props.data[days[i].field]} field={days[i].field} restore={true} restore_function={this.restore}/>);
 				}
 			}
-			console.log(visuals_to_add);
 			this.setState({past_day: visuals_to_add});
-			console.log(this.state.past_day);
+			
+			var weeks = response.data.week;
+			visuals_to_add = [];
+			for (var i = 0; i < weeks.length; i++) {
+				console.log(weeks[i].field);
+				if (weeks[i].type === "bar") {
+				  visuals_to_add.push(<BarChartFS name={weeks[i].name} key={weeks[i].id} id={weeks[i].id} data={this.props.data[weeks[i].field]} field={weeks[i].field} restore={true} restore_function={this.restore}/>);
+				}
+
+				else if (weeks[i].type === "line") {
+				  visuals_to_add.push(<LineGraphFS name={weeks[i].name} key={weeks[i].id} id={weeks[i].id} data={this.props.data[weeks[i].field]} field={weeks[i].field} restore={true} restore_function={this.restore}/>);
+				}
+
+				else if (weeks[i].type === "pie") {
+				  visuals_to_add.push(<PieChartFS name={weeks[i].name} key={weeks[i].id} id={weeks[i].id} data={this.props.data[weeks[i].field]} field={weeks[i].field} restore={true} restore_function={this.restore}/>);
+				}
+			}
+			this.setState({past_week: visuals_to_add});
+			
+			var months = response.data.month;
+			visuals_to_add = [];
+			for (var i = 0; i < months.length; i++) {
+				console.log(months[i].field);
+				if (months[i].type === "bar") {
+				  visuals_to_add.push(<BarChartFS name={months[i].name} key={months[i].id} id={months[i].id} data={this.props.data[months[i].field]} field={months[i].field} restore={true} restore_function={this.restore}/>);
+				}
+
+				else if (months[i].type === "line") {
+				  visuals_to_add.push(<LineGraphFS name={months[i].name} key={months[i].id} id={months[i].id} data={this.props.data[months[i].field]} field={months[i].field} restore={true} restore_function={this.restore}/>);
+				}
+
+				else if (months[i].type === "pie") {
+				  visuals_to_add.push(<PieChartFS name={months[i].name} key={months[i].id} id={months[i].id} data={this.props.data[months[i].field]} field={months[i].field} restore={true} restore_function={this.restore}/>);
+				}
+			}
+			this.setState({past_month: visuals_to_add});
 			//this.handleClose();
 			this.setState({show: true});
 		});
@@ -401,6 +435,9 @@ class RestoreVisualization extends Component {
 		  return null;
 		}
 
+		var day_text = this.state.past_day.length === 0 ? "No visualizations from this time period" : ""
+		var week_text = this.state.past_week.length === 0 ? "No visualizations from this time period" : ""
+		var month_text = this.state.past_month.length === 0 ? "No visualizations from this time period" : ""
 		return (
 		<Nav>
 		  <NavItem eventKey={2} onClick={this.handleShow}>
@@ -417,6 +454,7 @@ class RestoreVisualization extends Component {
 			  </Modal.Header>
 			  <Modal.Body>
 			    <div><p><b>Hidden in the past day:</b></p></div>
+				<div align="center">{day_text}</div>
 				<Grid fluid id="grid">
 					<FormatGrid
 						counter={this.state.past_day.length}
@@ -424,6 +462,7 @@ class RestoreVisualization extends Component {
 					/>
                  </Grid>
 				<div><p><b>Hidden in the past week:</b></p></div>
+				<div align="center">{week_text}</div>
 				<Grid fluid id="grid">
 					<FormatGrid
 						counter={this.state.past_week.length}
@@ -431,6 +470,7 @@ class RestoreVisualization extends Component {
 					/>
                  </Grid>
 				<div><p><b>Hidden in the past month:</b></p></div>
+				<div align="center">{month_text}</div>
 				<Grid fluid id="grid">
 					<FormatGrid
 						counter={this.state.past_month.length}
