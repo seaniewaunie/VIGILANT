@@ -204,7 +204,7 @@ export default class BarChartFS extends Component {
   var width = this.state.fullscreen ? 12 : 4;
   //var buttonText = this.state.fullscreen ? 'Minimize' : 'Fullscreen';
   var localFilterShowing = this.state.showLocalFilter;
-  var imagePic = this.state.fullscreen ?  ShrinkImg : FullscreenImg
+  var imagePic = this.state.fullscreen ?  ShrinkImg : FullscreenImg;
 
   console.log('height: ', height);
 
