@@ -137,9 +137,9 @@ export default class Filter extends Component {
                     stayOpen = {true}
                     updateRequest = {this.props.updateRequest}
                     key={301}
-                    selections={this.props.filterCodes}
+                    selections={this.state.descriptions}
                     default={this.state.settings.current_codes}
-                    title='Codes'
+                    title='Descriptions'
                   />
                   <MultiSelector
                     multi={true}
