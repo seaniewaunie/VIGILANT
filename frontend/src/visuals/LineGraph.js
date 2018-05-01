@@ -30,7 +30,7 @@ export default class LineGraphFS extends Component {
 
   }
 
-	
+
   getData() {
 	var all_data = this.props.data;
 	var field = this.props.field;
@@ -47,7 +47,7 @@ export default class LineGraphFS extends Component {
 			count_array[index] = count_array[index] + 1;
 		}
 	}
-	
+
 	//var color = "";
 	if (this.state && this.state.color.length < 1) {
 		var r = Math.floor(Math.random() * 255);
@@ -55,7 +55,7 @@ export default class LineGraphFS extends Component {
 		var b = Math.floor(Math.random() * 255);
 		this.state.color.push(("rgb(" + r + "," + g + "," + b + ")"));
 	}
-	
+
 	var label_array = data_array;
 	if (field === "times") {
 		label_array = []
@@ -69,7 +69,7 @@ export default class LineGraphFS extends Component {
 			}
 			count_array.push(0);
 		}
-		
+
 		for (var j = 0; j < all_data.length; j++) {
 			for (var k = 0; k < 24; k++) {
 				if (all_data[j].slice(0, 2) === label_array[k].slice(0, 2)) {
@@ -110,8 +110,8 @@ export default class LineGraphFS extends Component {
 
   getOptions() {
 	  if(this.props.restore === true) {
-		  return { 
-			onClick: this.add, 
+		  return {
+			onClick: this.add,
 			scales: {
 				yAxes: [{
 					ticks: {
@@ -127,12 +127,12 @@ export default class LineGraphFS extends Component {
 		};
 	  }
   }
-  
+
   add() {
 	  console.log("restore visual to screen");
 	  this.props.restore_function(this.props.name, this.props.id, "line", this.props.field);
   }
-  
+
    componentWillMount() {
     this.setState({
       name: this.props.name,
@@ -140,8 +140,8 @@ export default class LineGraphFS extends Component {
 	  color: [],
 	  restore: this.props.restore,
     });
-  } 
-  
+  }
+
   handleHide(){
 	console.log(this.props.id);
     this.setState({
@@ -152,7 +152,7 @@ export default class LineGraphFS extends Component {
 		.then(response => {
 			console.log(response);
 		});
-	
+
   }
 
 
@@ -165,7 +165,7 @@ export default class LineGraphFS extends Component {
 
   render() {
 	const {data} = this.state;
-  
+
 	if(this.state.hidden){
       return null;
     }
@@ -179,7 +179,7 @@ export default class LineGraphFS extends Component {
 			  <p width={this.state.width} height={this.state.height} align='center' style={{textAlign:'center'}}><b>No Crimes to Display</b></p>
 		  </Well>
 		</Col> );
-	} 
+	}
 	//console.log(this.state.height);
 	if (this.props.restore === false) {
 		return (
@@ -198,13 +198,10 @@ export default class LineGraphFS extends Component {
 				options={this.getOptions()}
 			  />
 		  </Well>
-		</Col> 
+		</Col>
 		);
 	}
 	else {
-		if (this.state.name === '') {
-			this.setState({name: this.state.field });
-		}
 		return (
 		 <Col xs={4} sm={4} md={4} key={this.state.id}>
 		   <Well>
@@ -218,7 +215,7 @@ export default class LineGraphFS extends Component {
 				options={this.getOptions()}
 			  />
 		  </Well>
-		</Col> 
+		</Col>
 		);
 	}
   }
