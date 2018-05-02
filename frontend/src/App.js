@@ -74,7 +74,6 @@ class App extends Component {
         this.renderUserVisuals = this.renderUserVisuals.bind(this);
         this.toggleGlobalFilter = this.toggleGlobalFilter.bind(this);
         this.updateGlobalFilterRequest = this.updateGlobalFilterRequest.bind(this);
-		this.setUp = this.setUp.bind(this);
     }
 
     componentWillMount() {
@@ -90,10 +89,22 @@ class App extends Component {
 
     // on page load, default data must be set
     componentDidMount() {
+	  var today = new Date();
+	  var day = today.getDate();
+	  if (day < 10) {
+		  day = ('0' + day);
+	  }
+	  var month = today.getMonth();
+	  if (month < 10) {
+		  month = ('0' + month);
+	  }
+	  var year = today.getFullYear();
+	  var one_month_ago = (year + '-' + month + '-' + day);
 	  this.defaultVisuals();
 	  console.log(this.state.visual_info);
       this.getFilterCodes();
-      this.makeRequest();
+	  this.updateGlobalFilterRequest('start_date=' + one_month_ago + '&end_date=&start_time=&end_time=', 'Time Frame', 'Past Month');
+      //this.makeRequest();
     }
 
 	async defaultVisuals() {
@@ -117,19 +128,6 @@ class App extends Component {
 		
 	}
 
-	setUp() {
-		var visual_id;
-		var req = ('http://127.0.0.1:8000/api/add/name=setupvisualnotforuse&type=none&field=none');
-		axios.get(req, {responseType: 'json'})
-		.then(response => {
-			var new_id = response.data.visual_id;
-			var next_req = ('http://127.0.0.1:8000/api/hide/id=' + new_id);
-			axios.get(next_req, {responseType: 'json'})
-			.then(response => {
-				console.log('setup done');
-			});
-		});
-	}
 	
     addOne(vis, info){
         var newVisual = vis;

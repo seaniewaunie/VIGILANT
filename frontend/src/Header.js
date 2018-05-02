@@ -44,7 +44,6 @@ class Header extends Component {
 
                 <Nav pullRight>
                   <NavItem eventKey={4} href="#Table">Table</NavItem>
-                  <NavItem eventKey={1} href="#">Hide</NavItem>
 					<RestoreVisualization eventKey={2}
 						data={this.props.data}
 						addOne={this.props.addOne}

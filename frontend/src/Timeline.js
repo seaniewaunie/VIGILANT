@@ -42,6 +42,7 @@ export default class Timeline extends Component {
 	else {
 		color = ("rgb(" + 0 + "," + 0 + "," + 255 + ")");
 	}
+	console.log(data_array);
 	var data = {
 		labels: data_array,
 		datasets : [{
@@ -58,24 +59,60 @@ export default class Timeline extends Component {
   }
   
   getOptions() {
-	var options = {
-		scales: {
-			xAxes: [{
-				type: 'time',
-				unit: 'day',
-				distribution: 'linear',
-				gridLines: {
+	var options;
+	console.log(this.getData().labels);
+	if (this.getData().labels.length > 100) {
+		options = {
+			scales: {
+				xAxes: [{
+					type: 'time',
+					distribution: 'linear',
+					gridLines: {
+						display: false,
+					 },
+					time: {
+						unit: 'month',
+						displayFormats: {
+							'month': 'MMM YYYY',
+						},
+					},
+				}],
+				yAxes: [{
 					display: false,
-				 },
-			}],
-			yAxes: [{
-				//display: false,
-				gridLines : {
-					display : false,
-					drawBorder: false,
-				},
-			}]
+					gridLines : {
+						display : false,
+						drawBorder: false,
+					},
+				}]
 
+			}
+		}
+	}
+	else {
+		options = {
+			scales: {
+				xAxes: [{
+					type: 'time',
+					distribution: 'linear',
+					gridLines: {
+						display: false,
+					 },
+					time: {
+						unit: 'day',
+						displayFormats: {
+							'day': 'MMM DD',
+						},
+					},
+				}],
+				yAxes: [{
+					display: false,
+					gridLines : {
+						display : false,
+						drawBorder: false,
+					},
+				}]
+
+			}
 		}
 	}
 	return options;
