@@ -234,6 +234,9 @@ export default class LineGraphFS extends Component {
 		);
 	}
 	else {
+		if (this.state.name === '') {
+			this.setState({name: this.state.field });
+		}
 		return (
 		 <Col xs={width} sm={width} md={width} key={this.state.id}>
 		   <Well>

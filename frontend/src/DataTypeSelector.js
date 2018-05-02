@@ -29,9 +29,9 @@ export default class DataTypeSelector extends Component{
 
 	handleSelectChange (value) {
 		console.log('You\'ve selected:', value);
-    if(value.includes('i') && value.includes('o')){
-      value = []
-    }
+    //if(value.includes('i') && value.includes('o')){
+     // value = []
+    //}
 		this.setState({ value }, () => {
       this.props.updateRequest(this.state.value);
     });
