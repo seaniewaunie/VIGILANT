@@ -78,7 +78,6 @@ class AddVisualization extends Component {
     this.handleTimeLine = this.handleTimeLine.bind(this);
     this.handleTableChart = this.handleTableChart.bind(this);
     this.handleAdd = this.handleAdd.bind(this);
-	this.makeRequest = this.makeRequest.bind(this);
     this.updateRequest = this.updateRequest.bind(this);
 
     this.addOne = this.props.addOne.bind(this);
@@ -116,7 +115,7 @@ class AddVisualization extends Component {
     this.setState({ show: true });
   }
 
-  handleAdd(){
+  async handleAdd(){
     //console.log(this.props.data);
     if(this.state.name.length < NAME_LENGTH){
       var element;
@@ -127,36 +126,50 @@ class AddVisualization extends Component {
 		  id: 0,
 		  field: "",
 	  };
+	  var result;
+	  var new_id;
       switch(this.state.type){
           case 'Bar Chart':
-			  this.makeRequest(this.state.name, "bar", this.state.selectedData);
+			  var req = ('http://127.0.0.1:8000/api/add/name='+
+				this.state.name + '&type=' + 'bar' + '&field=' + this.state.selectedData
+			  );
+			  result = await axios.get(req);
+			  new_id = result.data.visual_id;
 			  info.type = "bar";
 			  info.name = this.state.name;
-			  info.key = this.state.id;
-			  info.id = this.state.id;
+			  info.key = new_id;
+			  info.id = new_id;
 			  info.field = this.state.selectedData;
 			  console.log(info);
-			  element = <BarChartFS name={this.state.name} key={this.state.id} id={this.state.id} currentData={this.props.data[this.state.selectedData]}/>;
+			  element = <BarChartFS name={this.state.name} key={new_id} id={new_id} currentData={this.props.data[this.state.selectedData]}/>;
               break;
           case 'Line Graph':
-			  this.makeRequest(this.state.name, "line", this.state.selectedData);
+			  var req = ('http://127.0.0.1:8000/api/add/name='+
+				this.state.name + '&type=' + 'line' + '&field=' + this.state.selectedData
+			  );
+			  result = await axios.get(req);
+			  new_id = result.data.visual_id;
 			  info.type = "line";
 			  info.name = this.state.name;
-			  info.key = this.state.id;
-			  info.id = this.state.id;
+			  info.key = new_id;
+			  info.id = new_id;
 			  info.field = this.state.selectedData;
 			  console.log(info);
-              element = <LineGraphFS data={this.props.data[this.state.selectedData]}  id={this.state.id} name={this.state.name} key={this.state.id}/>;
+              element = <LineGraphFS data={this.props.data[this.state.selectedData]}  id={new_id} name={this.state.name} key={new_id}/>;
               break;
           case 'Pie Chart':
-			  this.makeRequest(this.state.name, "pie", this.state.selectedData);
+			  var req = ('http://127.0.0.1:8000/api/add/name='+
+				this.state.name + '&type=' + 'pie' + '&field=' + this.state.selectedData
+			  );
+			  result = await axios.get(req);
+			  new_id = result.data.visual_id;
 			  info.type = "pie";
 			  info.name = this.state.name;
-			  info.key = this.state.id;
-			  info.id = this.state.id;
+			  info.key = new_id;
+			  info.id = new_id;
 			  info.field = this.state.selectedData;
 			  console.log(info);
-              element = <PieChartFS data={this.props.data[this.state.selectedData]}  id={this.state.id} name={this.state.name} key={this.state.id} />;
+              element = <PieChartFS data={this.props.data[this.state.selectedData]}  id={new_id} name={this.state.name} key={new_id} />;
               break;
           default:
               console.log("error, unhandled element selected in Add visualization: ", this.state.type);
@@ -166,18 +179,6 @@ class AddVisualization extends Component {
     }
   }
 
-  makeRequest(name, type, field) {
-	var visual_id;
-	var req = ('http://127.0.0.1:8000/api/add/name='+
-				name + '&type=' + type + '&field=' + field
-	);
-	console.log(req);
-	axios.get(req, {responseType: 'json'})
-		.then(response => {
-		this.setState({id: response.data.visual_id});
-		});
-	//console.log(this.state.id);
-  }
 
   getValidationState() {
     const length = this.state.name.length;

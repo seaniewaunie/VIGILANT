@@ -74,6 +74,7 @@ class App extends Component {
         this.renderUserVisuals = this.renderUserVisuals.bind(this);
         this.toggleGlobalFilter = this.toggleGlobalFilter.bind(this);
         this.updateGlobalFilterRequest = this.updateGlobalFilterRequest.bind(this);
+		this.setUp = this.setUp.bind(this);
     }
 
     componentWillMount() {
@@ -95,15 +96,35 @@ class App extends Component {
       this.makeRequest();
     }
 
-	defaultVisuals() {
+	async defaultVisuals() {
 		this.state.visual_info.push({type: 'bar', name: 'Distribution of Crimes by Day', key: 10, id: 10, field: 'days'});
 		this.state.visual_info.push({type: 'bar', name: 'Indoor/Outdoor Distribution', key: 0, id: 0, field: 'doors'});
 		this.state.visual_info.push({type: 'bar', name: 'Weapon Distribution', key: 1, id: 1, field: 'weapons'});
 		this.state.visual_info.push({type: 'bar', name: 'Number of Crimes Each Day', key: 2, id: 2, field: 'dates'});
 		this.state.visual_info.push({type: 'bar', name: 'Distribution of Crimes by Code', key: 4, id: 4, field: 'codes'});
 		this.state.visual_info.push({type: 'bar', name: 'Distribution of Crimes by District', key: 5, id: 5, field: 'districts'});
+		
+		for (var i = 0; i < visual_info.length; i++) {
+			
+		}
+		
+		
 	}
 
+	setUp() {
+		var visual_id;
+		var req = ('http://127.0.0.1:8000/api/add/name=setupvisualnotforuse&type=none&field=none');
+		axios.get(req, {responseType: 'json'})
+		.then(response => {
+			var new_id = response.data.visual_id;
+			var next_req = ('http://127.0.0.1:8000/api/hide/id=' + new_id);
+			axios.get(next_req, {responseType: 'json'})
+			.then(response => {
+				console.log('setup done');
+			});
+		});
+	}
+	
     addOne(vis, info){
         var newVisual = vis;
         if(info.name === ''){
