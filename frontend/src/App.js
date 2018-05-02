@@ -108,14 +108,14 @@ class App extends Component {
     }
 
 	async defaultVisuals() {
-		this.state.visual_info.push({type: 'bar', name: 'Distribution of Crimes by Day', key: 10, id: 10, field: 'days'});
-		this.state.visual_info.push({type: 'bar', name: 'Indoor/Outdoor Distribution', key: 0, id: 0, field: 'doors'});
-		this.state.visual_info.push({type: 'bar', name: 'Weapon Distribution', key: 1, id: 1, field: 'weapons'});
-		this.state.visual_info.push({type: 'bar', name: 'Number of Crimes Each Day', key: 2, id: 2, field: 'dates'});
-		this.state.visual_info.push({type: 'bar', name: 'Distribution of Crimes by Code', key: 4, id: 4, field: 'codes'});
-		this.state.visual_info.push({type: 'bar', name: 'Distribution of Crimes by District', key: 5, id: 5, field: 'districts'});
+		this.state.visual_info.push({type: 'bar', name: 'Distribution of Crimes by Day', key: 1, id: 1, field: 'days'});
+		this.state.visual_info.push({type: 'bar', name: 'Indoor/Outdoor Distribution', key: 2, id: 2, field: 'doors'});
+		this.state.visual_info.push({type: 'bar', name: 'Weapon Distribution', key: 3, id: 3, field: 'weapons'});
+		this.state.visual_info.push({type: 'line', name: 'Number of Crimes Each Day', key: 4, id: 4, field: 'dates'});
+		this.state.visual_info.push({type: 'bar', name: 'Distribution of Crimes by Code', key: 5, id: 5, field: 'codes'});
+		this.state.visual_info.push({type: 'bar', name: 'Distribution of Crimes by District', key: 6, id: 6, field: 'districts'});
 		
-		for (var i = 0; i < this.state.visual_info.length; i++) {
+		/* for (var i = 0; i < this.state.visual_info.length; i++) {
 			var req = ('http://127.0.0.1:8000/api/add/name='+
 				this.state.visual_info[i].name + '&type=' + this.state.visual_info[i].type + '&field=' + this.state.visual_info[i].field
 			  );
@@ -123,7 +123,7 @@ class App extends Component {
 			  this.state.visual_info[i].key = result.data.visual_id;
 			  this.state.visual_info[i].id = result.data.visual_id;
 			  console.log(this.state.visual_info[i]);
-		}
+		} */
 		
 		
 	}
@@ -347,7 +347,7 @@ class App extends Component {
                     />
                     <Grid fluid id="grid">
                         <FormatGrid
-                            counter={this.state.counter}
+                            counter={this.state.visuals.length}
                             visuals={this.state.visuals}
                         />
                     </Grid>
@@ -370,7 +370,7 @@ function FormatGrid(props) {
     // format the grid
     var grid = [];
     var rowNum=0;
-    var rows = Math.ceil(props.counter/VIS_PER_ROW);
+    var rows = Math.ceil(props.visuals.length/VIS_PER_ROW);
     for(var i=0; i < rows; i++){
         // add each row to an html object to return
         grid.push(
