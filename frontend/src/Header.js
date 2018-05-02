@@ -326,80 +326,78 @@ class RestoreVisualization extends Component {
 	handleShow() {
 		this.getRestorables();
 		//this.handleClose();
-		this.setState({show: true});
+		//this.setState({show: true});
 	}
 	
 	handleClose() {
 		this.setState({ show: false, selected: false});
 	}
 
-  getRestorables() {
+  async getRestorables() {
 	console.log(this.props.data);
 	var visual_id;
 	var req = ('http://127.0.0.1:8000/api/getrestorable/');
-	axios.get(req, {responseType: 'json'})
-		.then(response => {
-			console.log(response);
-			var days = response.data.day;
-			var visuals_to_add = [];
-			for (var i = 0; i < days.length; i++) {
-				console.log(days[i].field);
-				if (days[i].type === "bar") {
-				  visuals_to_add.push(<BarChartFS name={days[i].name} key={days[i].id} id={days[i].id} data={this.props.data[days[i].field]} field={days[i].field} restore={true} restore_function={this.restore}/>);
-				}
+	var response = await axios.get(req);
+	console.log(response);
+	var days = response.data.day;
+	var visuals_to_add = [];
+	for (var i = 0; i < days.length; i++) {
+		console.log(days[i].field);
+		if (days[i].type === "bar") {
+		  visuals_to_add.push(<BarChartFS name={days[i].name} key={days[i].id} id={days[i].id} data={this.props.data[days[i].field]} field={days[i].field} restore={true} restore_function={this.restore}/>);
+		}
 
-				else if (days[i].type === "line") {
-				  visuals_to_add.push(<LineGraphFS name={days[i].name} key={days[i].id} id={days[i].id} data={this.props.data[days[i].field]} field={days[i].field} restore={true} restore_function={this.restore}/>);
-				}
+		else if (days[i].type === "line") {
+		  visuals_to_add.push(<LineGraphFS name={days[i].name} key={days[i].id} id={days[i].id} data={this.props.data[days[i].field]} field={days[i].field} restore={true} restore_function={this.restore}/>);
+		}
 
-				else if (days[i].type === "pie") {
-				  visuals_to_add.push(<PieChartFS name={days[i].name} key={days[i].id} id={days[i].id} data={this.props.data[days[i].field]} field={days[i].field} restore={true} restore_function={this.restore}/>);
-				}
-			}
-			this.setState({past_day: visuals_to_add});
-			
-			var weeks = response.data.week;
-			visuals_to_add = [];
-			for (var i = 0; i < weeks.length; i++) {
-				console.log(weeks[i].field);
-				if (weeks[i].type === "bar") {
-				  visuals_to_add.push(<BarChartFS name={weeks[i].name} key={weeks[i].id} id={weeks[i].id} data={this.props.data[weeks[i].field]} field={weeks[i].field} restore={true} restore_function={this.restore}/>);
-				}
+		else if (days[i].type === "pie") {
+		  visuals_to_add.push(<PieChartFS name={days[i].name} key={days[i].id} id={days[i].id} data={this.props.data[days[i].field]} field={days[i].field} restore={true} restore_function={this.restore}/>);
+		}
+	}
+	this.setState({past_day: visuals_to_add});
+	
+	var weeks = response.data.week;
+	visuals_to_add = [];
+	for (var i = 0; i < weeks.length; i++) {
+		console.log(weeks[i].field);
+		if (weeks[i].type === "bar") {
+		  visuals_to_add.push(<BarChartFS name={weeks[i].name} key={weeks[i].id} id={weeks[i].id} data={this.props.data[weeks[i].field]} field={weeks[i].field} restore={true} restore_function={this.restore}/>);
+		}
 
-				else if (weeks[i].type === "line") {
-				  visuals_to_add.push(<LineGraphFS name={weeks[i].name} key={weeks[i].id} id={weeks[i].id} data={this.props.data[weeks[i].field]} field={weeks[i].field} restore={true} restore_function={this.restore}/>);
-				}
+		else if (weeks[i].type === "line") {
+		  visuals_to_add.push(<LineGraphFS name={weeks[i].name} key={weeks[i].id} id={weeks[i].id} data={this.props.data[weeks[i].field]} field={weeks[i].field} restore={true} restore_function={this.restore}/>);
+		}
 
-				else if (weeks[i].type === "pie") {
-				  visuals_to_add.push(<PieChartFS name={weeks[i].name} key={weeks[i].id} id={weeks[i].id} data={this.props.data[weeks[i].field]} field={weeks[i].field} restore={true} restore_function={this.restore}/>);
-				}
-			}
-			this.setState({past_week: visuals_to_add});
-			
-			var months = response.data.month;
-			visuals_to_add = [];
-			for (var i = 0; i < months.length; i++) {
-				console.log(months[i].field);
-				if (months[i].type === "bar") {
-				  visuals_to_add.push(<BarChartFS name={months[i].name} key={months[i].id} id={months[i].id} data={this.props.data[months[i].field]} field={months[i].field} restore={true} restore_function={this.restore}/>);
-				}
+		else if (weeks[i].type === "pie") {
+		  visuals_to_add.push(<PieChartFS name={weeks[i].name} key={weeks[i].id} id={weeks[i].id} data={this.props.data[weeks[i].field]} field={weeks[i].field} restore={true} restore_function={this.restore}/>);
+		}
+	}
+	this.setState({past_week: visuals_to_add});
+	
+	var months = response.data.month;
+	visuals_to_add = [];
+	for (var i = 0; i < months.length; i++) {
+		console.log(months[i].field);
+		if (months[i].type === "bar") {
+		  visuals_to_add.push(<BarChartFS name={months[i].name} key={months[i].id} id={months[i].id} data={this.props.data[months[i].field]} field={months[i].field} restore={true} restore_function={this.restore}/>);
+		}
 
-				else if (months[i].type === "line") {
-				  visuals_to_add.push(<LineGraphFS name={months[i].name} key={months[i].id} id={months[i].id} data={this.props.data[months[i].field]} field={months[i].field} restore={true} restore_function={this.restore}/>);
-				}
+		else if (months[i].type === "line") {
+		  visuals_to_add.push(<LineGraphFS name={months[i].name} key={months[i].id} id={months[i].id} data={this.props.data[months[i].field]} field={months[i].field} restore={true} restore_function={this.restore}/>);
+		}
 
-				else if (months[i].type === "pie") {
-				  visuals_to_add.push(<PieChartFS name={months[i].name} key={months[i].id} id={months[i].id} data={this.props.data[months[i].field]} field={months[i].field} restore={true} restore_function={this.restore}/>);
-				}
-			}
-			this.setState({past_month: visuals_to_add});
-			//this.handleClose();
-			this.setState({show: true});
-		});
+		else if (months[i].type === "pie") {
+		  visuals_to_add.push(<PieChartFS name={months[i].name} key={months[i].id} id={months[i].id} data={this.props.data[months[i].field]} field={months[i].field} restore={true} restore_function={this.restore}/>);
+		}
+	}
+	this.setState({past_month: visuals_to_add});
+	//this.handleClose();
+	this.setState({show: true});
   }
 
 	  
-  restore(name, id, type, field) {
+  async restore(name, id, type, field) {
 	  var info = {
 		  type: type,
 		  name: name,
@@ -421,10 +419,7 @@ class RestoreVisualization extends Component {
 	  this.addOne(element, info);
 	  
 	  var req = ('http://127.0.0.1:8000/api/restore/id=' + id);
-	  axios.get(req, {responseType: 'json'})
-		.then(response => {
-			console.log(response);
-		});
+	  var reponse = await axios.get(req);
 	
 	  //this.handleShow();
 	  this.getRestorables();
