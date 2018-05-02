@@ -23,12 +23,12 @@ DROP TABLE IF EXISTS `VigilantDB`.`CrimeData` ;
 
 CREATE TABLE IF NOT EXISTS `VigilantDB`.`CrimeData` (
   `crime_ID` INT NOT NULL AUTO_INCREMENT,
-  `date` DATE NOT NULL,
-  `time` TIME NOT NULL,
-  `day` VARCHAR(5) NOT NULL,
-  `code` VARCHAR(10) NOT NULL,
-  `description` VARCHAR(45) NOT NULL,
-  `district` VARCHAR(45) NOT NULL,
+  `date` DATE NULL,
+  `time` TIME NULL,
+  `day` VARCHAR(5) NULL,
+  `code` VARCHAR(10) NULL,
+  `description` VARCHAR(45) NULL,
+  `district` VARCHAR(45) NULL,
   `post` VARCHAR(10) NULL,
   `weapon` VARCHAR(45) NULL,
   `address` VARCHAR(45) NULL,
