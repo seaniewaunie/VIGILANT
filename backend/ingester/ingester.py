@@ -33,6 +33,7 @@ def executeScriptsFromFile(filename):
                 cursor.execute(command)
         except:
             print ("Command skipped: ")
+            print(command);
 
             
 # Function will return day given date string
@@ -193,10 +194,13 @@ with open('4ih5-d5d5.json') as dataFile:
             
         data = (crimedate, time, description, district, day, weapon, address, neighborhood, premise, in_out, latitude, longitude, post, crimecode)
             
-        
-        cursor.execute(add_data, data)
-        cnx.commit()
-        #count += 1
+        try:
+            cursor.execute(add_data, data)
+            cnx.commit()
+        except:
+            print("something happened, skipping row");
+    
+            #count += 1
 
         # Values that every entry has        
         #print("date: " + v['crimedate'][:10])
