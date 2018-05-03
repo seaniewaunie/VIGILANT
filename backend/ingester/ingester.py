@@ -165,11 +165,33 @@ with open('4ih5-d5d5.json') as dataFile:
             district = v['district']
         except KeyError:
             #print("found district error")
-            district = "none"
+            district = None;
 
-        
+        try:
+            time = v['crimetime']
+        except KeyError:
+            time = None;
 
-        data = (v['crimedate'][:10], v['crimetime'], v['description'], district, day, weapon, address, neighborhood, premise, in_out, latitude, longitude, post, v['crimecode'])
+        try:
+            description = v['description']
+        except KeyError:
+            print("found no description");
+            description = None;
+
+        try:
+            crimedate = v['crimedate']
+            crimedate = crimedate[:10]
+        except KeyError:
+            print("crimedate format error")
+            crimedate = None;
+
+        try:
+            crimecode = v['crimecode']
+        except KeyError:
+            print("found no crimecode");
+            crimcode = None;
+            
+        data = (crimedate, time, description, district, day, weapon, address, neighborhood, premise, in_out, latitude, longitude, post, crimecode)
             
         
         cursor.execute(add_data, data)
