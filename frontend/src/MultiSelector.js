@@ -22,33 +22,47 @@ export default class MultiSelectField extends Component{
       removeSelected: false,
       disabled: this.props.disabled,
       stayOpen: this.props.stayOpen,
-      value: [this.props.default],
+      value: this.props.default,
       rtl: false,
       options: this.props.selections,
       multi: this.props.multi
     };
 
     this.handleSelectChange = this.handleSelectChange.bind(this);
+	this.handleLoad = this.handleLoad.bind(this);
 
 	}
 
 	handleSelectChange (value) {
 		console.log('You\'ve selected:', value);
-    if(value.includes('i') && value.includes('o')){
-      value = []
-    }
-		this.setState({ value }, () => {
-      this.props.updateRequest(
-          '&' + this.state.title.toLowerCase() + '=['+this.state.value + ']',
-        this.props.title,
-        this.state.value);
-    });
-
-
+		if(value.includes('i') && value.includes('o')){
+		  value = []
+		}
+			this.setState({ value }, () => {
+		  this.props.updateRequest(
+			  '&' + this.state.title.toLowerCase() + '=['+this.state.value + ']',
+			this.props.title,
+			this.state.value);
+		});
+	}
+	
+	handleLoad() {
+		if (this.state.value) {
+			var value_list = this.state.value.split(',');
+			console.log(value_list);
+			for (var i = 0; i < value_list.length; i++) {
+				for (var j = 0; j < this.state.options.length; j ++) {
+					if (this.state.options[j] === value_list[i]) {
+						this.state.options[j].props('selected', true);
+					}
+				}
+			}
+		}
 	}
 
 	render () {
 		const { disabled, stayOpen, value } = this.state;
+		this.handleLoad();
 		return (
       <FormGroup >
           <ControlLabel>{this.props.title}</ControlLabel>
