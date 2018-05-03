@@ -5,34 +5,37 @@ import { Pie as PieChart} from 'react-chartjs-2';
 import pattern from 'patternomaly';
 import {Well, Col} from 'react-bootstrap';
 import axios from 'axios';
-
+import FullscreenImg from '../images/fullscreen_opt.png';
+import ShrinkImg from '../images/shrink_image_opt.png';
+import '../css/Piechart.css';
 
 class PieChartFS extends Component {
 
 	constructor(props) {
     super(props);
 
-    this.compress = this.compress.bind(this);
-    this.expand = this.expand.bind(this);
-    this.getData = this.getData.bind(this);
-	this.getCounts = this.getCounts.bind(this);
-    this.handleClick = this.handleClick.bind(this);
-	this.add = this.add.bind(this);
-	this.getOptions = this.getOptions.bind(this);
-	this.handleHide = this.handleHide.bind(this);
-
-
     this.state = {
         fullscreen: false,
-        height: 200,
-        width: 200,
+        height: this.props.data.length > 20 ? 120 : 50,
         name : props.name,
         data : this.getData(),
 		background_colors: ["rgb(" + 0 + "," + 0 + "," + 0 + ")"],
-		field : this.props.field,
+		field : props.field,
+		id: props.id,
 		colors: [],
-		restore: this.props.restore,
+		restore: props.restore,
 		};
+		
+		//this.compress = this.compress.bind(this);
+		//this.expand = this.expand.bind(this);
+		this.getData = this.getData.bind(this);
+		this.getCounts = this.getCounts.bind(this);
+		this.handleClick = this.handleClick.bind(this);
+		this.add = this.add.bind(this);
+		this.getOptions = this.getOptions.bind(this);
+		this.handleHide = this.handleHide.bind(this);
+		this.handleFullScreen = this.handleFullScreen.bind(this);
+		this.isMouseInside = false;
 	}
 
 	getData() {
@@ -148,9 +151,6 @@ class PieChartFS extends Component {
   }
   
   handleClick() {
-    this.setState({fullscreen: !this.state.fullscreen}, () => {
-        this.state.fullscreen ? this.expand() : this.compress();
-    });
 
   }
   
@@ -180,17 +180,47 @@ class PieChartFS extends Component {
 		});
 	
   }
+  
+  handleFullScreen(){
+    this.setState({fullscreen: !this.state.fullscreen});
+  }
 
+  getInitialState() {
+	  return {
+		isMouseInside: false
+	  };
+	}
+	mouseEnter = () => {
+	  this.setState({ isMouseInside: true });
+	}
+	mouseLeave = () => {
+	  this.setState({ isMouseInside: false });
+	}
+
+	componentWillMount() {
+    this.setState({
+      name: this.props.name,
+      data: this.getData(),
+	  height: this.props.data.length > 20 ? 120 : 50,
+	  color: [],
+	  restore: this.props.restore,
+    });
+  }
 
  render() {
 	 
+	var imagePic = this.state.fullscreen ?  ShrinkImg : FullscreenImg;
+	var width = this.state.fullscreen ? 12 : 4;
+	var height = this.state.fullscreen ? window.innerHeight : 235;
+	var localFilterShowing = this.state.showLocalFilter;
+	
 	if(this.state.hidden){
       return null;
     }
 	if(this.props.data.length === 0) {
 		console.log("empty data pie chart");
       return(
-		<Col xs={4} sm={4} md={4} key={this.state.id}>
+		<Col xs={width} sm={width} md={width} key={this.state.id}>
 		   <Well>
 			  <p width={this.state.width} height={this.state.height} align='center' style={{textAlign:'center'}}><b>No Crimes to Display</b></p>
 		  </Well>
@@ -199,19 +229,29 @@ class PieChartFS extends Component {
 	else {
 		if (this.props.restore === false) {
 			return (
-				<Col xs={4} sm={4} md={4} key={this.state.id}>
-					<Well>
+				<Col xs={width} sm={width} md={width} key={this.state.id}>
+					<Well className='PieChart' style={{
+					}}>
 					  <button type="button" class="close" aria-label="Close" onClick={this.handleHide}>
 						<span aria-hidden="true">&times;</span>
 					  </button>
-					  <p align='center'><b>{this.state.name}</b></p>
+					  
+					  <div className='VisualName'><b>{this.state.name}</b></div>
+					  
+					   <div onMouseEnter={this.mouseEnter} onMouseLeave={this.mouseLeave} className='HiddenButtons'>
+						{this.state.isMouseInside ? <button onClick={this.handleFullScreen}> <img src={imagePic}/> </button> : null}
+						<button style={{display: this.state.fullscreen ? 'inline-block':'none'}} onClick={this.handleLocalFilter}>Filter</button>
+					  
 					  <PieChart
 						className="PieChartFS"
 						legend={false}
-						height={this.state.height}
+						height={height}
+						//width={width}
 						data={this.getData()}
 						options={this.getOptions()}
 						/>
+						
+						</div>
 					</Well>
 				</Col> 
 			);
@@ -221,19 +261,14 @@ class PieChartFS extends Component {
 			this.setState({name: this.state.field });
 		  }
 		  return (
-				<Col xs={4} sm={4} md={4} key={this.state.id}>
+				<Col xs={width} sm={width} md={width} key={this.state.id}>
 					<Well>
 					  <p align='center'><b>{this.state.name}</b></p>
 					  <PieChart
 						className="PieChartFS"
 						legend={false}
-						width={this.state.width}
-						height={this.state.height}
-						//axisLabels={{x: 'My x Axis', y: 'My y Axis'}}
-						//axes
-						//colorBars
-						//xTickNumber={5}
-						//yTickNumber={5}
+						//width={width}
+						height={height}
 						data={this.getData()}
 						options={this.getOptions()}
 						/>

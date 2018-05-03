@@ -159,11 +159,8 @@ export default class LineGraphFS extends Component {
 
   }
 
-
   handleClick() {
-    this.setState({fullscreen: !this.state.fullscreen}, () => {
-        this.state.fullscreen ? this.expand() : this.compress();
-    });
+   
   }
 
    handleFullScreen(){
@@ -215,8 +212,9 @@ export default class LineGraphFS extends Component {
 			  <button type="button" class="close" aria-label="Close" onClick={this.handleHide}>
 				<span aria-hidden="true">&times;</span>
 			  </button>
-			  <p align='left'><b>{this.state.name}</b></p>
-
+			 
+				<div className='VisualName'><b>{this.state.name}</b></div>
+				
 			  <div onMouseEnter={this.mouseEnter} onMouseLeave={this.mouseLeave} className='HiddenButtons'>
 			  {this.state.isMouseInside ? <button onClick={this.handleFullScreen}> <img src={imagePic}/> </button> : null}
 			 <button style={{display: this.state.fullscreen ? 'inline-block':'none'}} onClick={this.handleLocalFilter}>Filter</button>
