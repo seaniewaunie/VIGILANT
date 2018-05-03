@@ -81,8 +81,8 @@ class App extends Component {
       this.setState({
         contentStyle : {
           width: '100%',
-          height: '93%',
-          overflowY: 'scroll',
+          //height: '93%',
+          //overflowY: 'scroll',
         },
         sidebarOpen: false,
       })
@@ -115,7 +115,7 @@ class App extends Component {
 		this.state.visual_info.push({type: 'line', name: 'Trend of Crimes Over Dates', key: 4, id: 4, field: 'dates'});
 		this.state.visual_info.push({type: 'bar', name: 'Distribution of Crimes by Description', key: 5, id: 5, field: 'descriptions'});
 		this.state.visual_info.push({type: 'bar', name: 'Distribution of Crimes by District', key: 6, id: 6, field: 'districts'});
-		
+
 		 /*for (var i = 0; i < this.state.visual_info.length; i++) {
 			var req = ('http://127.0.0.1:8000/api/add/name='+
 				this.state.visual_info[i].name + '&type=' + this.state.visual_info[i].type + '&field=' + this.state.visual_info[i].field
@@ -126,7 +126,7 @@ class App extends Component {
 			  console.log(this.state.visual_info[i]);
 		} */
 	}
-	
+
 	async loadVisuals() {
 		var req = ('http://127.0.0.1:8000/api/getvisuals/');
 		var result = await axios.get(req);
@@ -134,9 +134,11 @@ class App extends Component {
 		for (var i = 0; i < returned_vis.length; i++) {
 			this.state.visual_info.push({type: returned_vis[i].type, name: returned_vis[i].name, key: returned_vis[i].id, id: returned_vis[i].id, field: returned_vis[i].field});
 		}
+
+
 	}
 
-	
+
     addOne(vis, info){
         var newVisual = vis;
         if(info.name === ''){
@@ -167,8 +169,8 @@ class App extends Component {
           filterType: 'global',
           contentStyle: {
             width: this.state.sidebarOpen ? '100%':'80%',
-            height: '93%',
-            overflowY: 'scroll',
+            //height: '93%',
+            //overflowY: 'scroll',
           }
         }, () => {
           this.renderUserVisuals();

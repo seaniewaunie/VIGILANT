@@ -119,9 +119,7 @@ export default class Filter extends Component {
             if(this.props.show){
               return null;
             }
-            else if(this.props.filterCodes === undefined){
-              return(<RingLoader color={'#123abc'} size={200}/>);
-            }
+            
             return(
                 <Well bsSize="small" className="filterOptions">
                   <b>{element}</b>
