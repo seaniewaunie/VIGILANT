@@ -1,6 +1,6 @@
 
 .Visual{
-  overflow: auto;
+  //overflow: auto;
   //height: 80vh;
   //width: 80%;
 }
@@ -25,4 +25,3 @@
 .HiddenButtons button{
   display: inline-block;
 }
-

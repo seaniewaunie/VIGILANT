@@ -338,7 +338,6 @@ class App extends Component {
         return (
             <div className="App">
 
-                <a name="home"></a>
                 <div className="header">
                   <Header
                       data ={this.state.crimesInfo}
@@ -351,10 +350,12 @@ class App extends Component {
 
                 <div className='content'>
                   <div className='content-visuals' style={this.state.contentStyle}>
+                    <a name="Top"></a>
                     <TimeLine key={500} data={this.state.crimesInfo.dates} width={this.state.contentStyle.width}/>
                     <HeatMapFS
                         data ={this.state.crimesInfo}
                     />
+                    <a name="Visuals"></a>
                     <Grid fluid id="grid">
                         <FormatGrid
                             counter={this.state.visuals.length}

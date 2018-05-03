@@ -1,13 +1,17 @@
 .Visual{
-  overflow-y: auto;
+  overflow-y: hidden !important;
   padding: 0;
-  padding-top:20px;
-  //height: 80vh;
+  padding-top: 20px;
+  height: 100%;
   //width: 80%;
+  padding-right:5px;
+  padding-left:5px;
 }
 
-.Visual b{
-  padding-left:20px;
+.BarChartFS {
+    display: block;
+    width: 1010px;
+    height: 85%;
 }
 
 .ULTAMATE_FULLSCREEN {
@@ -22,11 +26,13 @@
     border: 0 !important;
     border-radius: 0 !important;
     box-shadow: none !important;
-    padding-bottom : 10px !important;
+    padding-bottom : 0px !important;
+    padding-right : 0px !important;
 }
 
 .Chart{
   //width:80%;
+  height:100% !important;
   float:left;
   height: inherit;
 }

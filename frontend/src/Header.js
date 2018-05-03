@@ -29,7 +29,7 @@ class Header extends Component {
               <Navbar.Header>
                 <Navbar.Brand> <img src={logo} className="Header-logo" alt="logo" /> </Navbar.Brand>
                 <Navbar.Brand>
-                    <a href="#home">VIGILANT</a>
+                    <a eventkey={7} href="#Top">VIGILANT</a>
                 </Navbar.Brand>
                 <Navbar.Toggle />
               </Navbar.Header>
@@ -43,6 +43,8 @@ class Header extends Component {
 
 
                 <Nav pullRight>
+                  <NavItem eventKey={6} href="#Top">Top</NavItem>
+                  <NavItem eventKey={5} href="#Visuals">Visuals</NavItem>
                   <NavItem eventKey={4} href="#Table">Table</NavItem>
 					<RestoreVisualization eventKey={2}
 						data={this.props.data}
@@ -321,13 +323,13 @@ class RestoreVisualization extends Component {
 		  past_month: [],
 		};
 	}
-	
+
 	handleShow() {
 		this.getRestorables();
 		//this.handleClose();
 		//this.setState({show: true});
 	}
-	
+
 	handleClose() {
 		this.setState({ show: false, selected: false});
 	}
@@ -355,7 +357,7 @@ class RestoreVisualization extends Component {
 		}
 	}
 	this.setState({past_day: visuals_to_add});
-	
+
 	var weeks = response.data.week;
 	visuals_to_add = [];
 	for (var i = 0; i < weeks.length; i++) {
@@ -373,7 +375,7 @@ class RestoreVisualization extends Component {
 		}
 	}
 	this.setState({past_week: visuals_to_add});
-	
+
 	var months = response.data.month;
 	visuals_to_add = [];
 	for (var i = 0; i < months.length; i++) {
@@ -395,7 +397,7 @@ class RestoreVisualization extends Component {
 	this.setState({show: true});
   }
 
-	  
+
   async restore(name, id, type, field) {
 	  var info = {
 		  type: type,
@@ -404,7 +406,7 @@ class RestoreVisualization extends Component {
 		  id: id,
 		  field: field,
 	  };
-	  var element; 
+	  var element;
 	  if (type === "line") {
 		  element = (name === '') ? <LineGraphFS data={this.props.data[field]}  id={id} name={field} key={id} field={field} restore={false}/> : <LineGraphFS data={this.props.data[field]}  id={id} name={name} key={id} field={field} restore={false}/>;
 	  }
@@ -414,16 +416,16 @@ class RestoreVisualization extends Component {
 	  else if (type === "pie") {
 		  element = name === '' ? <PieChartFS data={this.props.data[field]}  id={id} name={field} key={id} field={field} restore={false}/> : <PieChartFS data={this.props.data[field]}  id={id} name={name} key={id} field={field} restore={false}/>;
 	  }
-	  
+
 	  this.addOne(element, info);
-	  
+
 	  var req = ('http://127.0.0.1:8000/api/restore/id=' + id);
 	  var reponse = await axios.get(req);
-	
+
 	  //this.handleShow();
 	  this.getRestorables();
   }
-	
+
 	render() {
 
 		if(this.props.data === undefined){

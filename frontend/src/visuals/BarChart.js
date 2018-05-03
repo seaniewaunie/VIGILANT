@@ -133,7 +133,7 @@ export default class BarChartFS extends Component {
       // first get the total number of crimes
       // go through and change to percentage
       for(var i =0; i< count_array.length; i++){
-        count_array[i] = Math.ceil(count_array[i]/this.props.data.length* 100);
+        count_array[i] = Math.ceil(count_array[i]/all_data.length* 100);
       }
     }
 	}
@@ -143,9 +143,9 @@ export default class BarChartFS extends Component {
 
 
 	var data = {
-		labels: label_array,
+		labels: count_array.length > 15 ? (this.state.fullscreen ? label_array : label_array.slice(0,15)) : label_array,
 		datasets : [{
-			data: count_array,
+			data:  count_array.length > 15 ? (this.state.fullscreen ? count_array : count_array.slice(0,15)) : count_array,
 			backgroundColor: color,
 			borderColor: color,
 			borderWidth: 1,
@@ -172,17 +172,48 @@ export default class BarChartFS extends Component {
 			scales: {
 				yAxes: [{
 					ticks: {
-					fontSize: 6
+					fontSize: 6,
+          beginAtZero: true,
+          min: 0
 					}
 				}],
 				xAxes: [{
 					ticks: {
-					fontSize: 6
+					fontSize: 6,
 					}
 				}],
-			}
+			},
 		};
 	  }
+    else{
+      return {
+        responsive: true,
+        tooltips: {
+          mode: 'label',
+          custom: () => {
+          }
+        },
+        elements: {
+          line: {
+            fill: false,
+          }
+        },
+        scales: {
+  				yAxes: [{
+  					ticks: {
+            beginAtZero: true,
+            min: 0
+  					}
+  				}],
+  				xAxes: [{
+  					ticks: {
+            beginAtZero: true,
+            min: 0
+  					}
+  				}],
+        },
+      }
+    }
   }
 
   add() {
@@ -263,9 +294,7 @@ export default class BarChartFS extends Component {
        className={this.state.fullscreen ? 'ULTAMATE_FULLSCREEN' : 'HiddenButtons'}
        >
 
-       <Well className='Visual' style={{
-           height: this.state.fullscreen ? '100vh': '45vh'
-         }}>
+       <Well className='Visual'>
 			<button type="button" class="close" aria-label="Close" onClick={this.handleHide}>
 				<span aria-hidden="true">&times;</span>
 			</button>
@@ -278,7 +307,6 @@ export default class BarChartFS extends Component {
             width: this.state.fullscreen ? '80%':'100%',
           }}>
   			  <HorizontalBar
-            height={height}
     				className="BarGraphFS"
     			  legend={false}
     				data={this.getData()}
@@ -322,11 +350,11 @@ export default class BarChartFS extends Component {
 		   <Well>
 			 <div className='VisualName'><b>{this.state.name}</b></div>
 			  <HorizontalBar
-				height={height}
-				className="BarGraphFS"
-					  legend={false}
-				data={this.getData()}
-				options={this.getOptions()}
+  				height={height}
+  				className="BarGraphFS"
+				  legend={false}
+  				data={this.getData()}
+  				options={this.getOptions()}
 			  />
 		  </Well>
 		</Col>
