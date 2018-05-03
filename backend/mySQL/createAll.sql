@@ -125,3 +125,30 @@ ENGINE = InnoDB;
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
+
+-- -----------------------------------------------------
+-- Hard Code Predefined Values
+-- -----------------------------------------------------
+INSERT INTO globalfilters (global_filter_ID)
+VALUES ( 1);
+
+INSERT INTO users ( user_ID, global_filter_ID,  username)
+VALUES(1,1,'user');
+
+INSERT INTO localvisualization (fk_user_id, name, type, visible, field, use_global)
+VALUES (1, 'Distribution of Crimes by Day of Week', 'bar', 1, 'days', 1);
+
+INSERT INTO localvisualization (fk_user_id, name, type, visible, field, use_global)
+VALUES (1, 'Trend of Crimes Over Times of Day', 'line', 1, 'times', 1);
+
+INSERT INTO localvisualization (fk_user_id, name, type, visible, field, use_global)
+VALUES (1, 'Weapon Distribution', 'bar', 1, 'weapons', 1);
+
+INSERT INTO localvisualization (fk_user_id, name, type, visible, field, use_global)
+VALUES (1, 'Trend of Crimes Over Dates', 'line', 1, 'dates', 1);
+
+INSERT INTO localvisualization (fk_user_id, name, type, visible, field, use_global)
+VALUES (1, 'Distribution of Crimes by Description', 'bar', 1, 'descriptions', 1);
+
+INSERT INTO localvisualization (fk_user_id, name, type, visible, field, use_global)
+VALUES (1, 'Distribution of Crimes by District', 'bar', 1, 'districts', 1);
