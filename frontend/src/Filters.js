@@ -111,6 +111,7 @@ export default class Filter extends Component {
     }
 
     render(){
+		console.log(this.props.settings);
         var element;
         if(this.state.scope === 'global'){
             element = <p>Global Filter settings</p>;

@@ -187,8 +187,9 @@ export default class LineGraphFS extends Component {
 
 	const {data} = this.state;
 	var imagePic = this.state.fullscreen ?  ShrinkImg : FullscreenImg;
-	var height = data.labels.length > 20 ? 600 : data.labels.length > 10 ? 300:250;
+	//var height = data.labels.length > 20 ? 600 : data.labels.length > 10 ? 300:250;
 	var width = this.state.fullscreen ? 12 : 4;
+	var height = this.state.fullscreen ? window.innerHeight : 235;
 	var localFilterShowing = this.state.showLocalFilter;
 
 	if(this.state.hidden){
@@ -209,13 +210,12 @@ export default class LineGraphFS extends Component {
 	if (this.props.restore === false) {
 		return (
 		 <Col xs={width} sm={width} md={width} key={this.state.id}>
-		   <Well className='Visual' style={{
-           height: this.state.fullscreen ? '85vh': '50vh'
+		   <Well className='LineGraph' style={{
          }}>
 			  <button type="button" class="close" aria-label="Close" onClick={this.handleHide}>
 				<span aria-hidden="true">&times;</span>
 			  </button>
-			  <p align='center'><b>{this.state.name}</b></p>
+			  <p align='left'><b>{this.state.name}</b></p>
 
 			  <div onMouseEnter={this.mouseEnter} onMouseLeave={this.mouseLeave} className='HiddenButtons'>
 			  {this.state.isMouseInside ? <button onClick={this.handleFullScreen}> <img src={imagePic}/> </button> : null}

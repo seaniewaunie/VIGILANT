@@ -193,6 +193,23 @@ class GetRestorableVisualizations(APIView):
 			
 		#print(date - datetime.timedelta(days=1))
 		return http.JsonResponse(return_json)
+	
+	
+class GetCurrentVisualizations(APIView):
+	serializer_class = serializers.VisualizationSerializer
+	
+	def get_queryset(self):
+		queryset = models.Localvisualization.objects.all()
+		return queryset
+		
+	def get(self, request):
+		return_json = {'data': []}
+		queryset = models.Localvisualization.objects.all().filter(visible=1)
+		for row in queryset:
+			return_json['data'].append({'id': row.pk, 'name': row.name, 'type': row.type, 'field': row.field, 'use_global': row.use_global})
+			
+		#print(date - datetime.timedelta(days=1))
+		return http.JsonResponse(return_json)
 		
 
 class SetLocalFilter(APIView):

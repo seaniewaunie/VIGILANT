@@ -19,4 +19,5 @@ urlpatterns = [
 	re_path(r'restore/id=(?P<id>\d+)$', views.RestoreVisualization.as_view()),
 	re_path(r'^lfilter/id=(?P<id>\d+)&start_date=(?P<start_date>.*)&end_date=(?P<end_date>.*)&start_time=(?P<start_time>.*)&end_time=(?P<end_time>.*)&days=(?P<days>\[(\w*)(,*\w*)*\])&codes=(?P<codes>.*)&districts=(?P<districts>\[(\w*)(,*\w*)*\])&weapons=(?P<weapons>\[(\w*)(,*\w*)*\])&start_lat=(?P<start_lat>.*)&end_lat=(?P<end_lat>.*)&start_long=(?P<start_long>.*)&end_long=(?P<end_long>.*)&i_o=(?P<i_o>\[(\w*)(,*\w*)*\])$', views.SetLocalFilter.as_view()),
 	path('getrestorable/', views.GetRestorableVisualizations.as_view()),
+	path('getvisuals/', views.GetCurrentVisualizations.as_view()),
 ]
