@@ -189,7 +189,7 @@ export default class LineGraphFS extends Component {
 	var imagePic = this.state.fullscreen ?  ShrinkImg : FullscreenImg;
 	//var height = data.labels.length > 20 ? 600 : data.labels.length > 10 ? 300:250;
 	var width = this.state.fullscreen ? 12 : 4;
-	var height = this.state.fullscreen ? 450 : 235;
+	var height = this.state.fullscreen ? window.innerHeight : 235;
 	var localFilterShowing = this.state.showLocalFilter;
 
 	if(this.state.hidden){
