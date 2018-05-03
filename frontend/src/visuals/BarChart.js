@@ -258,9 +258,13 @@ export default class BarChartFS extends Component {
 		return (
 	  <Col xs={width} sm={width} md={width} key={this.state.id}>
 
-		 <div onMouseEnter={this.mouseEnter} onMouseLeave={this.mouseLeave} className='HiddenButtons'>
-		   <Well className='Visual' style={{
-           height: this.state.fullscreen ? '85vh': '45vh'
+		 <div onMouseEnter={this.mouseEnter}
+       onMouseLeave={this.mouseLeave}
+       className={this.state.fullscreen ? 'ULTAMATE_FULLSCREEN' : 'HiddenButtons'}
+       >
+
+       <Well className='Visual' style={{
+           height: this.state.fullscreen ? '100vh': '45vh'
          }}>
 			<button type="button" class="close" aria-label="Close" onClick={this.handleHide}>
 				<span aria-hidden="true">&times;</span>
@@ -271,7 +275,7 @@ export default class BarChartFS extends Component {
 			  <button style={{visibility: this.state.isMouseInside ? 'visible' :'hidden'}} onClick={this.handleFullScreen}> <img src={imagePic}/> </button>
 
         <div className='Chart' style={{
-            width: this.state.fullscreen ? '60%':'100%',
+            width: this.state.fullscreen ? '80%':'100%',
           }}>
   			  <HorizontalBar
             height={height}

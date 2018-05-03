@@ -80,8 +80,8 @@ class App extends Component {
       this.setState({
         contentStyle : {
           width: '100%',
-          height: '93%',
-          overflowY: 'scroll',
+          //height: '93%',
+          //overflowY: 'scroll',
         },
         sidebarOpen: false,
       })
@@ -114,7 +114,7 @@ class App extends Component {
 		this.state.visual_info.push({type: 'bar', name: 'Number of Crimes Each Day', key: 2, id: 2, field: 'dates'});
 		this.state.visual_info.push({type: 'bar', name: 'Distribution of Crimes by Code', key: 4, id: 4, field: 'codes'});
 		this.state.visual_info.push({type: 'bar', name: 'Distribution of Crimes by District', key: 5, id: 5, field: 'districts'});
-		
+
 		for (var i = 0; i < this.state.visual_info.length; i++) {
 			var req = ('http://127.0.0.1:8000/api/add/name='+
 				this.state.visual_info[i].name + '&type=' + this.state.visual_info[i].type + '&field=' + this.state.visual_info[i].field
@@ -124,11 +124,11 @@ class App extends Component {
 			  this.state.visual_info[i].id = result.data.visual_id;
 			  console.log(this.state.visual_info[i]);
 		}
-		
-		
+
+
 	}
 
-	
+
     addOne(vis, info){
         var newVisual = vis;
         if(info.name === ''){
@@ -159,8 +159,8 @@ class App extends Component {
           filterType: 'global',
           contentStyle: {
             width: this.state.sidebarOpen ? '100%':'80%',
-            height: '93%',
-            overflowY: 'scroll',
+            //height: '93%',
+            //overflowY: 'scroll',
           }
         }, () => {
           this.renderUserVisuals();
@@ -347,7 +347,7 @@ class App extends Component {
                     />
                     <Grid fluid id="grid">
                         <FormatGrid
-                            counter={this.state.counter}
+                            counter={this.state.visuals.length}
                             visuals={this.state.visuals}
                         />
                     </Grid>
