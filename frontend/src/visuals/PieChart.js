@@ -139,24 +139,26 @@ export default class PieChartFS extends Component {
 		}
 
 		var colors = [];
+		var fullscreen = false;
 		if (this.state) {
 			colors = this.state.colors;
-      if(this.state.percentage === 'percentage'){
-        // first get the total number of crimes
-        // go through and change to percentage
-        for(var i =0; i< count_array.length; i++){
-          count_array[i] = Math.ceil(count_array[i]/all_data.length* 100);
-        }
-      }
+			fullscreen = this.state.fullscreen;
+		  if(this.state.percentage === 'percentage'){
+			// first get the total number of crimes
+			// go through and change to percentage
+			for(var i =0; i< count_array.length; i++){
+			  count_array[i] = Math.ceil(count_array[i]/all_data.length* 100);
+			}
+		  }
 		}
 		else {
 			colors = [("rgb(" + 0 + "," + 0 + "," + 0 + ")")];
 		}
 
 		var data = {
-			labels: count_array.length > 15 ? (this.state.fullscreen ? label_array : label_array.slice(0,15)) : label_array,
+			labels: count_array.length > 15 ? (fullscreen ? label_array : label_array.slice(0,15)) : label_array,
 			datasets : [{
-				data: count_array.length > 15 ? (this.state.fullscreen ? count_array : count_array.slice(0,15)) : count_array,
+				data: count_array.length > 15 ? (fullscreen ? count_array : count_array.slice(0,15)) : count_array,
 				backgroundColor: colors,
 			}]
 		};
