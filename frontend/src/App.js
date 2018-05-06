@@ -132,6 +132,9 @@ class App extends Component {
 		var result = await axios.get(req);
 		var returned_vis = result.data.data;
 		for (var i = 0; i < returned_vis.length; i++) {
+			if (returned_vis[i].name === "") {
+				returned_vis[i].name = returned_vis[i].field;
+			}
 			this.state.visual_info.push({type: returned_vis[i].type, name: returned_vis[i].name, key: returned_vis[i].id, id: returned_vis[i].id, field: returned_vis[i].field});
 		}
 

@@ -196,7 +196,7 @@ export default class PieChartFS extends Component {
 
   add() {
 	  console.log("restore visual to screen");
-	  this.props.restore_function(this.props.name, this.props.id, "bar", this.props.field);
+	  this.props.restore_function(this.props.name, this.props.id, "pie", this.props.field);
   }
 
   handleClick() {

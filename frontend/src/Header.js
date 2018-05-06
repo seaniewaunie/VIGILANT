@@ -344,6 +344,9 @@ class RestoreVisualization extends Component {
 	var visuals_to_add = [];
 	for (var i = 0; i < days.length; i++) {
 		console.log(days[i].field);
+		if (days[i].name === "") {
+			days[i].name = days[i].field;
+		}
 		if (days[i].type === "bar") {
 		  visuals_to_add.push(<BarChartFS name={days[i].name} key={days[i].id} id={days[i].id} data={this.props.data[days[i].field]} field={days[i].field} restore={true} restore_function={this.restore}/>);
 		}
@@ -362,6 +365,9 @@ class RestoreVisualization extends Component {
 	visuals_to_add = [];
 	for (var i = 0; i < weeks.length; i++) {
 		console.log(weeks[i].field);
+		if (weeks[i].name === "") {
+			weeks[i].name = weeks[i].field;
+		}
 		if (weeks[i].type === "bar") {
 		  visuals_to_add.push(<BarChartFS name={weeks[i].name} key={weeks[i].id} id={weeks[i].id} data={this.props.data[weeks[i].field]} field={weeks[i].field} restore={true} restore_function={this.restore}/>);
 		}
@@ -380,6 +386,9 @@ class RestoreVisualization extends Component {
 	visuals_to_add = [];
 	for (var i = 0; i < months.length; i++) {
 		console.log(months[i].field);
+		if (months[i].name === "") {
+			months[i].name = months[i].field;
+		}
 		if (months[i].type === "bar") {
 		  visuals_to_add.push(<BarChartFS name={months[i].name} key={months[i].id} id={months[i].id} data={this.props.data[months[i].field]} field={months[i].field} restore={true} restore_function={this.restore}/>);
 		}

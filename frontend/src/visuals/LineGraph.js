@@ -113,24 +113,6 @@ export default class LineGraphFS extends Component {
 	}
 
 
-	//sort from greatest to least on count
-	for (var k = 0; k < label_array.length; k++) {
-			var max = k;
-		for (var l = k + 1; l < label_array.length; l++){
-			if (count_array[l] > count_array[max]) {
-				max = l;
-			}
-		}
-		if (max != k) {
-			var tmp = count_array[k];
-			count_array[k] = count_array[max];
-			count_array[max] = tmp;
-			tmp = label_array[k];
-			label_array[k] = label_array[max];
-			label_array[max] = tmp;
-		}
-	}
-
 	var color = "";
 	if (this.state) {
 		color = this.state.color[0];
@@ -149,9 +131,9 @@ export default class LineGraphFS extends Component {
 
 
 	var data = {
-		labels: count_array.length > 15 ? (this.state.fullscreen ? label_array : label_array.slice(0,15)) : label_array,
+		labels: count_array.length > 31 ? (this.state.fullscreen ? label_array : label_array.slice(0,15)) : label_array,
 		datasets : [{
-			data:  count_array.length > 15 ? (this.state.fullscreen ? count_array : count_array.slice(0,15)) : count_array,
+			data:  count_array.length > 31 ? (this.state.fullscreen ? count_array : count_array.slice(0,15)) : count_array,
 			backgroundColor: color,
 			borderColor: color,
 			borderWidth: 1,
