@@ -200,6 +200,7 @@ export default class BarChartFS extends Component {
 	  }
     else{
       return {
+        animation:false,
         responsive: true,
         tooltips: {
           mode: 'label',
@@ -286,6 +287,7 @@ export default class BarChartFS extends Component {
         return(
           <Gaussian
             vars = {this.getVars()}
+            data={this.getData()}
           />);
     }
   }
