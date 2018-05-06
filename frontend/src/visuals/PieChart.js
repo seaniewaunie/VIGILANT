@@ -32,6 +32,7 @@ export default class PieChartFS extends Component {
 	this.isMouseInside = false;
 
     this.state = {
+        data : this.getData(),
         fullscreen: false,
         percentage: 'count',
         showLocalFilter: false,
@@ -39,7 +40,8 @@ export default class PieChartFS extends Component {
     		field: props.field,
     		id: props.id,
         height: this.props.data.length > 20 ? 120 : 50,
-    		color: [],
+		    background_colors: ["rgb(" + 0 + "," + 0 + "," + 0 + ")"],
+    		colors: [],
     		restore: props.restore,
         LF_settings:{
 
@@ -65,90 +67,102 @@ export default class PieChartFS extends Component {
   }
 
   getData() {
-	var all_data = this.props.data;
-	var field = this.props.field;
-	var data_array = [];
-	var count_array = [];
-	for (var i = 0; i < all_data.length; i++) {
-		if (!data_array.includes(all_data[i])) {
-			data_array.push(all_data[i]);
-			count_array.push(1);
-			//console.log(dates[i]);
-		}
-		else {
-			var index = data_array.indexOf(all_data[i]);
-			count_array[index] = count_array[index] + 1;
-		}
-	}
+		var all_data = this.props.data;
+		var field = this.props.field;
 
-	if (this.state && this.state.color.length < 1) {
-		var r = Math.floor(Math.random() * 255);
-		var g = Math.floor(Math.random() * 255);
-		var b = Math.floor(Math.random() * 255);
-		this.state.color.push(("rgb(" + r + "," + g + "," + b + ")"));
-	}
-
-	var label_array = data_array;
-	if (field === "times") {
-		label_array = []
-		count_array = []
-		for (var i = 0; i < 24; i++) {
-			if (i < 10) {
-				label_array.push("0" + i + ":00:00");
+		var data_array = [];
+		var count_array = [];
+		for (var i = 0; i < all_data.length; i++) {
+			if (!data_array.includes(all_data[i])) {
+				data_array.push(all_data[i]);
+				count_array.push(1);
+				//console.log(dates[i]);
 			}
 			else {
-				label_array.push( i + ":00:00");
+				var index = data_array.indexOf(all_data[i]);
+				count_array[index] = count_array[index] + 1;
 			}
-			count_array.push(0);
 		}
 
-    // count up the number of crimes based on category
-		for (var j = 0; j < all_data.length; j++) {
-			for (var k = 0; k < 24; k++) {
-				if (all_data[j].slice(0, 2) === label_array[k].slice(0, 2)) {
-					count_array[k] = count_array[k] + 1;
+
+		//if data is times, group it by hours
+		var label_array = data_array;
+		if (field === "times") {
+			label_array = []
+			count_array = []
+			for (var i = 0; i < 24; i++) {
+				if (i < 10) {
+					label_array.push("0" + i + ":00:00");
+				}
+				else {
+					label_array.push( i + ":00:00");
+				}
+				count_array.push(0);
+			}
+
+			for (var j = 0; j < all_data.length; j++) {
+				for (var k = 0; k < 24; k++) {
+					if (all_data[j].slice(0, 2) === label_array[k].slice(0, 2)) {
+						count_array[k] = count_array[k] + 1;
+					}
 				}
 			}
+			data_array = label_array
 		}
-	}
 
-
-	//sort from greatest to least on count
-	for (var k = 0; k < label_array.length; k++) {
-			var max = k;
-		for (var l = k + 1; l < label_array.length; l++){
-			if (count_array[l] > count_array[max]) {
-				max = l;
+		//generate random colors for pie chart
+		if (this.state && this.state.colors.length <= data_array.length) {
+			for (var j = 0; j < data_array.length; j++) {
+				var r = Math.floor(Math.random() * 255);
+				var g = Math.floor(Math.random() * 255);
+				var b = Math.floor(Math.random() * 255);
+				this.state.colors.push("rgb(" + r + "," + g + "," + b + ")");
 			}
 		}
-		if (max != k) {
-			var tmp = count_array[k];
-			count_array[k] = count_array[max];
-			count_array[max] = tmp;
-			tmp = label_array[k];
-			label_array[k] = label_array[max];
-			label_array[max] = tmp;
-		}
-	}
 
+		//sort data_array and count_array simultaneously
+		for (var k = 0; k < data_array.length; k++) {
+			var max = k;
+			for (var l = k + 1; l < data_array.length; l++){
+				if (count_array[l] > count_array[max]) {
+					max = l;
+				}
+			}
+			if (max != k) {
+				var tmp = count_array[k];
+				count_array[k] = count_array[max];
+				count_array[max] = tmp;
+				tmp = data_array[k];
+				data_array[k] = data_array[max];
+				data_array[max] = tmp;
+			}
+		}
 
 		var colors = [];
 		if (this.state) {
 			colors = this.state.colors;
+      if(this.state.percentage === 'percentage'){
+        // first get the total number of crimes
+        // go through and change to percentage
+        for(var i =0; i< count_array.length; i++){
+          count_array[i] = Math.ceil(count_array[i]/all_data.length* 100);
+        }
+      }
 		}
 		else {
 			colors = [("rgb(" + 0 + "," + 0 + "," + 0 + ")")];
 		}
 
 		var data = {
-			labels: data_array,
+			labels: count_array.length > 15 ? (this.state.fullscreen ? label_array : label_array.slice(0,15)) : label_array,
 			datasets : [{
-				data: count_array,
+				data: count_array.length > 15 ? (this.state.fullscreen ? count_array : count_array.slice(0,15)) : count_array,
 				backgroundColor: colors,
 			}]
 		};
 		return data;
-  }
+	}
+
 
 
 
@@ -168,52 +182,13 @@ export default class PieChartFS extends Component {
   getOptions() {
 	  if(this.props.restore === true) {
 		  return {
-			onClick: this.add,
-			scales: {
-				yAxes: [{
-					ticks: {
-					fontSize: 6,
-          beginAtZero: true,
-          min: 0
-					}
-				}],
-				xAxes: [{
-					ticks: {
-					fontSize: 6,
-					}
-				}],
-			},
-		};
+        onClick: this.add,
+      };
 	  }
-    else{
-      return {
-        animation:false,
-        responsive: true,
-        tooltips: {
-          mode: 'label',
-          custom: () => {
-          }
-        },
-        elements: {
-          line: {
-            fill: false,
-          }
-        },
-        scales: {
-  				yAxes: [{
-  					ticks: {
-            beginAtZero: true,
-            min: 0
-  					}
-  				}],
-  				xAxes: [{
-  					ticks: {
-            beginAtZero: true,
-            min: 0
-  					}
-  				}],
-        },
-      }
+    return {
+      legend: {
+        display: this.state.fullscreen,
+      },
     }
   }
 
@@ -263,11 +238,10 @@ export default class PieChartFS extends Component {
     switch(this.state.graph){
       case 'normal':
         return(
-          <PieChartFS
-    				className="BarGraphFS"
-    			  legend={false}
-    				data={this.getData()}
-    				options={this.getOptions()}
+          <PieChart
+            className='BarGraphFS'
+            data={this.getData()}
+            options={this.getOptions()}
   			  />);
       default:
         //console.log(this.state.vars);
@@ -275,6 +249,7 @@ export default class PieChartFS extends Component {
           <Gaussian
             vars = {this.getVars()}
             data={this.getData()}
+            fullscreen={this.state.fullscreen}
           />);
     }
   }
@@ -380,12 +355,11 @@ export default class PieChartFS extends Component {
 		  <Col xs={width} sm={width} md={width} key={this.state.id}>
 		   <Well>
 			 <div className='VisualName'><b>{this.state.name}</b></div>
-			  <PieChartFS
-  				height={height}
-  				className="BarGraphFS"
-				  legend={false}
-  				data={this.getData()}
-  				options={this.getOptions()}
+			  <PieChart
+          className='BarGraphFS'
+          legend={false}
+          data={this.getData()}
+          options={this.getOptions()}
 			  />
 		  </Well>
 		</Col>

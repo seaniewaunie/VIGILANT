@@ -288,6 +288,7 @@ export default class LineGraphFS extends Component {
           <Gaussian
             vars = {this.getVars()}
             data={this.getData()}
+            fullscreen={this.state.fullscreen}
           />);
     }
   }

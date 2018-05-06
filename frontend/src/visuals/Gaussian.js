@@ -7,7 +7,7 @@ export default class Gaussian extends Component{
     super(props);
     this.state = {
       color: [],
-
+      fullscreen: this.props.fullscreen,
     }
     this.calcGauss = this.calcGauss.bind(this);
     this.calcSigma = this.calcSigma.bind(this);
@@ -112,7 +112,7 @@ export default class Gaussian extends Component{
 
 
     this.setState({
-      x, y, data
+      x, y, data, fullscreen: this.props.fullscreen,
     });
 
   }
@@ -191,7 +191,7 @@ export default class Gaussian extends Component{
     }
 
     this.setState({
-      x, y, data
+      x, y, data, fullscreen: nextProps.fullscreen,
     });
   }
 
@@ -204,6 +204,9 @@ export default class Gaussian extends Component{
     };
     const options ={
       animation: false,
+      legend: {
+        display: this.state.fullscreen
+      }
     }
     return (
       <div>
