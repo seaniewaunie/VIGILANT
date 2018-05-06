@@ -8,6 +8,7 @@ import FullscreenImg from '../images/fullscreen_opt.png';
 import ShrinkImg from '../images/shrink_image_opt.png';
 import Filter from '../Filters.js';
 import Interpretor from '../Interpretor.js';
+import Gaussian from './Gaussian.js';
 
 export default class BarChartFS extends Component {
   constructor(props) {
@@ -24,6 +25,10 @@ export default class BarChartFS extends Component {
     this.handleLocalFilter = this.handleLocalFilter.bind(this);
   	this.add = this.add.bind(this);
   	this.getOptions = this.getOptions.bind(this);
+    this.showGraph = this.showGraph.bind(this);
+    this.changeGraph = this.changeGraph.bind(this);
+    this.updateVariables = this.updateVariables.bind(this);
+    this.getVars = this.getVars.bind(this);
 	this.isMouseInside = false;
 
     this.state = {
@@ -54,6 +59,7 @@ export default class BarChartFS extends Component {
      color: [],
      restore: this.props.restore,
      percentage: 'count',
+     graph: 'normal',
      //data: this.getData(),
    });
   }
@@ -165,6 +171,13 @@ export default class BarChartFS extends Component {
     })
   }
 
+  changeGraph(uri, selection, value){
+    this.setState({
+      graph: value,
+    })
+
+  }
+
   getOptions() {
 	  if(this.props.restore === true) {
 		  return {
@@ -258,6 +271,36 @@ export default class BarChartFS extends Component {
 	  this.setState({ isMouseInside: false });
 	}
 
+  showGraph(){
+    switch(this.state.graph){
+      case 'normal':
+        return(
+          <HorizontalBar
+    				className="BarGraphFS"
+    			  legend={false}
+    				data={this.getData()}
+    				options={this.getOptions()}
+  			  />);
+      default:
+        //console.log(this.state.vars);
+        return(
+          <Gaussian
+            vars = {this.getVars()}
+          />);
+    }
+  }
+
+  getVars(){
+    return this.state.vars;
+  }
+
+  updateVariables(vars){
+    console.log(vars);
+    this.setState({
+      vars
+    });
+  }
+
 
   render() {
 	const data = this.getData();
@@ -306,12 +349,9 @@ export default class BarChartFS extends Component {
         <div className='Chart' style={{
             width: this.state.fullscreen ? '80%':'100%',
           }}>
-  			  <HorizontalBar
-    				className="BarGraphFS"
-    			  legend={false}
-    				data={this.getData()}
-    				options={this.getOptions()}
-  			  />
+
+            {this.showGraph()}
+
         </div>
         {
           this.state.fullscreen ?
@@ -321,6 +361,7 @@ export default class BarChartFS extends Component {
                   data = {this.props.data}
                   visData = {data}
                   category = {this.props.field}
+                  updateVariables = {this.updateVariables}
                 />
               </div>
               <div className='VisualFilter'>
@@ -330,6 +371,7 @@ export default class BarChartFS extends Component {
                   key = {this.state.id+400}
                   updateRequest = {this.updateLocalFilterRequest}
                   changeXAxis = {this.changeXAxis}
+                  changeGraph = {this.changeGraph}
                   settings = {this.state.LF_settings}
                 />
               </div>

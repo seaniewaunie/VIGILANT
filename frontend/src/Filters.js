@@ -97,6 +97,10 @@ export default class Filter extends Component {
               {label: 'Count', value: 'count'},
               {label: 'Percentage', value: 'percentage'},
             ],
+            statsGraph: [
+              {label: 'Normal', value: 'normal'},
+              {label: 'Gaussian', value: 'gaussian'},
+            ],
         };
 
         this.onSetSidebarOpen = this.onSetSidebarOpen.bind(this);
@@ -119,7 +123,7 @@ export default class Filter extends Component {
             if(this.props.show){
               return null;
             }
-            
+
             return(
                 <Well bsSize="small" className="filterOptions">
                   <b>{element}</b>
@@ -184,13 +188,19 @@ export default class Filter extends Component {
           return(
               <Well bsSize="small" className="filterOptions">
                 <b>{element}</b>
-
                   <MultiSelector
                     multi={false}
                     updateRequest = {this.props.changeXAxis}
                     key={306}
                     selections={this.state.count_percentage}
                     title='Count/Percentage'
+                  />
+                  <MultiSelector
+                    multi={false}
+                    updateRequest = {this.props.changeGraph}
+                    key={306}
+                    selections={this.state.statsGraph}
+                    title='Graph'
                   />
               </Well>
           );
