@@ -241,6 +241,14 @@ export default class BarChartFS extends Component {
 
   handleHide(){
 	console.log(this.props.id);
+	var current_info = {
+		  type: "bar",
+		  name: this.props.name,
+		  key: this.props.id,
+		  id: this.props.id,
+		  field: this.props.field,
+	  };
+	this.props.hideOne(current_info);
     this.setState({
       hidden: !this.state.hidden,
     })

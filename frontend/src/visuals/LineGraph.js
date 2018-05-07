@@ -214,7 +214,7 @@ export default class LineGraphFS extends Component {
 
   add() {
 	  console.log("restore visual to screen");
-	  this.props.restore_function(this.props.name, this.props.id, "bar", this.props.field);
+	  this.props.restore_function(this.props.name, this.props.id, "line", this.props.field);
   }
 
   handleClick() {
@@ -223,6 +223,14 @@ export default class LineGraphFS extends Component {
 
   handleHide(){
 	console.log(this.props.id);
+	var current_info = {
+		  type: "line",
+		  name: this.props.name,
+		  key: this.props.id,
+		  id: this.props.id,
+		  field: this.props.field,
+	  };
+	this.props.hideOne(current_info);
     this.setState({
       hidden: !this.state.hidden,
     })

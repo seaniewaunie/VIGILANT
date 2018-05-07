@@ -12,6 +12,7 @@ import { PieChart} from './Visualizations';
 import BarChartFS from './visuals/BarChart';
 import LineGraphFS from './visuals/LineGraph';
 import PieChartFS from './visuals/PieChart';
+var ResponsiveReactGridLayout = require('react-grid-layout').Responsive;
 
 var VIS_PER_ROW = 3;
 var VIS_SIZE = 6;
@@ -148,22 +149,42 @@ class App extends Component {
           info.name = info.field
         }
         this.state.visual_info.push(info);
-        this.state.visuals.push(newVisual)
-		    console.log(this.state.visuals.length);
+        this.state.visuals.push(newVisual);
+		console.log(this.state.visuals);
         this.setState({
             counter: this.state.visuals.length,
         })
         this.renderUserVisuals();
+		this.render();
     }
 
-    hideOne(vis){
-        var hideVisual = 3;
-        this.state.hiddenVisuals.push(
-            this.state.visuals.splice(hideVisual, 1)
-        );
+    hideOne(info){
+        //var hideVisual = 3;
+		if(info.name === ''){
+          info.name = info.field
+        }
+		//var index = this.state.visual_info.indexOf(info);
+		console.log(this.state.visual_info);
+		console.log(info);
+		var new_visuals = [];
+		var new_visuals_info = [];
+		for (var index = 0; index < this.state.visual_info.length; index++) {
+			if (this.state.visual_info[index].id != info.id) {
+				new_visuals.push(this.state.visuals[index]);
+				new_visuals_info.push(this.state.visual_info[index]);
+			}
+		}
+		this.setState({visuals: new_visuals});
+		this.setState({visual_info: new_visuals_info});
+		console.log(this.state.visual_info);
+		console.log(this.state.visuals);
+        //this.state.hiddenVisuals.push(
+         //   this.state.visuals.splice(hideVisual, 1)
+        //);
         this.setState({
             counter:this.state.counter - 1
         })
+		this.render();
     }
 
     toggleGlobalFilter(open) {
@@ -231,15 +252,15 @@ class App extends Component {
         //console.log(this.state.visuals[i]);
         //this.state.visuals[i].props.currentData = this.state.crimesInfo.days;
         if (this.state.visual_info[i].type === "bar") {
-          visuals_to_add.push(<BarChartFS name={this.state.visual_info[i].name} key={this.state.visual_info[i].key} id={this.state.visual_info[i].id} data={this.state.crimesInfo[this.state.visual_info[i].field]} field={this.state.visual_info[i].field} restore={false}/>);
+          visuals_to_add.push(<BarChartFS name={this.state.visual_info[i].name} key={this.state.visual_info[i].key} id={this.state.visual_info[i].id} data={this.state.crimesInfo[this.state.visual_info[i].field]} field={this.state.visual_info[i].field} restore={false} hideOne={this.hideOne}/>);
         }
 
         else if (this.state.visual_info[i].type === "line") {
-          visuals_to_add.push(<LineGraphFS name={this.state.visual_info[i].name} key={this.state.visual_info[i].key} id={this.state.visual_info[i].id} data={this.state.crimesInfo[this.state.visual_info[i].field]} field={this.state.visual_info[i].field} restore={false}/>);
+          visuals_to_add.push(<LineGraphFS name={this.state.visual_info[i].name} key={this.state.visual_info[i].key} id={this.state.visual_info[i].id} data={this.state.crimesInfo[this.state.visual_info[i].field]} field={this.state.visual_info[i].field} restore={false} hideOne={this.hideOne}/>);
         }
 
         else if (this.state.visual_info[i].type === "pie") {
-          visuals_to_add.push(<PieChartFS name={this.state.visual_info[i].name} key={this.state.visual_info[i].key} id={this.state.visual_info[i].id} data={this.state.crimesInfo[this.state.visual_info[i].field]} field={this.state.visual_info[i].field} restore={false}/>);
+          visuals_to_add.push(<PieChartFS name={this.state.visual_info[i].name} key={this.state.visual_info[i].key} id={this.state.visual_info[i].id} data={this.state.crimesInfo[this.state.visual_info[i].field]} field={this.state.visual_info[i].field} restore={false} hideOne={this.hideOne}/>);
         }
       }
       console.log(visuals_to_add);
@@ -318,6 +339,7 @@ class App extends Component {
         });
       */
     }
+	
 
     render() {
         this.state.counter = this.state.visuals.length;
@@ -359,12 +381,12 @@ class App extends Component {
                         data ={this.state.crimesInfo}
                     />
                     <a name="Visuals"></a>
-                    <Grid fluid id="grid">
+					<Grid fluid id="grid">
                         <FormatGrid
                             counter={this.state.visuals.length}
                             visuals={this.state.visuals}
                         />
-                    </Grid>
+                    </Grid> 
                     <div id='table-reference'>
                       <a name="Table"></a>
                       <TableFS
