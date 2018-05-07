@@ -385,7 +385,7 @@ export default class LineGraphFS extends Component {
 		   <Well>
 			 <div className='VisualName'><b>{this.state.name}</b></div>
 			  <LineChart
-  				height={height}
+  				height={200}
   				className="BarGraphFS"
 				  legend={false}
   				data={this.getData()}
