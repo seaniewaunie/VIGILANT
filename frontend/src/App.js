@@ -34,8 +34,9 @@ class App extends Component {
             GF_settings: {
               times: 'Past Month',
               days: '',
-              codes: '',
+              codes: 'AUTO THEFT,BURGLARY,LARCENY,LARCENY FROM AUTO,ROBBERY - CARJACKING,ROBBERY - COMMERCIAL,ROBBERY - RESIDENCE,ROBBERY - STREET',
               regions: '',
+			  descriptions: 'AUTO THEFT,BURGLARY,LARCENY,LARCENY FROM AUTO,ROBBERY - CARJACKING,ROBBERY - COMMERCIAL,ROBBERY - RESIDENCE,ROBBERY - STREET',
               weapons: 'All',
               io: 'Both',
             },
@@ -103,9 +104,9 @@ class App extends Component {
 	  var year = today.getFullYear();
 	  var one_month_ago = (year + '-' + month + '-' + day);
 	  this.loadVisuals();
-	  console.log(this.state.visual_info);
       this.getFilterCodes();
 	  this.updateGlobalFilterRequest('start_date=' + one_month_ago + '&end_date=&start_time=&end_time=', 'Time Frame', 'Past Month');
+	  this.updateGlobalFilterRequest('&descriptions=' + this.state.GF_settings.descriptions, 'Descriptions', this.state.GF_settings.descriptions);
       //this.makeRequest();
     }
 
@@ -116,16 +117,6 @@ class App extends Component {
 		this.state.visual_info.push({type: 'line', name: 'Trend of Crimes Over Dates', key: 4, id: 4, field: 'dates'});
 		this.state.visual_info.push({type: 'bar', name: 'Distribution of Crimes by Description', key: 5, id: 5, field: 'descriptions'});
 		this.state.visual_info.push({type: 'bar', name: 'Distribution of Crimes by District', key: 6, id: 6, field: 'districts'});
-
-		 /*for (var i = 0; i < this.state.visual_info.length; i++) {
-			var req = ('http://127.0.0.1:8000/api/add/name='+
-				this.state.visual_info[i].name + '&type=' + this.state.visual_info[i].type + '&field=' + this.state.visual_info[i].field
-			  );
-			  var result = await axios.get(req);
-			  this.state.visual_info[i].key = result.data.visual_id;
-			  this.state.visual_info[i].id = result.data.visual_id;
-			  console.log(this.state.visual_info[i]);
-		} */
 	}
 
 	async loadVisuals() {
@@ -150,7 +141,6 @@ class App extends Component {
         }
         this.state.visual_info.push(info);
         this.state.visuals.push(newVisual);
-		console.log(this.state.visuals);
         this.setState({
             counter: this.state.visuals.length,
         })
@@ -159,13 +149,9 @@ class App extends Component {
     }
 
     hideOne(info){
-        //var hideVisual = 3;
 		if(info.name === ''){
           info.name = info.field
         }
-		//var index = this.state.visual_info.indexOf(info);
-		console.log(this.state.visual_info);
-		console.log(info);
 		var new_visuals = [];
 		var new_visuals_info = [];
 		for (var index = 0; index < this.state.visual_info.length; index++) {
@@ -176,11 +162,6 @@ class App extends Component {
 		}
 		this.setState({visuals: new_visuals});
 		this.setState({visual_info: new_visuals_info});
-		console.log(this.state.visual_info);
-		console.log(this.state.visuals);
-        //this.state.hiddenVisuals.push(
-         //   this.state.visuals.splice(hideVisual, 1)
-        //);
         this.setState({
             counter:this.state.counter - 1
         })
@@ -199,12 +180,9 @@ class App extends Component {
         }, () => {
           this.renderUserVisuals();
         });
-        //console.log(VIS_PER_ROW);
     }
 
-    makeRequest(){
-      //start_date=&end_date=&start_time=&end_time=&days=[]&codes=[]&districts=[]&weapons=[]&start_lat=&end_lat=&start_long=&end_long=&i_o=
-      //console.log(this.state.requestURL);
+    makeRequest(){ //start_date=&end_date=&start_time=&end_time=&days=[]&codes=[]&districts=[]&weapons=[]&start_lat=&end_lat=&start_long=&end_long=&i_o=
       var req = ('http://127.0.0.1:8000/api/'+
         this.state.requestURL.timeframe+
         this.state.requestURL.days+
@@ -214,7 +192,6 @@ class App extends Component {
         this.state.requestURL.geography+
         this.state.requestURL.io
       )
-      console.log(req);
       axios.get(req, {responseType: 'json'})
       .then(res => {
         const visualsData = res.data.data;
@@ -238,9 +215,7 @@ class App extends Component {
             },
           },
           () => {
-          console.log("response: ", this.state.visualsData)
     		  this.setState({visuals: []});
-    		  console.log(this.state.visuals);
           this.renderUserVisuals();
         });
       });
@@ -249,8 +224,6 @@ class App extends Component {
     renderUserVisuals() {
       var visuals_to_add = [];
       for (var i = 0; i < this.state.visual_info.length; i++) {
-        //console.log(this.state.visuals[i]);
-        //this.state.visuals[i].props.currentData = this.state.crimesInfo.days;
         if (this.state.visual_info[i].type === "bar") {
           visuals_to_add.push(<BarChartFS name={this.state.visual_info[i].name} key={this.state.visual_info[i].key} id={this.state.visual_info[i].id} data={this.state.crimesInfo[this.state.visual_info[i].field]} field={this.state.visual_info[i].field} restore={false} hideOne={this.hideOne}/>);
         }
@@ -263,9 +236,7 @@ class App extends Component {
           visuals_to_add.push(<PieChartFS name={this.state.visual_info[i].name} key={this.state.visual_info[i].key} id={this.state.visual_info[i].id} data={this.state.crimesInfo[this.state.visual_info[i].field]} field={this.state.visual_info[i].field} restore={false} hideOne={this.hideOne}/>);
         }
       }
-      console.log(visuals_to_add);
       this.setState({visuals: visuals_to_add});
-      console.log(this.state.visuals);
     }
 
     getFilterCodes() {
@@ -286,7 +257,6 @@ class App extends Component {
         case 'Time Frame':
           newRequest.timeframe = uriString;
           newSettings.times = value;
-          //console.log(uriString + ' from ' + selection);
           this.setState({requestURL: newRequest, GF_settings: newSettings}, ()=>{
             this.makeRequest();
           });
@@ -322,8 +292,6 @@ class App extends Component {
         case 'Descriptions':
           newRequest.codes = uriString;
           newSettings.codes = value;
-		  console.log(uriString);
-		  console.log(value);
           this.setState({requestURL: newRequest, GF_settings: newSettings} , ()=>{
             this.makeRequest();
           });

@@ -14,11 +14,8 @@ export default class LineGraphFS extends Component {
   constructor(props) {
     super(props);
 
-    //this.compress = this.compress.bind(this);
-    //this.expand = this.expand.bind(this);
     this.changeXAxis = this.changeXAxis.bind(this);
     this.getData = this.getData.bind(this);
-	//this.getCounts = this.getCounts.bind(this);
     this.handleClick = this.handleClick.bind(this);
     this.handleFullScreen = this.handleFullScreen.bind(this);
     this.handleHide = this.handleHide.bind(this);
@@ -45,7 +42,6 @@ export default class LineGraphFS extends Component {
 
         },
         total_num_crimes: 0,
-        //data : this.getData(),
 
 	     };
 
@@ -60,7 +56,6 @@ export default class LineGraphFS extends Component {
      restore: this.props.restore,
      percentage: 'count',
      graph: 'normal',
-     //data: this.getData(),
    });
   }
 
@@ -73,7 +68,6 @@ export default class LineGraphFS extends Component {
 		if (!data_array.includes(all_data[i])) {
 			data_array.push(all_data[i]);
 			count_array.push(1);
-			//console.log(dates[i]);
 		}
 		else {
 			var index = data_array.indexOf(all_data[i]);
@@ -273,7 +267,6 @@ export default class LineGraphFS extends Component {
     				options={this.getOptions()}
   			  />);
       default:
-        //console.log(this.state.vars);
         return(
           <Gaussian
             vars = {this.getVars()}
@@ -297,13 +290,12 @@ export default class LineGraphFS extends Component {
 
   render() {
 	const data = this.getData();
-  var height = data.labels.length > 20 ? 600 : data.labels.length > 10 ? 300:250;
-  var width = this.state.fullscreen ? 12 : 4;
-  //var buttonText = this.state.fullscreen ? 'Minimize' : 'Fullscreen';
-  var localFilterShowing = this.state.showLocalFilter;
-  var imagePic = this.state.fullscreen ?  ShrinkImg : FullscreenImg
+    var height = data.labels.length > 20 ? 600 : data.labels.length > 10 ? 300:250;
+    var width = this.state.fullscreen ? 12 : 4;
+    var localFilterShowing = this.state.showLocalFilter;
+    var imagePic = this.state.fullscreen ?  ShrinkImg : FullscreenImg
 
-  console.log('height: ', height);
+      console.log('height: ', height);
 
     if(this.props.data === undefined){
       return(<RingLoader color={'#123abc'} />);
@@ -320,7 +312,6 @@ export default class LineGraphFS extends Component {
     if(this.state.hidden){
       return null;
     }
-	//console.log(this.state.height);
 	if (this.props.restore === false) {
 		return (
 	  <Col xs={width} sm={width} md={width} key={this.state.id}>

@@ -14,11 +14,9 @@ export default class BarChartFS extends Component {
   constructor(props) {
     super(props);
 
-    //this.compress = this.compress.bind(this);
-    //this.expand = this.expand.bind(this);
+
     this.changeXAxis = this.changeXAxis.bind(this);
     this.getData = this.getData.bind(this);
-	//this.getCounts = this.getCounts.bind(this);
     this.handleClick = this.handleClick.bind(this);
     this.handleFullScreen = this.handleFullScreen.bind(this);
     this.handleHide = this.handleHide.bind(this);

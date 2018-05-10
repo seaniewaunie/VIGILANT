@@ -51,7 +51,6 @@ export default class PieChartFS extends Component {
 
 	     };
 
-       console.log(this.props.data);
   }
 
   componentWillMount() {
@@ -254,7 +253,6 @@ export default class PieChartFS extends Component {
             options={this.getOptions()}
   			  />);
       default:
-        //console.log(this.state.vars);
         return(
           <Gaussian
             vars = {this.getVars()}
@@ -269,7 +267,6 @@ export default class PieChartFS extends Component {
   }
 
   updateVariables(vars){
-    console.log(vars);
     this.setState({
       vars
     });
@@ -284,7 +281,6 @@ export default class PieChartFS extends Component {
   var localFilterShowing = this.state.showLocalFilter;
   var imagePic = this.state.fullscreen ?  ShrinkImg : FullscreenImg
 
-  console.log('height: ', height);
 
     if(this.props.data === undefined){
       return(<RingLoader color={'#123abc'} />);
@@ -419,7 +415,7 @@ class old_PieChartFS extends Component {
 			if (!data_array.includes(all_data[i])) {
 				data_array.push(all_data[i]);
 				count_array.push(1);
-				//console.log(dates[i]);
+
 			}
 			else {
 				var index = data_array.indexOf(all_data[i]);
@@ -517,7 +513,6 @@ class old_PieChartFS extends Component {
   }
 
   add() {
-	  console.log("restore visual to screen");
 	  this.props.restore_function(this.props.name, this.props.id, "pie", this.props.field);
   }
 
@@ -531,16 +526,13 @@ class old_PieChartFS extends Component {
 
   compress() {
     //this.setState({height:"200", width:"200"});
-    console.log("Compressing Visual from full screen");
   }
 
   expand() {
     //this.setState({height:"150", width:"150"});
-    console.log("Expanding Visual to full screen");
   }
 
   handleHide(){
-	console.log(this.props.id);
     this.setState({
       hidden: !this.state.hidden,
     })
@@ -589,7 +581,6 @@ class old_PieChartFS extends Component {
       return null;
     }
 	if(this.props.data.length === 0) {
-		console.log("empty data pie chart");
       return(
 		<Col xs={width} sm={width} md={width} key={this.state.id}>
 		   <Well>

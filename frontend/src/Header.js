@@ -117,7 +117,6 @@ class AddVisualization extends Component {
   }
 
   async handleAdd(){
-    //console.log(this.props.data);
     if(this.state.name.length < NAME_LENGTH){
       var element;
 	  var info = {
@@ -141,7 +140,6 @@ class AddVisualization extends Component {
 			  info.key = new_id;
 			  info.id = new_id;
 			  info.field = this.state.selectedData;
-			  console.log(info);
 			  element = <BarChartFS name={this.state.name} key={new_id} id={new_id} currentData={this.props.data[this.state.selectedData]}/>;
               break;
           case 'Line Graph':
@@ -155,7 +153,6 @@ class AddVisualization extends Component {
 			  info.key = new_id;
 			  info.id = new_id;
 			  info.field = this.state.selectedData;
-			  console.log(info);
               element = <LineGraphFS data={this.props.data[this.state.selectedData]}  id={new_id} name={this.state.name} key={new_id}/>;
               break;
           case 'Pie Chart':
@@ -169,7 +166,6 @@ class AddVisualization extends Component {
 			  info.key = new_id;
 			  info.id = new_id;
 			  info.field = this.state.selectedData;
-			  console.log(info);
               element = <PieChartFS data={this.props.data[this.state.selectedData]}  id={new_id} name={this.state.name} key={new_id} />;
               break;
           default:
@@ -326,8 +322,6 @@ class RestoreVisualization extends Component {
 
 	handleShow() {
 		this.getRestorables();
-		//this.handleClose();
-		//this.setState({show: true});
 	}
 
 	handleClose() {
@@ -335,15 +329,12 @@ class RestoreVisualization extends Component {
 	}
 
   async getRestorables() {
-	console.log(this.props.data);
 	var visual_id;
 	var req = ('http://127.0.0.1:8000/api/getrestorable/');
 	var response = await axios.get(req);
-	console.log(response);
 	var days = response.data.day;
 	var visuals_to_add = [];
 	for (var i = 0; i < days.length; i++) {
-		console.log(days[i].field);
 		if (days[i].name === "") {
 			days[i].name = days[i].field;
 		}
@@ -364,7 +355,6 @@ class RestoreVisualization extends Component {
 	var weeks = response.data.week;
 	visuals_to_add = [];
 	for (var i = 0; i < weeks.length; i++) {
-		console.log(weeks[i].field);
 		if (weeks[i].name === "") {
 			weeks[i].name = weeks[i].field;
 		}
@@ -385,7 +375,6 @@ class RestoreVisualization extends Component {
 	var months = response.data.month;
 	visuals_to_add = [];
 	for (var i = 0; i < months.length; i++) {
-		console.log(months[i].field);
 		if (months[i].name === "") {
 			months[i].name = months[i].field;
 		}
@@ -402,7 +391,6 @@ class RestoreVisualization extends Component {
 		}
 	}
 	this.setState({past_month: visuals_to_add});
-	//this.handleClose();
 	this.setState({show: true});
   }
 
@@ -431,7 +419,6 @@ class RestoreVisualization extends Component {
 	  var req = ('http://127.0.0.1:8000/api/restore/id=' + id);
 	  var reponse = await axios.get(req);
 
-	  //this.handleShow();
 	  this.getRestorables();
   }
 
